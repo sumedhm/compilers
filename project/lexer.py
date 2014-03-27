@@ -13,7 +13,15 @@ reserved = {
 	'else' : 'ELSE',
 	'while' : 'WHILE',
 	'for' : 'FOR',
-	'do' : 'DO'
+	'do' : 'DO',
+	'short' : 'SHORT',
+	'long' : 'LONG',
+	'case' : 'CASE',
+	'default' : 'DEFAULT',
+	'switch' : 'SWITCH',
+	'continue' : 'CONTINUE',
+	'break' : 'BREAK',
+	'return' : 'RETURN'
 }
 
 tokens = [
@@ -21,6 +29,7 @@ tokens = [
    'SINGLE_QUOTES',
    'DOUBLE_QUOTES',
    'COMMENT',
+   'MOD',
    'ADD',
    'MINUS',
    'MULT',
@@ -45,6 +54,7 @@ t_COMMENT = r'(/\*(.|\n)*?\*/)|(//.*)'
 t_INT 		  = r'int'
 t_FLOAT		  = r'float'
 t_CHAR 		  = r'char'
+t_MOD	      = r'\%'
 t_ADD         = r'\+'
 t_MINUS       = r'-'
 t_MULT        = r'\*'
