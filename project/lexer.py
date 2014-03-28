@@ -44,7 +44,10 @@ tokens = [
    'RPAREN',
    'EQUALS',
    'VARIABLE',
-   'SEMI_COLON'
+   'SEMI_COLON',
+   'COMMA',
+   'CONDOP',
+   'COLON'
 ] + list(reserved.values())
 
 t_SINGLE_QUOTES = r'\''
@@ -54,11 +57,11 @@ t_COMMENT = r'(/\*(.|\n)*?\*/)|(//.*)'
 t_INT 		  = r'int'
 t_FLOAT		  = r'float'
 t_CHAR 		  = r'char'
-t_MOD	      = r'\%'
 t_ADD         = r'\+'
 t_MINUS       = r'-'
 t_MULT        = r'\*'
 t_DIV         = r'/'
+t_MOD	      = r'%'
 t_LBRACE      = r'\{'
 t_RBRACE      = r'\}'
 t_LPAREN      = r'\('
@@ -68,7 +71,10 @@ t_EXP_REAL    = r'((\d*\.\d+)|(\d+\.\d*)|\d+)(e|E)(\+|-)?\d+'
 t_DOT_REAL    = r'(\d*\.\d+)|(\d+\.\d*)'
 t_DEC_INT  	  = r'\d+'
 t_EQUALS	  = r'\='
-t_SEMI_COLON  = r';'
+t_SEMI_COLON  = r'\;'
+t_CONDOP      = r'\?'
+t_COLON	      = r'\:'
+t_COMMA	      = r'\,'
 t_ignore  	  = ' \n\r\t'
 
 def t_VARIABLE(t):
