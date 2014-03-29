@@ -12,7 +12,9 @@ precedence = (
  ('left','L_OP','G_OP','LE_OP','GE_OP'),
  ('left','NOTEQUALS','EQUALS_OP'),
  ('left','OR_OP','AND_OP'),
- ('right','EQUALS','ADD_ASSIGN','MOD_ASSIGN','SUB_ASSIGN','MUL_ASSIGN','DIV_ASSIGN','LEFT_ASSIGN','RIGHT_ASSIGN','XOR_ASSIGN','OR_ASSIGN','AND_ASSIGN')
+ ('right','EQUALS','ADD_ASSIGN','MOD_ASSIGN','SUB_ASSIGN','MUL_ASSIGN','DIV_ASSIGN','LEFT_ASSIGN','RIGHT_ASSIGN','XOR_ASSIGN','OR_ASSIGN','AND_ASSIGN'),
+ ('right', 'UELSE'),
+ ('right', 'ELSE')
 )
 
 class Node(object):
@@ -98,6 +100,20 @@ def p_statement_5(t):
 	'statement : constant_statement'
 	n = Node('statement5')
 	n.add_child(t[1])
+	t[0] = n
+	pass
+
+def p_statement_6(t):
+	'statement : conditional_statement'
+	n = Node('statement6')
+	n.add_child(t[1])
+	t[0] = n
+	pass
+
+def p_statement_7(t):
+	'statement : COMMENT'
+	n = Node('statement7')
+	n.add_child(Node(t[1]))
 	t[0] = n
 	pass
 
@@ -727,6 +743,90 @@ def p_iterative_exp_2(t):
 	t[0] = n
 	pass
 
+def p_conditional_statement_1(t):
+	'conditional_statement : IF LPAREN exp RPAREN statement %prec UELSE'
+	n = Node('conditional_statement1')
+	n.add_child(Node(t[1]))
+	n.add_child(Node(t[2]))
+	n.add_child(t[3])
+	n.add_child(Node(t[4]))
+	n.add_child(t[5])
+	t[0] = n
+	pass
+
+def p_conditional_statement_2(t):
+	'conditional_statement : IF LPAREN exp RPAREN LBRACE statements RBRACE %prec UELSE'
+	n = Node('conditional_statement2')
+	n.add_child(Node(t[1]))
+	n.add_child(Node(t[2]))
+	n.add_child(t[3])
+	n.add_child(Node(t[4]))
+	n.add_child(Node(t[5]))
+	n.add_child(t[6])
+	n.add_child(Node(t[7]))
+	t[0] = n
+	pass
+
+def p_conditional_statement_3(t):
+	'conditional_statement : IF LPAREN exp RPAREN statement ELSE statement'
+	n = Node('conditional_statement3')
+	n.add_child(Node(t[1]))
+	n.add_child(Node(t[2]))
+	n.add_child(t[3])
+	n.add_child(Node(t[4]))
+	n.add_child(t[5])
+	n.add_child(Node(t[6]))
+	n.add_child(t[7])
+	t[0] = n
+	pass
+
+def p_conditional_statement_4(t):
+	'conditional_statement : IF LPAREN exp RPAREN LBRACE statements RBRACE ELSE statement'
+	n = Node('conditional_statement4')
+	n.add_child(Node(t[1]))
+	n.add_child(Node(t[2]))
+	n.add_child(t[3])
+	n.add_child(Node(t[4]))
+	n.add_child(Node(t[5]))
+	n.add_child(t[6])
+	n.add_child(Node(t[7]))
+	n.add_child(Node(t[8]))
+	n.add_child(t[9])
+	t[0] = n
+	pass
+
+def p_conditional_statement_5(t):
+	'conditional_statement : IF LPAREN exp RPAREN statement ELSE LBRACE statements RBRACE'
+	n = Node('conditional_statement5')
+	n.add_child(Node(t[1]))
+	n.add_child(Node(t[2]))
+	n.add_child(t[3])
+	n.add_child(Node(t[4]))
+	n.add_child(t[5])
+	n.add_child(Node(t[6]))
+	n.add_child(Node(t[7]))
+	n.add_child(t[8])
+	n.add_child(Node(t[9]))
+	t[0] = n
+	pass
+
+def p_conditional_statement_6(t):
+	'conditional_statement : IF LPAREN exp RPAREN LBRACE statements RBRACE ELSE LBRACE statements RBRACE'
+	n = Node('conditional_statement6')
+	n.add_child(Node(t[1]))
+	n.add_child(Node(t[2]))
+	n.add_child(t[3])
+	n.add_child(Node(t[4]))
+	n.add_child(Node(t[5]))
+	n.add_child(t[6])
+	n.add_child(Node(t[7]))
+	n.add_child(Node(t[8]))
+	n.add_child(Node(t[9]))
+	n.add_child(t[10])
+	n.add_child(Node(t[11]))
+	t[0] = n
+	pass
+
 def p_function_1(t):
 	'function : normal_function'
 	n = Node('function1')
@@ -768,6 +868,84 @@ def p_main_function_2(t):
 	t[0] = n
 	pass
 
+def p_main_function_3(t):
+	'main_function : MAIN LPAREN parameters RPAREN LBRACE statements RBRACE'
+	n = Node('main_function3')
+	n.add_child(Node("VOID"))
+	n.add_child(Node(t[1]))
+	n.add_child(Node(t[2]))
+	n.add_child(t[3])
+	n.add_child(Node(t[4]))
+	n.add_child(Node(t[5]))
+	n.add_child(t[6])
+	n.add_child(Node(t[7]))
+	t[0] = n
+	pass
+
+def p_main_function_4(t):
+	'main_function : MAIN LPAREN parameters RPAREN LBRACE RBRACE'
+	n = Node('main_function4')
+	n.add_child(Node("VOID"))
+	n.add_child(Node(t[1]))
+	n.add_child(Node(t[2]))
+	n.add_child(t[3])
+	n.add_child(Node(t[4]))
+	n.add_child(Node(t[5]))
+	n.add_child(Node(t[6]))
+	t[0] = n
+	pass
+
+def p_main_function_5(t):
+	'main_function : type MAIN LPAREN RPAREN LBRACE statements RBRACE'
+	n = Node('main_function5')
+	n.add_child(t[1])
+	n.add_child(Node(t[2]))
+	n.add_child(Node(t[3]))
+	n.add_child(Node(t[4]))
+	n.add_child(Node(t[5]))
+	n.add_child(t[6])
+	n.add_child(Node(t[7]))
+	t[0] = n
+	pass
+
+def p_main_function_6(t):
+	'main_function : type MAIN LPAREN RPAREN LBRACE RBRACE'
+	n = Node('main_function6')
+	n.add_child(t[1])
+	n.add_child(Node(t[2]))
+	n.add_child(Node(t[3]))
+	n.add_child(Node(t[4]))
+	n.add_child(Node(t[5]))
+	n.add_child(Node(t[6]))
+	t[0] = n
+	pass
+
+def p_main_function_7(t):
+	'main_function : MAIN LPAREN RPAREN LBRACE statements RBRACE'
+	n = Node('main_function7')
+	n.add_child(Node("VOID"))
+	n.add_child(Node(t[1]))
+	n.add_child(Node(t[2]))
+	n.add_child(Node(t[3]))
+	n.add_child(Node(t[4]))
+	n.add_child(t[5])
+	n.add_child(Node(t[6]))
+	t[0] = n
+	pass
+
+def p_main_function_8(t):
+	'main_function : MAIN LPAREN RPAREN LBRACE RBRACE'
+	n = Node('main_function8')
+	n.add_child(Node("VOID"))
+	n.add_child(Node(t[1]))
+	n.add_child(Node(t[2]))
+	n.add_child(Node(t[3]))
+	n.add_child(Node(t[4]))
+	n.add_child(Node(t[5]))
+	t[0] = n
+	pass
+
+
 def p_normal_function_1(t):
 	'normal_function : type VARIABLE LPAREN parameters RPAREN LBRACE statements RBRACE'
 	n = Node('normal_function1')
@@ -795,6 +973,84 @@ def p_normal_function_2(t):
 	t[0] = n
 	pass
 
+def p_normal_function_3(t):
+	'normal_function : VARIABLE LPAREN parameters RPAREN LBRACE statements RBRACE'
+	n = Node('normal_function3')
+	n.add_child(Node("VOID"))
+	n.add_child(Node(t[1]))
+	n.add_child(Node(t[2]))
+	n.add_child(t[3])
+	n.add_child(Node(t[4]))
+	n.add_child(Node(t[5]))
+	n.add_child(t[6])
+	n.add_child(Node(t[7]))
+	t[0] = n
+	pass
+
+def p_normal_function_4(t):
+	'normal_function : VARIABLE LPAREN parameters RPAREN LBRACE RBRACE'
+	n = Node('normal_function4')
+	n.add_child(Node("VOID"))
+	n.add_child(Node(t[1]))
+	n.add_child(Node(t[2]))
+	n.add_child(t[3])
+	n.add_child(Node(t[4]))
+	n.add_child(Node(t[5]))
+	n.add_child(Node(t[6]))
+	t[0] = n
+	pass
+
+def p_normal_function_5(t):
+	'normal_function : type VARIABLE LPAREN RPAREN LBRACE statements RBRACE'
+	n = Node('normal_function5')
+	n.add_child(t[1])
+	n.add_child(Node(t[2]))
+	n.add_child(Node(t[3]))
+	n.add_child(Node(t[4]))
+	n.add_child(Node(t[5]))
+	n.add_child(t[6])
+	n.add_child(Node(t[7]))
+	t[0] = n
+	pass
+
+def p_normal_function_6(t):
+	'normal_function : type VARIABLE LPAREN RPAREN LBRACE RBRACE'
+	n = Node('normal_function6')
+	n.add_child(t[1])
+	n.add_child(Node(t[2]))
+	n.add_child(Node(t[3]))
+	n.add_child(Node(t[4]))
+	n.add_child(Node(t[5]))
+	n.add_child(Node(t[6]))
+	t[0] = n
+	pass
+
+def p_normal_function_7(t):
+	'normal_function : VARIABLE LPAREN RPAREN LBRACE statements RBRACE'
+	n = Node('normal_function7')
+	n.add_child(Node("VOID"))
+	n.add_child(Node(t[1]))
+	n.add_child(Node(t[2]))
+	n.add_child(Node(t[3]))
+	n.add_child(Node(t[4]))
+	n.add_child(t[5])
+	n.add_child(Node(t[6]))
+	t[0] = n
+	pass
+
+def p_normal_function_8(t):
+	'normal_function : VARIABLE LPAREN RPAREN LBRACE RBRACE'
+	n = Node('normal_function8')
+	n.add_child(Node("VOID"))
+	n.add_child(Node(t[1]))
+	n.add_child(Node(t[2]))
+	n.add_child(Node(t[3]))
+	n.add_child(Node(t[4]))
+	n.add_child(Node(t[5]))
+	t[0] = n
+	pass
+
+
 def p_parameters_1(t):
 	'parameters : type VARIABLE COMMA parameters'
 	n = Node('parameters1')
@@ -810,13 +1066,6 @@ def p_parameters_2(t):
 	n = Node('parameters2')
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
-	t[0] = n
-	pass
-
-def p_parameters_3(t):
-	'parameters : empty'
-	n = Node('parameters3')
-	n.add_child(Node('empty'))
 	t[0] = n
 	pass
 
@@ -873,6 +1122,7 @@ def p_arguments_4(t):
 
 def p_empty(t):
 	'empty : '
+	t[0] = Node('empty')
 	pass
 
 def p_error(t):

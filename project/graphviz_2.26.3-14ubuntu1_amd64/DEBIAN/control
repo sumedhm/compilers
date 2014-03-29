@@ -1,0 +1,36 @@
+Package: graphviz
+Version: 2.26.3-14ubuntu1
+Architecture: amd64
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Installed-Size: 901
+Depends: libc6 (>= 2.15), libcdt4, libcgraph5, libexpat1 (>= 2.0.1), libgd2-noxpm (>= 2.0.36~rc1~dfsg) | libgd2-xpm (>= 2.0.36~rc1~dfsg), libgraph4, libgvc5, libgvpr1, libx11-6, libxaw7, libxmu6, libxt6
+Recommends: ttf-liberation
+Suggests: gsfonts, graphviz-doc
+Conflicts: gdtclft
+Section: graphics
+Priority: optional
+Multi-Arch: foreign
+Homepage: http://www.graphviz.org/
+Description: rich set of graph drawing tools
+ Graph drawing addresses the problem of visualizing structural information
+ by constructing geometric representations of abstract graphs and networks.
+ Automatic generation of graph drawings has important applications in key
+ technologies such as database design, software engineering, VLSI and
+ network design and visual interfaces in other domains. Situations where
+ these tools might be particularly useful include:
+ .
+   * you would like to restructure a program and first need to understand
+     the relationships between its types, procedures, and source files
+   * you need to find the bottlenecks in an Internet backbone - not only
+     individual links, but their relationships
+   * you're debugging a protocol or microarchitecture represented as a
+     finite state machine and need to figure out how a certain
+     error state arises
+   * you would like to browse a database schema, knowledge base, or
+     distributed program represented graphically
+   * you would like to see an overview of a collection of linked documents
+   * you would like to discover patterns and communities of interest in a
+     database of telephone calls or e-mail messages
+ .
+ This package contains the command-line tools.
+Original-Maintainer: David Claughton <dave@eclecticdave.com>
