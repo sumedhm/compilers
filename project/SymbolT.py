@@ -17,6 +17,26 @@ precedence = (
  ('right', 'ELSE')
 )
 
+class Table(object):
+	def __init__(self, data):
+		self.data = data
+		self.parent = None
+		self.child_tables = []
+		self.variables = {}
+
+	def add_table(self, obj):
+		self.child_tables.append(obj)
+		obj.parent = self
+
+	def add_variable(self, obj, setType):
+		if obj in self.variables:
+			return False
+		else:
+			self.variables[obj] = {}
+			self.variables[obj]['type'] = setType
+			self.variables[obj]['size'] = 0
+			return True
+
 class Node(object):
     def __init__(self, data):
         self.data = data
@@ -25,8 +45,14 @@ class Node(object):
     def add_child(self, obj):
         self.children.append(obj)
 
+
+lineno = 1
+global_scope = Table('Global_variables')
+current_scope = global_scope
+tableux = 1
+
 i = 0
-f = open('parse_tree.dot','wb')
+f = open('st.dot','wb')
 f.write('strict digraph graphname {\n\n0 [label="program"]\n')
 def print_all(n):
 	global i
@@ -40,15 +66,25 @@ def print_all(n):
 		f.write(a)
 		print_all(c)
 
+def print_table(obj):
+	print "\nPrinting table", obj.data
+	for j in obj.variables:
+		print j, ':', obj.variables[j]
+	print "Children of obj.data: ",
+	for i in obj.child_tables:
+		print i.data,
+	print " "
+	for i in obj.child_tables:
+		print_table(i)
+
 def p_program_1(t):
 	'program : statements'
-	n = Node('program')
-	n.add_child(t[1])
-	t[0] = n
-	print n.data
-	print_all(n)
+	t[0] = t[1]
+	print_all(t[0])
 	f.write('\n\n}')
 	f.close()
+	global global_scope
+	print_table(global_scope)
 	pass
 
 
@@ -62,16 +98,12 @@ def p_statements_1(t):
 
 def p_statements_2(t):
 	'statements : statement'
-	n = Node('statements2')
-	n.add_child(t[1])
-	t[0] = n
+	t[0] = t[1]
 	pass
 
 def p_statement_1(t):
 	'statement : declaration'
-	n = Node('statement1')
-	n.add_child(t[1])
-	t[0] = n
+	t[0] = t[1]
 	pass
 
 def p_statement_2(t):
@@ -84,37 +116,27 @@ def p_statement_2(t):
 
 def p_statement_3(t):
 	'statement : iterative_statement'
-	n = Node('statement3')
-	n.add_child(t[1])
-	t[0] = n
+	t[0] = t[1]
 	pass
 
 def p_statement_4(t):
 	'statement : function'
-	n = Node('statement4')
-	n.add_child(t[1])
-	t[0] = n
+	t[0] = t[1]
 	pass
 
 def p_statement_5(t):
 	'statement : constant_statement'
-	n = Node('statement5')
-	n.add_child(t[1])
-	t[0] = n
+	t[0] = t[1]
 	pass
 
 def p_statement_6(t):
 	'statement : conditional_statement'
-	n = Node('statement6')
-	n.add_child(t[1])
-	t[0] = n
+	t[0] = t[1]
 	pass
 
 def p_statement_7(t):
 	'statement : COMMENT'
-	n = Node('statement7')
-	n.add_child(Node(t[1]))
-	t[0] = n
+	t[0] = Node(t[1])
 	pass
 
 def p_constant_statement_1(t):
@@ -156,12 +178,20 @@ def p_declaration_1(t):
 	n.add_child(t[1])
 	n.add_child(t[2])
 	n.add_child(Node(t[3]))
+	global current_scope
+	for i in current_scope.variables:
+		if(current_scope.variables[i]['type']=='NA'):
+			current_scope.variables[i]['type'] = t[1].data
 	t[0] = n
 	pass
 
 def p_enum_list_1(t):
 	'enum_list : VARIABLE COMMA enum_list'
 	n = Node('enum_list1')
+	global current_scope
+	new_var = current_scope.add_variable(t[1], 'NA')
+	if(not new_var):
+		print "Error: Variable", t[1], "declared multiple times in same scope."
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
 	n.add_child(t[3])
@@ -171,9 +201,14 @@ def p_enum_list_1(t):
 def p_enum_list_2(t):
 	'enum_list : VARIABLE EQUALS exp COMMA enum_list'
 	n = Node('enum_list2')
-	n.add_child(Node(t[1]))
-	n.add_child(Node(t[2]))
-	n.add_child(t[3])
+	global current_scope
+	new_var = current_scope.add_variable(t[1], 'NA')
+	if(not new_var):
+		print "Error: Variable", t[1], "declared multiple times in same scope."
+	x = Node(t[2])
+	x.add_child(Node(t[1]))
+	x.add_child(t[3])
+	n.add_child(x)
 	n.add_child(Node(t[4]))
 	n.add_child(t[5])
 	t[0] = n
@@ -181,361 +216,280 @@ def p_enum_list_2(t):
 
 def p_enum_list_3(t):
 	'enum_list : VARIABLE'
-	n = Node('enum_list3')
-	n.add_child(Node(t[1]))
-	t[0] = n
+	global current_scope
+	new_var = current_scope.add_variable(t[1], 'NA')
+	if(not new_var):
+		print "Error: Variable", t[1], "declared multiple times in same scope."
+	t[0] = Node(t[1])
 	pass
 
 def p_enum_list_4(t):
 	'enum_list : VARIABLE EQUALS exp'
-	n = Node('enum_list4')
+	global current_scope
+	new_var = current_scope.add_variable(t[1], 'NA')
+	if(not new_var):
+		print "Error: Variable", t[1], "declared multiple times in same scope."
+	n = Node(t[2])
 	n.add_child(Node(t[1]))
-	n.add_child(Node(t[2]))
-	n.add_child(t[3])
-	t[0] = n
-	pass
-
-def p_enum_list_5(t):
-	'enum_list : array COMMA enum_list'
-	n = Node('enum_list5')
-	n.add_child(Node(t[1]))
-	n.add_child(Node(t[2]))
-	n.add_child(t[3])
-	t[0] = n
-	pass
-
-def p_enum_list_6(t):
-	'enum_list : array EQUALS exp COMMA enum_list'
-	n = Node('enum_list6')
-	n.add_child(Node(t[1]))
-	n.add_child(Node(t[2]))
-	n.add_child(t[3])
-	n.add_child(Node(t[4]))
-	n.add_child(t[5])
-	t[0] = n
-	pass
-
-def p_enum_list_7(t):
-	'enum_list : array'
-	n = Node('enum_list7')
-	n.add_child(Node(t[1]))
-	t[0] = n
-	pass
-
-def p_enum_list_8(t):
-	'enum_list : array EQUALS exp'
-	n = Node('enum_list8')
-	n.add_child(Node(t[1]))
-	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_type_1(t):
 	'type : INT'
-	n = Node('type1')
-	n.add_child(Node(t[1]))
-	t[0] = n
+	t[0] = Node(t[1])
 	pass
 
 def p_type_2(t):
 	'type : FLOAT'
-	n = Node('type2')
-	n.add_child(Node(t[1]))
-	t[0] = n
+	t[0] = Node(t[1])
 	pass
 
 def p_type_3(t):
 	'type : CHAR'
-	n = Node('type3')
-	n.add_child(Node(t[1]))
-	t[0] = n
+	t[0] = Node(t[1])
 	pass
 
 def p_type_4(t):
 	'type : DOUBLE'
-	n = Node('type4')
-	n.add_child(Node(t[1]))
-	t[0] = n
+	t[0] = Node(t[1])
 	pass
 
 def p_type_5(t):
 	'type : VOID'
-	n = Node('type5')
-	n.add_child(Node(t[1]))
-	t[0] = n
+	t[0] = Node(t[1])
 	pass
 
 def p_type_6(t):
 	'type : SHORT'
-	n = Node('type6')
-	n.add_child(Node(t[1]))
-	t[0] = n
+	t[0] = Node(t[1])
 	pass
 
 def p_type_7(t):
 	'type : LONG'
-	n = Node('type7')
-	n.add_child(Node(t[1]))
-	t[0] = n
+	t[0] = Node(t[1])
 	pass
 
 def p_constant_1(t):
 	'constant : HEX_INT'
-	n = Node('constant1')
-	n.add_child(Node(t[1]))
-	t[0] = n
+	t[0] = Node(t[1])
 	pass
 
 def p_constant_2(t):
 	'constant : DOT_REAL'
-	n = Node('constant2')
-	n.add_child(Node(t[1]))
-	t[0] = n
+	t[0] = Node(t[1])
 	pass
 
 def p_constant_3(t):
 	'constant : EXP_REAL'
-	n = Node('constant3')
-	n.add_child(Node(t[1]))
-	t[0] = n
+	t[0] = Node(t[1])
 	pass
 
 def p_constant_4(t):
 	'constant : DEC_INT'
-	n = Node('constant4')
-	n.add_child(Node(t[1]))
-	t[0] = n
+	t[0] = Node(t[1])
 	pass
 
 def p_constant_5(t):
 	'constant : CHARACTER'
-	n = Node('constant5')
-	n.add_child(Node(t[1]))
-	t[0] = n
+	t[0] = Node(t[1])
 	pass
 
 def p_exp_1(t):
 	'exp : exp ADD exp'
-	n = Node('exp1')
+	n = Node(t[2])
 	n.add_child(t[1])
-	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_exp_2(t):
 	'exp : exp MINUS exp'
-	n = Node('exp2')
+	n = Node(t[2])
 	n.add_child(t[1])
-	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_exp_3(t):
 	'exp : exp MULT exp'
-	n = Node('exp3')
+	n = Node(t[2])
 	n.add_child(t[1])
-	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_exp_4(t):
 	'exp : exp DIV exp'
-	n = Node('exp4')
+	n = Node(t[2])
 	n.add_child(t[1])
-	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_exp_5(t):
 	'exp : exp MOD exp'
-	n = Node('exp5')
+	n = Node(t[2])
 	n.add_child(t[1])
-	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_exp_6(t):
 	'exp : exp L_OP exp'
-	n = Node('exp6')
+	n = Node(t[2])
 	n.add_child(t[1])
-	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_exp_7(t):
 	'exp : exp G_OP exp'
-	n = Node('exp7')
+	n = Node(t[2])
 	n.add_child(t[1])
-	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_exp_8(t):
 	'exp : exp LE_OP exp'
-	n = Node('exp8')
+	n = Node(t[2])
 	n.add_child(t[1])
-	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_exp_9(t):
 	'exp : exp GE_OP exp'
-	n = Node('exp9')
+	n = Node(t[2])
 	n.add_child(t[1])
-	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_exp_10(t):
 	'exp : exp NOTEQUALS exp'
-	n = Node('exp10')
+	n = Node(t[2])
 	n.add_child(t[1])
-	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_exp_11(t):
 	'exp : exp EQUALS_OP exp'
-	n = Node('exp11')
+	n = Node(t[2])
 	n.add_child(t[1])
-	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_exp_12(t):
 	'exp : exp OR_OP exp'
-	n = Node('exp12')
+	n = Node(t[2])
 	n.add_child(t[1])
-	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_exp_13(t):
 	'exp : exp AND_OP exp'
-	n = Node('exp13')
+	n = Node(t[2])
 	n.add_child(t[1])
-	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_exp_14(t):
 	'exp : exp MUL_ASSIGN exp'
-	n = Node('exp14')
+	n = Node(t[2])
 	n.add_child(t[1])
-	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_exp_15(t):
 	'exp : exp DIV_ASSIGN exp'
-	n = Node('exp15')
+	n = Node(t[2])
 	n.add_child(t[1])
-	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_exp_16(t):
 	'exp : exp MOD_ASSIGN exp'
-	n = Node('exp16')
+	n = Node(t[2])
 	n.add_child(t[1])
-	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_exp_17(t):
 	'exp : exp ADD_ASSIGN exp'
-	n = Node('exp17')
+	n = Node(t[2])
 	n.add_child(t[1])
-	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_exp_18(t):
 	'exp : exp SUB_ASSIGN exp'
-	n = Node('exp18')
+	n = Node(t[2])
 	n.add_child(t[1])
-	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_exp_19(t):
 	'exp : exp LEFT_ASSIGN exp'
-	n = Node('exp19')
+	n = Node(t[2])
 	n.add_child(t[1])
-	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_exp_20(t):
 	'exp : exp RIGHT_ASSIGN exp'
-	n = Node('exp20')
+	n = Node(t[2])
 	n.add_child(t[1])
-	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_exp_21(t):
 	'exp : exp AND_ASSIGN exp'
-	n = Node('exp21')
+	n = Node(t[2])
 	n.add_child(t[1])
-	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_exp_22(t):
 	'exp : exp XOR_ASSIGN exp'
-	n = Node('exp22')
+	n = Node(t[2])
 	n.add_child(t[1])
-	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_exp_23(t):
 	'exp : exp OR_ASSIGN exp'
-	n = Node('exp23')
+	n = Node(t[2])
 	n.add_child(t[1])
-	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_exp_24(t):
 	'exp : exp EQUALS exp'
-	n = Node('exp24')
+	n = Node(t[2])
 	n.add_child(t[1])
-	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_exp_25(t):
 	'exp : unary_expression'
-	n = Node('exp25')
-	n.add_child(t[1])
-	t[0] = n
+	t[0] = t[1]
 	pass
 
 def p_exp_26(t):
@@ -549,23 +503,17 @@ def p_exp_26(t):
 
 def p_exp_27(t):
 	'exp : constant'
-	n = Node('exp27')
-	n.add_child(t[1])
-	t[0] = n
+	t[0] = t[1]
 	pass
 
 def p_exp_28(t):
 	'exp : VARIABLE'
-	n = Node('exp28')
-	n.add_child(Node(t[1]))
-	t[0] = n
+	t[0] = Node(t[1])
 	pass
 
 def p_exp_29(t):
 	'exp : function_call'
-	n = Node('exp29')
-	n.add_child(t[1])
-	t[0] = n
+	t[0] = t[1]
 	pass
 
 def p_unary_expression_1(t):
@@ -586,16 +534,12 @@ def p_unary_expression_2(t):
 
 def p_unary_operator_1(t):
 	'unary_operator : INCREMENT'
-	n = Node('unary_operator1')
-	n.add_child(Node(t[1]))
-	t[0] = n
+	t[0] = Node(t[1])
 	pass
 
 def p_unary_operator_2(t):
 	'unary_operator : DECREMENT'
-	n = Node('unary_operator2')
-	n.add_child(Node(t[1]))
-	t[0] = n
+	t[0] = Node(t[1])
 	pass
 
 def p_iterative_statement_1(t):
@@ -614,7 +558,7 @@ def p_iterative_statement_1(t):
 	pass
 
 def p_iterative_statement_2(t):
-	'iterative_statement : FOR LPAREN iterative_exp SEMI_COLON iterative_exp SEMI_COLON iterative_exp RPAREN LBRACE statements RBRACE'
+	'iterative_statement : FOR LPAREN iterative_exp SEMI_COLON iterative_exp SEMI_COLON iterative_exp RPAREN lbrace statements rbrace'
 	n = Node('iterative_statement2')
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -646,7 +590,7 @@ def p_iterative_statement_3(t):
 	pass
 
 def p_iterative_statement_4(t):
-	'iterative_statement : FOR LPAREN iterative_exp SEMI_COLON iterative_exp SEMI_COLON iterative_exp RPAREN LBRACE RBRACE'
+	'iterative_statement : FOR LPAREN iterative_exp SEMI_COLON iterative_exp SEMI_COLON iterative_exp RPAREN lbrace rbrace'
 	n = Node('iterative_statement4')
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -684,7 +628,7 @@ def p_iterative_statement_6(t):
 	pass
 
 def p_iterative_statement_7(t):
-	'iterative_statement : WHILE LPAREN exp RPAREN LBRACE statements RBRACE'
+	'iterative_statement : WHILE LPAREN exp RPAREN lbrace statements rbrace'
 	n = Node('iterative_statement7')
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -697,7 +641,7 @@ def p_iterative_statement_7(t):
 	pass
 
 def p_iterative_statement_8(t):
-	'iterative_statement : WHILE LPAREN exp RPAREN LBRACE RBRACE'
+	'iterative_statement : WHILE LPAREN exp RPAREN lbrace rbrace'
 	n = Node('iterative_statement8')
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -722,7 +666,7 @@ def p_iterative_statement_9(t):
 	pass
 
 def p_iterative_statement_10(t):
-	'iterative_statement : DO LBRACE statements RBRACE WHILE LPAREN exp RPAREN SEMI_COLON'
+	'iterative_statement : DO lbrace statements rbrace WHILE LPAREN exp RPAREN SEMI_COLON'
 	n = Node('iterative_statement10')
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -750,7 +694,7 @@ def p_iterative_statement_11(t):
 	pass
 
 def p_iterative_statement_12(t):
-	'iterative_statement : DO LBRACE RBRACE WHILE LPAREN exp RPAREN SEMI_COLON'
+	'iterative_statement : DO lbrace rbrace WHILE LPAREN exp RPAREN SEMI_COLON'
 	n = Node('iterative_statement12')
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -774,10 +718,9 @@ def p_iterative_exp_1(t):
 
 def p_iterative_exp_2(t):
 	'iterative_exp : exp'
-	n = Node('iterative_exp2')
-	n.add_child(t[1])
-	t[0] = n
+	t[0] = t[1]
 	pass
+
 
 def p_conditional_statement_1(t):
 	'conditional_statement : IF LPAREN exp RPAREN statement %prec UELSE'
@@ -791,7 +734,7 @@ def p_conditional_statement_1(t):
 	pass
 
 def p_conditional_statement_2(t):
-	'conditional_statement : IF LPAREN exp RPAREN LBRACE statements RBRACE %prec UELSE'
+	'conditional_statement : IF LPAREN exp RPAREN lbrace statements rbrace %prec UELSE'
 	n = Node('conditional_statement2')
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -817,7 +760,7 @@ def p_conditional_statement_3(t):
 	pass
 
 def p_conditional_statement_4(t):
-	'conditional_statement : IF LPAREN exp RPAREN LBRACE statements RBRACE ELSE statement'
+	'conditional_statement : IF LPAREN exp RPAREN lbrace statements rbrace ELSE statement'
 	n = Node('conditional_statement4')
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -832,7 +775,7 @@ def p_conditional_statement_4(t):
 	pass
 
 def p_conditional_statement_5(t):
-	'conditional_statement : IF LPAREN exp RPAREN statement ELSE LBRACE statements RBRACE'
+	'conditional_statement : IF LPAREN exp RPAREN statement ELSE lbrace statements rbrace'
 	n = Node('conditional_statement5')
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -847,7 +790,7 @@ def p_conditional_statement_5(t):
 	pass
 
 def p_conditional_statement_6(t):
-	'conditional_statement : IF LPAREN exp RPAREN LBRACE statements RBRACE ELSE LBRACE statements RBRACE'
+	'conditional_statement : IF LPAREN exp RPAREN lbrace statements rbrace ELSE lbrace statements rbrace'
 	n = Node('conditional_statement6')
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -863,22 +806,19 @@ def p_conditional_statement_6(t):
 	t[0] = n
 	pass
 
+
 def p_function_1(t):
 	'function : normal_function'
-	n = Node('function1')
-	n.add_child(t[1])
-	t[0] = n
+	t[0] = t[1]
 	pass
 
 def p_function_2(t):
 	'function : main_function'
-	n = Node('function2')
-	n.add_child(t[1])
-	t[0] = n
+	t[0] = t[1]
 	pass
 
 def p_main_function_1(t):
-	'main_function : type MAIN LPAREN parameters RPAREN LBRACE statements RBRACE'
+	'main_function : type MAIN LPAREN parameters RPAREN lbrace statements rbrace'
 	n = Node('main_function1')
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
@@ -892,7 +832,7 @@ def p_main_function_1(t):
 	pass
 
 def p_main_function_2(t):
-	'main_function : type MAIN LPAREN parameters RPAREN LBRACE RBRACE'
+	'main_function : type MAIN LPAREN parameters RPAREN lbrace rbrace'
 	n = Node('main_function2')
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
@@ -905,7 +845,7 @@ def p_main_function_2(t):
 	pass
 
 def p_main_function_3(t):
-	'main_function : MAIN LPAREN parameters RPAREN LBRACE statements RBRACE'
+	'main_function : MAIN LPAREN parameters RPAREN lbrace statements rbrace'
 	n = Node('main_function3')
 	n.add_child(Node("VOID"))
 	n.add_child(Node(t[1]))
@@ -919,7 +859,7 @@ def p_main_function_3(t):
 	pass
 
 def p_main_function_4(t):
-	'main_function : MAIN LPAREN parameters RPAREN LBRACE RBRACE'
+	'main_function : MAIN LPAREN parameters RPAREN lbrace rbrace'
 	n = Node('main_function4')
 	n.add_child(Node("VOID"))
 	n.add_child(Node(t[1]))
@@ -930,9 +870,8 @@ def p_main_function_4(t):
 	n.add_child(Node(t[6]))
 	t[0] = n
 	pass
-
 def p_main_function_5(t):
-	'main_function : type MAIN LPAREN RPAREN LBRACE statements RBRACE'
+	'main_function : type MAIN LPAREN RPAREN lbrace statements rbrace'
 	n = Node('main_function5')
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
@@ -945,7 +884,7 @@ def p_main_function_5(t):
 	pass
 
 def p_main_function_6(t):
-	'main_function : type MAIN LPAREN RPAREN LBRACE RBRACE'
+	'main_function : type MAIN LPAREN RPAREN lbrace rbrace'
 	n = Node('main_function6')
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
@@ -957,7 +896,7 @@ def p_main_function_6(t):
 	pass
 
 def p_main_function_7(t):
-	'main_function : MAIN LPAREN RPAREN LBRACE statements RBRACE'
+	'main_function : MAIN LPAREN RPAREN lbrace statements rbrace'
 	n = Node('main_function7')
 	n.add_child(Node("VOID"))
 	n.add_child(Node(t[1]))
@@ -970,7 +909,7 @@ def p_main_function_7(t):
 	pass
 
 def p_main_function_8(t):
-	'main_function : MAIN LPAREN RPAREN LBRACE RBRACE'
+	'main_function : MAIN LPAREN RPAREN lbrace rbrace'
 	n = Node('main_function8')
 	n.add_child(Node("VOID"))
 	n.add_child(Node(t[1]))
@@ -983,7 +922,7 @@ def p_main_function_8(t):
 
 
 def p_normal_function_1(t):
-	'normal_function : type VARIABLE LPAREN parameters RPAREN LBRACE statements RBRACE'
+	'normal_function : type VARIABLE LPAREN parameters RPAREN lbrace statements rbrace'
 	n = Node('normal_function1')
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
@@ -997,7 +936,7 @@ def p_normal_function_1(t):
 	pass
 
 def p_normal_function_2(t):
-	'normal_function : type VARIABLE LPAREN parameters RPAREN LBRACE RBRACE'
+	'normal_function : type VARIABLE LPAREN parameters RPAREN lbrace rbrace'
 	n = Node('normal_function2')
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
@@ -1010,7 +949,7 @@ def p_normal_function_2(t):
 	pass
 
 def p_normal_function_3(t):
-	'normal_function : VARIABLE LPAREN parameters RPAREN LBRACE statements RBRACE'
+	'normal_function : VARIABLE LPAREN parameters RPAREN lbrace statements rbrace'
 	n = Node('normal_function3')
 	n.add_child(Node("VOID"))
 	n.add_child(Node(t[1]))
@@ -1024,7 +963,7 @@ def p_normal_function_3(t):
 	pass
 
 def p_normal_function_4(t):
-	'normal_function : VARIABLE LPAREN parameters RPAREN LBRACE RBRACE'
+	'normal_function : VARIABLE LPAREN parameters RPAREN lbrace rbrace'
 	n = Node('normal_function4')
 	n.add_child(Node("VOID"))
 	n.add_child(Node(t[1]))
@@ -1037,7 +976,7 @@ def p_normal_function_4(t):
 	pass
 
 def p_normal_function_5(t):
-	'normal_function : type VARIABLE LPAREN RPAREN LBRACE statements RBRACE'
+	'normal_function : type VARIABLE LPAREN RPAREN lbrace statements rbrace'
 	n = Node('normal_function5')
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
@@ -1050,7 +989,7 @@ def p_normal_function_5(t):
 	pass
 
 def p_normal_function_6(t):
-	'normal_function : type VARIABLE LPAREN RPAREN LBRACE RBRACE'
+	'normal_function : type VARIABLE LPAREN RPAREN lbrace rbrace'
 	n = Node('normal_function6')
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
@@ -1062,7 +1001,7 @@ def p_normal_function_6(t):
 	pass
 
 def p_normal_function_7(t):
-	'normal_function : VARIABLE LPAREN RPAREN LBRACE statements RBRACE'
+	'normal_function : VARIABLE LPAREN RPAREN lbrace statements rbrace'
 	n = Node('normal_function7')
 	n.add_child(Node("VOID"))
 	n.add_child(Node(t[1]))
@@ -1075,7 +1014,7 @@ def p_normal_function_7(t):
 	pass
 
 def p_normal_function_8(t):
-	'normal_function : VARIABLE LPAREN RPAREN LBRACE RBRACE'
+	'normal_function : VARIABLE LPAREN RPAREN lbrace rbrace'
 	n = Node('normal_function8')
 	n.add_child(Node("VOID"))
 	n.add_child(Node(t[1]))
@@ -1085,7 +1024,6 @@ def p_normal_function_8(t):
 	n.add_child(Node(t[5]))
 	t[0] = n
 	pass
-
 
 def p_parameters_1(t):
 	'parameters : type VARIABLE COMMA parameters'
@@ -1144,25 +1082,39 @@ def p_arguments_2(t):
 
 def p_arguments_3(t):
 	'arguments : VARIABLE'
-	n = Node('arguments3')
-	n.add_child(Node(t[1]))
-	t[0] = n
+	t[0] = Node(t[1])
 	pass
 
 def p_arguments_4(t):
 	'arguments : constant'
-	n = Node('arguments4')
-	n.add_child(t[1])
-	t[0] = n
-	pass 
+	t[0] = t[1]
+	pass
+
+def p_lbrace_1(t):
+	'lbrace : LBRACE'
+	t[0] = t[1]
+	global current_scope, tableux
+	new_scope = Table(tableux)
+	tableux += 1
+	current_scope.add_table(new_scope)
+	current_scope = new_scope
+	pass
+
+def p_rbrace_1(t):
+	'rbrace : RBRACE'
+	t[0] = t[1]
+	global current_scope
+	current_scope = current_scope.parent
+	pass
 
 def p_empty(t):
 	'empty : '
 	t[0] = Node('empty')
 	pass
 
-def p_error(t):
-    print "ERROR"
+def p_error(p):
+    print "Error: Syntax error in line", p.lineno
+    pass
 
 
 def parse():

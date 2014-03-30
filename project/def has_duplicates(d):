@@ -1,0 +1,4 @@
+def has_duplicates(d):
+    return len(d) != len(set(d.values()))
+
+print has_duplicates({'a': 1, 'b': 1, 'c': 2})

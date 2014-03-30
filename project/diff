@@ -1,0 +1,206 @@
+19a20,39
+> class Table(object):
+> 	def __init__(self, data):
+> 		self.data = data
+> 		self.parent = None
+> 		self.child_tables = []
+> 		self.variables = {}
+> 
+> 	def add_table(self, obj):
+> 		self.child_tables.append(obj)
+> 		obj.parent = self
+> 
+> 	def add_variable(self, obj, setType):
+> 		if obj in self.variables:
+> 			return False
+> 		else:
+> 			self.variables[obj] = {}
+> 			self.variables[obj]['type'] = setType
+> 			self.variables[obj]['size'] = 0
+> 			return True
+> 
+27a48,53
+> 
+> lineno = 1
+> global_scope = Table('Global_variables')
+> current_scope = global_scope
+> tableux = 1
+> 
+29c55
+< f = open('ast.dot','wb')
+---
+> f = open('st.dot','wb')
+42a69,79
+> def print_table(obj):
+> 	print "\nPrinting table", obj.data
+> 	print "Children: ",
+> 	for i in obj.child_tables:
+> 		print i.data,
+> 	print " "
+> 	for j in obj.variables:
+> 		print j, ':', obj.variables[j]
+> 	for i in obj.child_tables:
+> 		print_table(i)
+> 
+46d82
+< 	print t[0].data
+49a86,87
+> 	global global_scope
+> 	print_table(global_scope)
+142a181,184
+> 	global current_scope
+> 	for i in current_scope.variables:
+> 		if(current_scope.variables[i]['type']=='NA'):
+> 			current_scope.variables[i]['type'] = t[1].data
+148a191,194
+> 	global current_scope
+> 	new_var = current_scope.add_variable(t[1], 'NA')
+> 	if(not new_var):
+> 		print "Error:", lineno, ": Variable", t[1], "declared twice in same scope."
+157a204,207
+> 	global current_scope
+> 	new_var = current_scope.add_variable(t[1], 'NA')
+> 	if(not new_var):
+> 		print "Error:", lineno, ": Variable", t[1], "declared twice in same scope."
+168a219,222
+> 	global current_scope
+> 	new_var = current_scope.add_variable(t[1], 'NA')
+> 	if(not new_var):
+> 		print "Error:", lineno, ": Variable", t[1], "declared twice in same scope."
+173a228,231
+> 	global current_scope
+> 	new_var = current_scope.add_variable(t[1], 'NA')
+> 	if(not new_var):
+> 		print "Error:", lineno, ": Variable", t[1], "declared twice in same scope."
+503c561
+< 	'iterative_statement : FOR LPAREN iterative_exp SEMI_COLON iterative_exp SEMI_COLON iterative_exp RPAREN LBRACE statements RBRACE'
+---
+> 	'iterative_statement : FOR LPAREN iterative_exp SEMI_COLON iterative_exp SEMI_COLON iterative_exp RPAREN lbrace statements rbrace'
+535c593
+< 	'iterative_statement : FOR LPAREN iterative_exp SEMI_COLON iterative_exp SEMI_COLON iterative_exp RPAREN LBRACE RBRACE'
+---
+> 	'iterative_statement : FOR LPAREN iterative_exp SEMI_COLON iterative_exp SEMI_COLON iterative_exp RPAREN lbrace rbrace'
+573c631
+< 	'iterative_statement : WHILE LPAREN exp RPAREN LBRACE statements RBRACE'
+---
+> 	'iterative_statement : WHILE LPAREN exp RPAREN lbrace statements rbrace'
+586c644
+< 	'iterative_statement : WHILE LPAREN exp RPAREN LBRACE RBRACE'
+---
+> 	'iterative_statement : WHILE LPAREN exp RPAREN lbrace rbrace'
+611c669
+< 	'iterative_statement : DO LBRACE statements RBRACE WHILE LPAREN exp RPAREN SEMI_COLON'
+---
+> 	'iterative_statement : DO lbrace statements rbrace WHILE LPAREN exp RPAREN SEMI_COLON'
+639c697
+< 	'iterative_statement : DO LBRACE RBRACE WHILE LPAREN exp RPAREN SEMI_COLON'
+---
+> 	'iterative_statement : DO lbrace rbrace WHILE LPAREN exp RPAREN SEMI_COLON'
+679c737
+< 	'conditional_statement : IF LPAREN exp RPAREN LBRACE statements RBRACE %prec UELSE'
+---
+> 	'conditional_statement : IF LPAREN exp RPAREN lbrace statements rbrace %prec UELSE'
+705c763
+< 	'conditional_statement : IF LPAREN exp RPAREN LBRACE statements RBRACE ELSE statement'
+---
+> 	'conditional_statement : IF LPAREN exp RPAREN lbrace statements rbrace ELSE statement'
+720c778
+< 	'conditional_statement : IF LPAREN exp RPAREN statement ELSE LBRACE statements RBRACE'
+---
+> 	'conditional_statement : IF LPAREN exp RPAREN statement ELSE lbrace statements rbrace'
+735c793
+< 	'conditional_statement : IF LPAREN exp RPAREN LBRACE statements RBRACE ELSE LBRACE statements RBRACE'
+---
+> 	'conditional_statement : IF LPAREN exp RPAREN lbrace statements rbrace ELSE lbrace statements rbrace'
+763c821
+< 	'main_function : type MAIN LPAREN parameters RPAREN LBRACE statements RBRACE'
+---
+> 	'main_function : type MAIN LPAREN parameters RPAREN lbrace statements rbrace'
+777c835
+< 	'main_function : type MAIN LPAREN parameters RPAREN LBRACE RBRACE'
+---
+> 	'main_function : type MAIN LPAREN parameters RPAREN lbrace rbrace'
+790c848
+< 	'main_function : MAIN LPAREN parameters RPAREN LBRACE statements RBRACE'
+---
+> 	'main_function : MAIN LPAREN parameters RPAREN lbrace statements rbrace'
+804c862
+< 	'main_function : MAIN LPAREN parameters RPAREN LBRACE RBRACE'
+---
+> 	'main_function : MAIN LPAREN parameters RPAREN lbrace rbrace'
+816c874
+< 	'main_function : type MAIN LPAREN RPAREN LBRACE statements RBRACE'
+---
+> 	'main_function : type MAIN LPAREN RPAREN lbrace statements rbrace'
+829c887
+< 	'main_function : type MAIN LPAREN RPAREN LBRACE RBRACE'
+---
+> 	'main_function : type MAIN LPAREN RPAREN lbrace rbrace'
+841c899
+< 	'main_function : MAIN LPAREN RPAREN LBRACE statements RBRACE'
+---
+> 	'main_function : MAIN LPAREN RPAREN lbrace statements rbrace'
+854c912
+< 	'main_function : MAIN LPAREN RPAREN LBRACE RBRACE'
+---
+> 	'main_function : MAIN LPAREN RPAREN lbrace rbrace'
+867c925
+< 	'normal_function : type VARIABLE LPAREN parameters RPAREN LBRACE statements RBRACE'
+---
+> 	'normal_function : type VARIABLE LPAREN parameters RPAREN lbrace statements rbrace'
+881c939
+< 	'normal_function : type VARIABLE LPAREN parameters RPAREN LBRACE RBRACE'
+---
+> 	'normal_function : type VARIABLE LPAREN parameters RPAREN lbrace rbrace'
+894c952
+< 	'normal_function : VARIABLE LPAREN parameters RPAREN LBRACE statements RBRACE'
+---
+> 	'normal_function : VARIABLE LPAREN parameters RPAREN lbrace statements rbrace'
+908c966
+< 	'normal_function : VARIABLE LPAREN parameters RPAREN LBRACE RBRACE'
+---
+> 	'normal_function : VARIABLE LPAREN parameters RPAREN lbrace rbrace'
+921c979
+< 	'normal_function : type VARIABLE LPAREN RPAREN LBRACE statements RBRACE'
+---
+> 	'normal_function : type VARIABLE LPAREN RPAREN lbrace statements rbrace'
+934c992
+< 	'normal_function : type VARIABLE LPAREN RPAREN LBRACE RBRACE'
+---
+> 	'normal_function : type VARIABLE LPAREN RPAREN lbrace rbrace'
+946c1004
+< 	'normal_function : VARIABLE LPAREN RPAREN LBRACE statements RBRACE'
+---
+> 	'normal_function : VARIABLE LPAREN RPAREN lbrace statements rbrace'
+959c1017
+< 	'normal_function : VARIABLE LPAREN RPAREN LBRACE RBRACE'
+---
+> 	'normal_function : VARIABLE LPAREN RPAREN lbrace rbrace'
+1034a1093,1115
+> def p_lbrace_1(t):
+> 	'lbrace : LBRACE'
+> 	t[0] = Node(t[1])
+> 	global current_scope, i
+> 	new_scope = Table(i)
+> 	i += 1
+> 	current_scope.add_table(new_scope)
+> 	current_scope = new_scope
+> 	pass
+> 
+> def p_rbrace_1(t):
+> 	'rbrace : RBRACE'
+> 	t[0] = Node(t[1])
+> 	global current_scope
+> 	current_scope = current_scope.parent
+> 	pass
+> 
+> def p_newline_1(t):
+> 	'newline : NEWLINE'
+> 	global lineno
+> 	lineno += 1
+> 	pass
+> 
+1046c1127
+< 	p = yacc.parse(f.read(), debug=1)
+---
+> 	p = yacc.parse(f.read(), debug=0)

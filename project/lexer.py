@@ -83,12 +83,11 @@ tokens = [
    'RIGHT_ASSIGN',
    'AND_ASSIGN',
    'XOR_ASSIGN',
-   'OR_ASSIGN'
+   'OR_ASSIGN',
 ] + list(reserved.values())
 
 t_SINGLE_QUOTES = r'\''
 t_DOUBLE_QUOTES = r'\"'
-t_NEWLINE = r'\\n'
 t_COMMENT = r'(/\*(.|\n)*?\*/)|(//.*)'
 t_INT 		  = r'int'
 t_FLOAT		  = r'float'
@@ -146,6 +145,11 @@ t_CONDOP      = r'\?'
 t_COMMA	      = r'\,'
 t_ignore  	  = ' \n\r\t'
 
+def t_NEWLINE(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+    return t
+
 def t_VARIABLE(t):
 	r'[a-zA-Z][0-9a-zA-Z_]*'
 	if t.value in reserved:
@@ -158,13 +162,3 @@ def t_error(t):
 
 
 lexer = lex.lex()
-
-'''print sys.argv[0]
-with open(sys.argv[1], 'r') as content_file:
-    data = content_file.read()
-lexer.input(data)
-
-while True:
-	tok = lexer.token()
-	if not tok: break
-	print tok.type + " - " + tok.value + "\n"'''

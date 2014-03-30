@@ -1,12 +1,23 @@
 main()
 {
-int i=0,j=0,k=91;
-for (i = 0; i < 1; ++i)
-{
-	j=1;
-	printf(j);	
-	int x = j;
-	int j = 5;
-	printf(sj);
+int i=0,j=0,k=91;char y;
+while(2>1){
+	int i;
+	if(5>4){
+		i = 0;
+		int i;
+	}if(5>4){
+		i = 0;
+		int i;
+	}if(5>4){
+		i = 0;
+		int i;
+	}
+	if(5>4){
+		i = 0;
+		int i;
+	}
 }
+char y;
 }
+char y;
