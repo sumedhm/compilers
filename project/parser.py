@@ -198,36 +198,66 @@ def p_enum_list_4(t):
 def p_enum_list_5(t):
 	'enum_list : array COMMA enum_list'
 	n = Node('enum_list5')
-	n.add_child(Node(t[1]))
+	n.add_child(t[1])
 	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
 def p_enum_list_6(t):
-	'enum_list : array EQUALS exp COMMA enum_list'
+	'enum_list : array EQUALS LBRACE num_list RBRACE COMMA enum_list'
 	n = Node('enum_list6')
-	n.add_child(Node(t[1]))
+	n.add_child(t[1])
 	n.add_child(Node(t[2]))
-	n.add_child(t[3])
-	n.add_child(Node(t[4]))
-	n.add_child(t[5])
+	n.add_child(Node(t[3]))
+	n.add_child(t[4])
+	n.add_child(Node(t[5]))
+	n.add_child(Node(t[6]))
+	n.add_child(t[7])
 	t[0] = n
 	pass
 
 def p_enum_list_7(t):
 	'enum_list : array'
 	n = Node('enum_list7')
-	n.add_child(Node(t[1]))
+	n.add_child(t[1])
 	t[0] = n
 	pass
 
 def p_enum_list_8(t):
-	'enum_list : array EQUALS exp'
+	'enum_list : array EQUALS LBRACE num_list RBRACE'
 	n = Node('enum_list8')
+	n.add_child(t[1])
+	n.add_child(Node(t[2]))
+	n.add_child(Node(t[3]))
+	n.add_child(t[4])
+	n.add_child(Node(t[5]))
+	t[0] = n
+	pass
+
+def p_array_1(t):
+	'array : VARIABLE LBIG exp RBIG'
+	n = Node('array')
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
 	n.add_child(t[3])
+	n.add_child(Node(t[4]))
+	t[0] = n
+	pass
+
+def p_num_list_1(t):
+	'num_list : exp COMMA num_list'
+	n = Node('num_list1')
+	n.add_child(t[1])
+	n.add_child(Node(t[2]))
+	n.add_child(t[3])
+	t[0] = n
+	pass
+
+def p_num_list_2(t):
+	'num_list : exp'
+	n = Node('num_list1')
+	n.add_child(t[1])
 	t[0] = n
 	pass
 
@@ -562,8 +592,15 @@ def p_exp_28(t):
 	pass
 
 def p_exp_29(t):
-	'exp : function_call'
+	'exp : array'
 	n = Node('exp29')
+	n.add_child(t[1])
+	t[0] = n
+	pass
+
+def p_exp_30(t):
+	'exp : function_call'
+	n = Node('exp30')
 	n.add_child(t[1])
 	t[0] = n
 	pass
@@ -581,6 +618,22 @@ def p_unary_expression_2(t):
 	n = Node('unary_expression2')
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
+	t[0] = n
+	pass
+
+def p_unary_expression_3(t):
+	'unary_expression : array unary_operator'
+	n = Node('unary_expression3')
+	n.add_child(t[1])
+	n.add_child(t[2])
+	t[0] = n
+	pass
+
+def p_unary_expression_4(t):
+	'unary_expression : unary_operator array'
+	n = Node('unary_expression4')
+	n.add_child(t[1])
+	n.add_child(t[2])
 	t[0] = n
 	pass
 
@@ -1167,7 +1220,7 @@ def p_error(t):
 
 def parse():
 	f = open(sys.argv[1])
-	p = yacc.parse(f.read(), debug=0)
+	p = yacc.parse(f.read(), debug=1)
 	print p
 
 import profile

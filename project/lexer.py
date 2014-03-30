@@ -12,7 +12,6 @@ reserved = {
 	'if' : 'IF',
 	'else' : 'ELSE',
 	'while' : 'WHILE',
-   '#' : 'HASH',
    'include' : 'INCLUDE',
    'define' : 'DEFINE',
 	'for' : 'FOR',
@@ -34,10 +33,12 @@ tokens = [
    'DOUBLE_QUOTES',
    'COMMENT',
    'MOD',
+   'HASH',
    'ADD',
    'MINUS',
    'MULT',
    'DIV',
+   ''
    'HEX_INT',
    'EXP_REAL',
    'DOT_REAL',
@@ -143,6 +144,7 @@ t_SEMI_COLON  = r'\;'
 t_COLON       = r'\:'
 t_CONDOP      = r'\?'
 t_COMMA	      = r'\,'
+t_ignore_HASH = r'\#.*'
 t_ignore  	  = ' \n\r\t'
 
 def t_NEWLINE(t):

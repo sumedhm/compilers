@@ -28,13 +28,13 @@ class Table(object):
 		self.child_tables.append(obj)
 		obj.parent = self
 
-	def add_variable(self, obj, setType):
+	def add_variable(self, obj, setType, setSize=0):
 		if obj in self.variables:
 			return False
 		else:
 			self.variables[obj] = {}
 			self.variables[obj]['type'] = setType
-			self.variables[obj]['size'] = 0
+			self.variables[obj]['size'] = setSize
 			return True
 
 class Node(object):
@@ -70,10 +70,15 @@ def print_table(obj):
 	print "\nPrinting table", obj.data
 	for j in obj.variables:
 		print j, ':', obj.variables[j]
-	print "Children of obj.data: ",
+	print "Children of", obj.data, ":",
+	flag = False
 	for i in obj.child_tables:
+		flag = True
 		print i.data,
-	print " "
+	if(not flag):
+		print "No child\n"
+	else:
+		print " "
 	for i in obj.child_tables:
 		print_table(i)
 
@@ -233,6 +238,87 @@ def p_enum_list_4(t):
 	n.add_child(Node(t[1]))
 	n.add_child(t[3])
 	t[0] = n
+	pass
+
+def p_enum_list_5(t):
+	'enum_list : VARIABLE LBIG exp RBIG COMMA enum_list'
+	n = Node('enum_list5')
+	global current_scope
+	new_var = current_scope.add_variable(t[1], 'NA', t[3].data)
+	if(not new_var):
+		print "Error: Variable", t[1], "declared multiple times in same scope."
+	n.add_child(Node(t[1]))
+	n.add_child(Node(t[2]))
+	n.add_child(t[3])
+	n.add_child(Node(t[4]))
+	n.add_child(Node(t[5]))
+	n.add_child(t[6])
+	pass
+
+def p_enum_list_6(t):
+	'enum_list : VARIABLE LBIG exp RBIG EQUALS LBRACE num_list RBRACE COMMA enum_list'
+	n = Node('enum_list6')
+	global current_scope
+	new_var = current_scope.add_variable(t[1], 'NA', t[3].data)
+	if(not new_var):
+		print "Error: Variable", t[1], "declared multiple times in same scope."
+	n.add_child(Node(t[1]))
+	n.add_child(Node(t[2]))
+	n.add_child(t[3])
+	n.add_child(Node(t[4]))
+	n.add_child(Node(t[5]))
+	n.add_child(Node(t[6]))
+	n.add_child(t[7])
+	n.add_child(Node(t[8]))
+	n.add_child(Node(t[9]))
+	n.add_child(t[10])
+	t[0] = n
+	pass
+
+def p_enum_list_7(t):
+	'enum_list : VARIABLE LBIG exp RBIG'
+	n = Node('enum_list7')
+	global current_scope
+	new_var = current_scope.add_variable(t[1], 'NA', t[3].data)
+	if(not new_var):
+		print "Error: Variable", t[1], "declared multiple times in same scope."
+	n.add_child(Node(t[1]))
+	n.add_child(Node(t[2]))
+	n.add_child(t[3])
+	n.add_child(Node(t[4]))
+	t[0] = n
+	pass
+
+def p_enum_list_8(t):
+	'enum_list : VARIABLE LBIG exp RBIG EQUALS LBRACE num_list RBRACE'
+	n = Node('enum_list8')
+	global current_scope
+	new_var = current_scope.add_variable(t[1], 'NA', t[3].data)
+	if(not new_var):
+		print "Error: Variable", t[1], "declared multiple times in same scope."
+	n.add_child(Node(t[1]))
+	n.add_child(Node(t[2]))
+	n.add_child(t[3])
+	n.add_child(Node(t[4]))
+	n.add_child(Node(t[5]))
+	n.add_child(Node(t[6]))
+	n.add_child(t[7])
+	n.add_child(Node(t[8]))
+	t[0] = n
+	pass
+
+def p_num_list_1(t):
+	'num_list : exp COMMA num_list'
+	n = Node('num_list1')
+	n.add_child(t[1])
+	n.add_child(Node(t[2]))
+	n.add_child(t[3])
+	t[0] = n
+	pass
+
+def p_num_list_2(t):
+	'num_list : exp'
+	t[0] = t[1]
 	pass
 
 def p_type_1(t):
@@ -512,6 +598,16 @@ def p_exp_28(t):
 	pass
 
 def p_exp_29(t):
+	'exp : VARIABLE LBIG exp RBIG'
+	n = Node('exp29')
+	n.add_child(Node(t[1]))
+	n.add_child(Node(t[2]))
+	n.add_child(t[3])
+	n.add_child(Node(t[4]))
+	t[0] = n
+	pass
+
+def p_exp_30(t):
 	'exp : function_call'
 	t[0] = t[1]
 	pass
@@ -529,6 +625,28 @@ def p_unary_expression_2(t):
 	n = Node('unary_expression2')
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
+	t[0] = n
+	pass
+
+def p_unary_expression_3(t):
+	'unary_expression : VARIABLE LBIG exp RBIG unary_operator'
+	n = Node('unary_expression3')
+	n.add_child(Node(t[1]))
+	n.add_child(Node(t[2]))
+	n.add_child(t[3])
+	n.add_child(Node(t[4]))
+	n.add_child(t[5])
+	t[0] = n
+	pass
+
+def p_unary_expression_4(t):
+	'unary_expression : unary_operator VARIABLE LBIG exp RBIG'
+	n = Node('unary_expression4')
+	n.add_child(t[1])
+	n.add_child(Node(t[2]))
+	n.add_child(Node(t[3]))
+	n.add_child(t[4])
+	n.add_child(Node(t[5]))
 	t[0] = n
 	pass
 
