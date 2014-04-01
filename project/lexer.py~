@@ -45,6 +45,7 @@ tokens = [
    'EQUALS',
    'VARIABLE',
    'SEMI_COLON',
+   'COLON',
    'COMMA',
    'CONDOP',
    'COLON'
@@ -74,6 +75,7 @@ t_EQUALS	  = r'\='
 t_SEMI_COLON  = r'\;'
 t_COLON       = r'\:'
 t_CONDOP      = r'\?'
+t_COLON	      = r'\:'
 t_COMMA	      = r'\,'
 t_ignore  	  = ' \n\r\t'
 

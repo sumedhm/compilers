@@ -112,15 +112,15 @@ def p_inclusive_or_expression_2(t):
 	pass
 
 def p_exclusive_or_expression_1(t):
-	'exclusive_or_expression: and_expression'
+	'exclusive_or_expression : and_expression'
 	pass
 
 def p_exclusive_or_expression_2(t):
-	'exclusive_or_expression : exclusive_or_expression AND and expression'
+	'exclusive_or_expression : exclusive_or_expression AND and_expression'
 	pass
 
 def p_and_expression_1(t):
-	'and_expression: equality_expression'
+	'and_expression : equality_expression'
 	pass
 
 def p_and_expression_2(t):
@@ -131,7 +131,7 @@ def p_equality_expression_1(t):
 	'equality_expression : relational_expression'
 	pass
 
-def_p_equality_expression_2(t):
+def p_equality_expression_2(t):
 	'equality_expression : equality_expression EQUALS relational_expression'
 	pass
 
@@ -167,7 +167,7 @@ def p_shift_operation_2(t):
 	pass
 
 def p_shift_expression_3(t):
-	'shift_expression : shift_expression RIGHT_OP' additive_expression'
+	'shift_expression : shift_expression RIGHT_OP additive_expression'
 	pass
 
 def p_additive_expression_1(t):
@@ -186,15 +186,15 @@ def p_multiplicative_expression_1(t):
 	'multiplicative_expression : cast_expression'
 	pass
 
-def p_multiplicative_expression_2(t)
+def p_multiplicative_expression_2(t):
 	'multiplicative_expressioin : multiplicative_expression MULT cast_expression'
 	pass
 
-def p_multiplicative_expression_3(t)
+def p_multiplicative_expression_3(t):
 	'multiplicative_expressioin : multiplicative_expression DIV cast_expression'
 	pass
 
-def p_multiplicative_expression_4(t)
+def p_multiplicative_expression_4(t):
 	'multiplicative_expressioin : multiplicative_expression MOD cast_expression'
 	pass
 
@@ -219,38 +219,38 @@ def p_unary_expression_3(t):
 	pass
 
 def p_unary_expression_4(t):
-	'unary_expression: unary_operator  cast_expression'
+	'unary_expression : unary_operator  cast_expression'
 	pass
 
 def p_unary_expression_5(t):
-	'unary_expression: SIZEOF unary_expression'
-pass
+	'unary_expression : SIZEOF unary_expression'
+	pass
 
 def p_unary_expression_6(t):
-	''unary_expression: SIZEOF LPAREN type_name RPAREN'
+	'unary_expression : SIZEOF LPAREN type_name RPAREN'
 	pass
 
-def p_ unary_operator_1(t):
-	'unary_operator: AND_OP'
+def p_unary_operator_1(t):
+	'unary_operator : AND_OP'
 	pass
 
-def p_ unary_operator_2(t):
-	'unary_operator: MULT'
+def p_unary_operator_2(t):
+	'unary_operator : MULT'
 	pass
 
-def p_ unary_operator_3(t):
-	'unary_operator: ADD'
+def p_unary_operator_3(t):
+	'unary_operator : ADD'
 	pass
-def p_ unary_operator_4(t):
-	'unary_operator: MINUS'
-	pass
-
-def p_ unary_operator_5(t):
-	'unary_operator: TILDA'
+def p_unary_operator_4(t):
+	'unary_operator : MINUS'
 	pass
 
-def p_ unary_operator_6(t):
-	'unary_operator: NOT'
+def p_unary_operator_5(t):
+	'unary_operator : TILDA'
+	pass
+
+def p_unary_operator_6(t):
+	'unary_operator : NOT'
 	pass
 
 
@@ -307,7 +307,7 @@ def p_expression_1(t):
 	pass
 
 def p_expression_2(t):
-	'expression COMMA assignment_expression'
+	'expression : expression COMMA assignment_expression'
 pass
 
 def p_assignment_expression_1(t):
@@ -362,4 +362,6 @@ def p_assignment_operator_11(t):
 	'assignment_operator : OR_ASSIGN'
 	pass
 
+import profile
 
+yacc.yacc(method='LALR', debug=1)

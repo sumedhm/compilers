@@ -1,0 +1,235 @@
+Created by PLY version 3.4 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    DO
+    RETURN
+    DEFAULT
+    WHILE
+    COMMENT
+    NEWLINE
+    EXP_REAL
+    DEC_INT
+    SWITCH
+    DOT_REAL
+    CASE
+    RBRACE
+    FOR
+    SINGLE_QUOTES
+    ELSE
+    IF
+    LBRACE
+    HEX_INT
+    BREAK
+    CONTINUE
+    DOUBLE_QUOTES
+    MAIN
+
+Grammar
+
+Rule 0     S' -> declaration
+Rule 1     declaration -> declaration_specifiers SEMI_COLON
+Rule 2     declaration -> declaration_specifiers init_declarator_list SEMI_COLON
+Rule 3     declaration_specifiers -> type_specifier
+Rule 4     declaration_specifiers -> type_specifier declaration_specifiers
+Rule 5     type_specifier -> VOID
+Rule 6     type_specifier -> INT
+Rule 7     type_specifier -> CHAR
+Rule 8     type_specifier -> SHORT
+Rule 9     type_specifier -> LONG
+Rule 10    type_specifier -> FLOAT
+Rule 11    type_specifier -> DOUBLE
+Rule 12    type_specifier -> enum_specifier
+Rule 13    enum_specifier -> type_specifier enum_list
+Rule 14    enum_list -> enumerator
+Rule 15    enum_list -> enum_list COMMA enumerator
+Rule 16    enumerator -> VARIABLE
+Rule 17    enumerator -> VARIABLE EQUALS constant_expression
+Rule 18    constant_expression -> conditional_expression
+Rule 19    conditional_expression -> logical_or_expression
+Rule 20    conditional_expression -> logical_or_expression CONDOP expression COLON conditional_expression
+Rule 21    logical_or_epression -> logical_and_expression
+Rule 22    logical_or_expression -> logical_or_expression OR_OP logical_and_expression
+Rule 23    logical_and_expression -> inclusive_or_expressioin
+Rule 24    logical_and_expression -> logical_and_expression AND_OP inclusive_or_expression
+Rule 25    inclusive_or_expression -> exclusive_or_expression
+Rule 26    inclusive_or_expression -> inclusive_or_expression OR exclusive_or_expression
+Rule 27    exclusive_or_expression -> and_expression
+Rule 28    exclusive_or_expression -> exclusive_or_expression AND and_expression
+Rule 29    and_expression -> equality_expression
+Rule 30    and_expression -> and_expression AND_OP equality_expression
+Rule 31    equality_expression -> relational_expression
+Rule 32    equality_expression -> equality_expression EQUALS relational_expression
+Rule 33    equality_expression -> equality_expression NOTEQUALS relational_expression
+Rule 34    relational_expression -> shift_expression
+Rule 35    relational_expression -> relational_expression L_OP shift_expression
+Rule 36    relational_expression -> relational_expression G_OP shift_expression
+Rule 37    relational_expression -> relational_expression LE_OP shift_expression
+Rule 38    relational_expression -> relational_expression GE_OP shift_expression
+Rule 39    shift_operation -> additive_expression
+Rule 40    shift_operation -> shift_expression LEFT_OP additive_expression
+Rule 41    shift_expression -> shift_expression RIGHT_OP additive_expression
+Rule 42    additive_expression -> multiplicative_expression
+Rule 43    additive_expression -> additive_expression ADD multiplicative_expression
+Rule 44    additive_expression -> additive_expression MINUS multiplicative_expression
+Rule 45    multiplicative_expression -> cast_expression
+Rule 46    multiplicative_expressioin -> multiplicative_expression MULT cast_expression
+Rule 47    multiplicative_expressioin -> multiplicative_expression DIV cast_expression
+Rule 48    multiplicative_expressioin -> multiplicative_expression MOD cast_expression
+Rule 49    cast_expression -> unary_expression
+Rule 50    cast_expression -> LPAREN type_name RPAREN cast_expression
+Rule 51    unary_expression -> postfix_expression
+Rule 52    unary_expression -> INCREMENT unary_expression
+Rule 53    unary_expression -> DECREMENT unary_expression
+Rule 54    unary_expression -> unary_operator cast_expression
+Rule 55    unary_expression -> SIZEOF unary_expression
+Rule 56    unary_expression -> SIZEOF LPAREN type_name RPAREN
+Rule 57    unary_operator -> AND_OP
+Rule 58    unary_operator -> MULT
+Rule 59    unary_operator -> ADD
+Rule 60    unary_operator -> MINUS
+Rule 61    unary_operator -> TILDA
+Rule 62    unary_operator -> NOT
+Rule 63    type_name -> specifier_qualifier_list
+Rule 64    specifier_qualifier_list -> type_specifier specifier_qualifier_list
+Rule 65    specifier_qualifier_list -> type_specifier
+Rule 66    postfix_expression -> primary_expression
+Rule 67    postfix_expression -> postfix_expression LBIG expression RBIG
+Rule 68    postfix_expression -> postfix_expression LPAREN RPAREN
+Rule 69    postfix_expression -> postfix_expression LPAREN argument_expression_list RPAREN
+Rule 70    post_expression -> postfix_expression DOT variable
+Rule 71    post_expression -> postfix_expression INCREMENT
+Rule 72    post_expression -> postfix_expression DECREMENT
+Rule 73    argument_expression_list -> assignment_expression
+Rule 74    argument_expression_list -> argument_expression_list COMMA assignment_expression
+Rule 75    expression -> assignment_expression
+Rule 76    expression -> expression COMMA assignment_expression
+Rule 77    assignment_expression -> contional_expression
+Rule 78    assignment_expression -> unary_expression assignment_operator assignment_expression
+Rule 79    assignment_operator -> EQUALS
+Rule 80    assignment_operator -> MUL_ASSIGN
+Rule 81    assignment_operator -> DIV_ASSIGN
+Rule 82    assignment_operator -> MOD_ASSIGN
+Rule 83    assignment_operator -> ADD_ASSIGN
+Rule 84    assignment_operator -> SUB_ASSIGN
+Rule 85    assignment_operator -> LEFT_ASSIGN
+Rule 86    assignment_operator -> RIGHT_ASSIGN
+Rule 87    assignment_operator -> AND_ASSIGN
+Rule 88    assignment_operator -> XOR_ASSIGN
+Rule 89    assignment_operator -> OR_ASSIGN
+
+Terminals, with rules where they appear
+
+ADD                  : 43 59
+BREAK                : 
+CASE                 : 
+CHAR                 : 7
+COLON                : 20
+COMMA                : 15 74 76
+COMMENT              : 
+CONDOP               : 20
+CONTINUE             : 
+DEC_INT              : 
+DEFAULT              : 
+DIV                  : 47
+DO                   : 
+DOT_REAL             : 
+DOUBLE               : 11
+DOUBLE_QUOTES        : 
+ELSE                 : 
+EQUALS               : 17 32 79
+EXP_REAL             : 
+FLOAT                : 10
+FOR                  : 
+HEX_INT              : 
+IF                   : 
+INT                  : 6
+LBRACE               : 
+LONG                 : 9
+LPAREN               : 50 56 68 69
+MAIN                 : 
+MINUS                : 44 60
+MOD                  : 48
+MULT                 : 46 58
+NEWLINE              : 
+RBRACE               : 
+RETURN               : 
+RPAREN               : 50 56 68 69
+SEMI_COLON           : 1 2
+SHORT                : 8
+SINGLE_QUOTES        : 
+SWITCH               : 
+VARIABLE             : 16 17
+VOID                 : 5
+WHILE                : 
+error                : 
+
+Nonterminals, with rules where they appear
+
+ADD_ASSIGN           : 83
+AND                  : 28
+AND_ASSIGN           : 87
+AND_OP               : 24 30 57
+DECREMENT            : 53 72
+DIV_ASSIGN           : 81
+DOT                  : 70
+GE_OP                : 38
+G_OP                 : 36
+INCREMENT            : 52 71
+LBIG                 : 67
+LEFT_ASSIGN          : 85
+LEFT_OP              : 40
+LE_OP                : 37
+L_OP                 : 35
+MOD_ASSIGN           : 82
+MUL_ASSIGN           : 80
+NOT                  : 62
+NOTEQUALS            : 33
+OR                   : 26
+OR_ASSIGN            : 89
+OR_OP                : 22
+RBIG                 : 67
+RIGHT_ASSIGN         : 86
+RIGHT_OP             : 41
+SIZEOF               : 55 56
+SUB_ASSIGN           : 84
+TILDA                : 61
+XOR_ASSIGN           : 88
+additive_expression  : 39 40 41 43 44
+and_expression       : 27 28 30
+argument_expression_list : 69 74
+assignment_expression : 73 74 75 76 78
+assignment_operator  : 78
+cast_expression      : 45 46 47 48 50 54
+conditional_expression : 18 20
+constant_expression  : 17
+contional_expression : 77
+declaration          : 0
+declaration_specifiers : 1 2 4
+enum_list            : 13 15
+enum_specifier       : 12
+enumerator           : 14 15
+equality_expression  : 29 30 32 33
+exclusive_or_expression : 25 26 28
+expression           : 20 67 76
+inclusive_or_expressioin : 23
+inclusive_or_expression : 24 26
+init_declarator_list : 2
+logical_and_expression : 21 22 24
+logical_or_epression : 
+logical_or_expression : 19 20 22
+multiplicative_expressioin : 
+multiplicative_expression : 42 43 44 46 47 48
+post_expression      : 
+postfix_expression   : 51 67 68 69 70 71 72
+primary_expression   : 66
+relational_expression : 31 32 33 35 36 37 38
+shift_expression     : 34 35 36 37 38 40 41
+shift_operation      : 
+specifier_qualifier_list : 63 64
+type_name            : 50 56
+type_specifier       : 3 4 13 64 65
+unary_expression     : 49 52 53 55 78
+unary_operator       : 54
+variable             : 70
+
