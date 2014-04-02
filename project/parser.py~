@@ -22,6 +22,78 @@ def p_declaration_specifiers_2(t):
         'declaration_specifiers : type_specifier declaration_specifiers'
 	pass
 
+def p_init_declarator_list_1(t):
+	'init_declarator_list : init_declarator'
+	pass
+
+def p_init_declarator_list_2(t):
+	'init_declarator_list : init_declarator_list COMMA init_declarator'
+	pass
+
+def p_init_declarator_1(t):
+	'init_declarator : declarator'
+	pass
+
+def p_init_declarator_2(t):
+	'init_declarator : declarator EQUALS initializer'
+	pass
+
+def p_initializer_1(t):
+	'initializer : assignment_expression'
+	pass
+
+def p_initializer_2(t):
+	'initializer : LBRACE initializer_list RBRACE'
+	pass
+
+def p_initializer_3(t):
+	'initializer : LBRACE initializer_list COMMA RBRACE'
+	pass
+
+def p_initializer_list_1(t):
+	'initializer_list : initializer'
+	pass
+
+def p_initializer_list_2(t):
+	'initializer_list : initializer_list COMMA initializer'
+	pass
+
+def p_declarator_1(t):
+	'declarator : direct_declarator'
+	pass
+
+def p_direct_declarator_1(t):
+	'direct_declarator : VARIABLE'
+	pass
+
+def p_direct_declarator_2(t):
+	'direct_declarator : LPAREN declarator RPAREN'
+	pass
+
+def p_direct_declarator_3(t):
+	'direct_declarator : direct_declarator LBIG constant_expression RBIG'
+	pass
+
+def p_direct_declarator_4(t):
+	'direct_declarator : direct_declarator LBIG RBIG'
+	pass
+
+def p_direct_declarator_5(t):
+	'direct_declarator : direct_declarator LPAREN variable_list RPAREN'
+	pass
+
+def p_direct_declarator_6(t):
+	'direct_declarator : direct_declarator LPAREN  RPAREN'
+	pass
+
+def p_variable_list_1(t):
+	'variable_list : VARIABLE'
+	pass
+
+def p_variable_list_2(t):
+	'variable_list : variable_list COMMA VARIABLE'
+	pass
+
 def p_type_specifier_1(t):
 	'type_specifier : VOID'
 	pass
@@ -96,7 +168,7 @@ def p_logical_or_expression_2(t):
 	pass
 
 def p_logical_and_expression_1(t):
-	'logical_and_expression : inclusive_or_expressioin'
+	'logical_and_expression : inclusive_or_expression'
 pass
 
 def p_logical_and_expression_2(t):
@@ -132,12 +204,13 @@ def p_equality_expression_1(t):
 	pass
 
 def p_equality_expression_2(t):
-	'equality_expression : equality_expression EQUALS relational_expression'
+	'equality_expression : equality_expression EQUALS_OP relational_expression'
 	pass
 
 def p_equality_expression_3(t):
 	'equality_expression : equality_expression NOTEQUALS relational_expression'
 	pass
+
 def p_relational_expression_1(t):
 	'relational_expression : shift_expression'
 	pass
@@ -158,12 +231,12 @@ def p_relational_expression_5(t):
 	'relational_expression : relational_expression GE_OP shift_expression'
 	pass
 
-def p_shift_operation_1(t):
-	'shift_operation : additive_expression'
+def p_shift_expression_1(t):
+	'shift_expression : additive_expression'
 	pass
 
-def p_shift_operation_2(t):
-	'shift_operation : shift_expression LEFT_OP additive_expression'
+def p_shift_expression_2(t):
+	'shift_expression : shift_expression LEFT_OP additive_expression'
 	pass
 
 def p_shift_expression_3(t):
@@ -270,6 +343,34 @@ def p_postfix_expression_1(t):
 	'postfix_expression : primary_expression'
 	pass
 
+def p_primary_expression_1(t):
+	'primary_expression : VARIABLE'
+	pass
+
+def p_primary_expression_2(t):
+	'primary_expression : constant'
+	pass
+
+def p_primary_expression_3(t):
+	'primary_expression : LPAREN expression RPAREN'
+	pass
+
+def p_constant_1(t):
+	'constant : HEX_INT'
+	pass
+
+def p_constant_2(t):
+	'constant : EXP_REAL'
+	pass
+
+def p_constant_3(t):
+	'constant : DOT_REAL'
+	pass
+
+def p_constant_4(t):
+	'constant : DEC_INT'
+	pass
+
 def p_postfix_expression_2(t):
 	'postfix_expression : postfix_expression LBIG expression RBIG'
 	pass
@@ -283,7 +384,7 @@ def p_postfix_expression_4(t):
 	pass
 
 def p_postfix_expression_5(t):
-	'post_expression : postfix_expression DOT variable'
+	'post_expression : postfix_expression DOT VARIABLE'
 	pass
 
 def p_postfix_expression_6(t):
@@ -311,7 +412,7 @@ def p_expression_2(t):
 pass
 
 def p_assignment_expression_1(t):
-	'assignment_expression : contional_expression'
+	'assignment_expression : conditional_expression'
 	pass
 
 def p_assignement_expression_2(t):
@@ -361,6 +462,14 @@ def p_assignment_operator_10(t):
 def p_assignment_operator_11(t):
 	'assignment_operator : OR_ASSIGN'
 	pass
+
+def p_empty(t):
+    'empty : '
+    pass
+
+def p_error(t):
+    print "Whoa. We're hosed"
+
 
 import profile
 
