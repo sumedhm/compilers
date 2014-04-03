@@ -239,6 +239,10 @@ def p_exp_28(t):
 	'exp : VARIABLE'
 	pass
 
+def p_exp_29(t):
+	'exp : function_call'
+	pass
+
 def p_unary_expression_1(t):
 	'unary_expression : VARIABLE unary_operator'
 	pass
@@ -320,23 +324,55 @@ def p_function_2(t):
 	pass
 
 def p_main_function_1(t):
-	'main_function : type MAIN LPAREN arguments RPAREN LBRACE statements RBRACE'
+	'main_function : type MAIN LPAREN parameters RPAREN LBRACE statements RBRACE'
 	pass
 
 def p_main_function_2(t):
-	'main_function : type MAIN LPAREN arguments RPAREN LBRACE RBRACE'
+	'main_function : type MAIN LPAREN parameters RPAREN LBRACE RBRACE'
 	pass
 
 def p_normal_function_1(t):
-	'normal_function : type VARIABLE LPAREN arguments RPAREN LBRACE statements RBRACE'
+	'normal_function : type VARIABLE LPAREN parameters RPAREN LBRACE statements RBRACE'
 	pass
 
 def p_normal_function_2(t):
-	'normal_function : type VARIABLE LPAREN arguments RPAREN LBRACE RBRACE'
+	'normal_function : type VARIABLE LPAREN parameters RPAREN LBRACE RBRACE'
+	pass
+
+def p_parameters_1(t):
+	'parameters : type VARIABLE COMMA parameters'
+	pass
+
+def p_parameters_2(t):
+	'parameters : type VARIABLE'
+	pass
+
+def p_parameters_3(t):
+	'parameters : empty'
+	pass
+
+def p_function_call_1(t):
+	'function_call : VARIABLE LPAREN arguments RPAREN'
+	pass
+
+def p_function_call_2(t):
+	'function_call : VARIABLE LPAREN RPAREN'
 	pass
 
 def p_arguments_1(t):
-	'arguments : empty'
+	'arguments : arguments COMMA VARIABLE'
+	pass
+
+def p_arguments_2(t):
+	'arguments : arguments COMMA constant'
+	pass
+
+def p_arguments_3(t):
+	'arguments : VARIABLE'
+	pass
+
+def p_arguments_4(t):
+	'arguments : constant'
 	pass
 
 def p_empty(t):
