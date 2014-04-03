@@ -1,3 +1,1 @@
-
-int a=0;
-char 3 = '\n'; 
+int x = 28*y+x/z;

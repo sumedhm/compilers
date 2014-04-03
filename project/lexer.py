@@ -44,6 +44,7 @@ tokens = [
    'RPAREN',
    'EQUALS',
    'VARIABLE',
+   'CHARACTER',
    'SEMI_COLON',
    'COMMA',
    'CONDOP',
@@ -51,6 +52,7 @@ tokens = [
    'OR_OP',
    'OR',
    'AND',
+   'ANDI',
    'AND_OP',
    'NOTEQUALS',
    'LE_OP',
@@ -98,34 +100,36 @@ t_LPAREN      = r'\('
 t_RPAREN      = r'\)'
 t_OR_OP	      = r'\|\|'
 t_OR	= r'\|'
-t_EQUALS_OP = r'\=='
+t_EQUALS_OP = r'\=\='
 t_AND = r'\^'
-t_AND_OP = r'\&&'
-t_NOTEQUALS = r'\!='
-t_LE_OP = r'\<='
-t_GE_OP = r'\>='
+t_ANDI = r'\&'
+t_AND_OP = r'\&\&'
+t_NOTEQUALS = r'\!\='
+t_LE_OP = r'\<\='
+t_GE_OP = r'\>\='
 t_L_OP = r'\<'
 t_G_OP = r'\>'
-t_LEFT_OP = r'\<<'
-t_RIGHT_OP = r'\>>'
-t_INCREMENT = r'\++'
-t_DECREMENT = r'\--'
-t_SIZEOF = r'\sizeof'
+t_LEFT_OP = r'\<\<'
+t_RIGHT_OP = r'\>\>'
+t_INCREMENT = r'\+\+'
+t_DECREMENT = r'\-\-'
+t_SIZEOF = r'sizeof'
 t_DOT = r'\.'
 t_LBIG = r'\['
 t_RBIG = r'\]'
 t_TILDA = r'\~'
 t_NOT = r'\!'
-t_MUL_ASSIGN = r'\*='
-t_DIV_ASSIGN = r'\\='
-t_MOD_ASSIGN = r'\%='
-t_ADD_ASSIGN = r'\+='
-t_SUB_ASSIGN = r'\-='
-t_LEFT_ASSIGN = r'\<<='
-t_RIGHT_ASSIGN = r'\>>='
-t_AND_ASSIGN = r'\&='
-t_XOR_ASSIGN = r'\^='
-t_OR_ASSIGN = r'\|='
+t_MUL_ASSIGN = r'\*\='
+t_DIV_ASSIGN = r'\/\='
+t_MOD_ASSIGN = r'\%\='
+t_ADD_ASSIGN = r'\+\='
+t_SUB_ASSIGN = r'\-\='
+t_LEFT_ASSIGN = r'\<\<\='
+t_RIGHT_ASSIGN = r'\>\>\='
+t_AND_ASSIGN = r'\&\='
+t_XOR_ASSIGN = r'\^\='
+t_OR_ASSIGN = r'\|\='
+t_CHARACTER   = r'\'[a-zA-Z0-9]\''
 t_HEX_INT     = r'0[xX][0-9a-fA-F]+'
 t_EXP_REAL    = r'((\d*\.\d+)|(\d+\.\d*)|\d+)(e|E)(\+|-)?\d+'
 t_DOT_REAL    = r'(\d*\.\d+)|(\d+\.\d*)'
@@ -149,7 +153,8 @@ def t_error(t):
 
 
 lexer = lex.lex()
-print sys.argv[0]
+
+'''print sys.argv[0]
 with open(sys.argv[1], 'r') as content_file:
     data = content_file.read()
 lexer.input(data)
@@ -157,4 +162,4 @@ lexer.input(data)
 while True:
 	tok = lexer.token()
 	if not tok: break
-	print tok.type + " - " + tok.value + "\n"
+	print tok.type + " - " + tok.value + "\n"'''

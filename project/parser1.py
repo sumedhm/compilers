@@ -13,7 +13,9 @@ def p_declaration_1(t):
 
 def p_declaration_2(t):
 	'declaration : declaration_specifiers init_declarator_list SEMI_COLON'
+	
 	pass
+
 
 def p_declaration_specifiers_1(t):
 	'declaration_specifiers : type_specifier'
@@ -463,126 +465,6 @@ def p_assignment_operator_10(t):
 def p_assignment_operator_11(t):
 	'assignment_operator : OR_ASSIGN'
 	pass
-
-def p_statement_1(t):
-	'statement : compound_statement'
-	pass
-
-def p_statement_2(t):
-	'statement : expression_statement’
-	pass
-	
-def p_statement_3(t):
-	'statement : selection_statement’
-	pass
-
-def p_statement_4(t):
-	'statement : iteration_statement’
-	pass
-
-def p_statement_5(t):
-	'statement : jump_statement’
-	pass
-
-def p_compound_statement_1(t):
-	'compound_statement : LBRACE RBRACE’
-	pass
-
-def p_compound_statement_2(t):
-	'compound_statement : LBRACE statement_list RBRACE’
-	pass
-
-def p_compound_statement_3(t):
-	'compound_statement : LBRACE declaration_list RBRACE’
-	pass
-
-def p_compound_statement_4(t):
-	'compound_statement : LBRACE declaration_list statement_list RBRACE’
-	pass
-
-def p_expression_statement_1(t):
-	'expression_statement : SEMI_COLON’
-	pass
-
-def p_expression_statement_2(t):
-	'expression_statement : expression SEMI_COLON’
-	pass
-
-def p_selection_statement_1(t):
-	'selection_statement : IF LPAREN expression RPAREN statement’
-	pass
-
-def p_selection_statement_2(t):
-	'selection_statement : IF LPAREN expression RPAREN statement ELSE statement’
-	pass
-
-def p_iteration_statement_1(t):
-	'iteration_statement : WHILE LPAREN expression RPAREN statement’
-	pass
-
-def p_iteration_statement_2(t):
-	'iteration_statement : DO statement WHILE LPAREN expression RPAREN SEMI_COLON'
-	pass
-
-def p_iteration_statement_3(t):
-	'iteration_statement : FOR LPAREN expression_statement expression_statement RPAREN statement’
-	pass
-
-def p_iteration_statement_4(t):
-	'iteration_statement : FOR LPAREN expression_statement expression_statement expression RPAREN statement’
-	pass
-
-
-
-def p_jump_statement_1(t):
-	'jump_statement : CONTINUE SEMI_COLON’
-	pass
-
-def p_jump_statement_2(t):
-	'jump_statement : BREAK SEMI_COLON’
-	pass
-
-def p_jump_statement_3(t):
-	'jump_statement : RETURN SEMI_COLON’
-	pass
-
-
-def p_jump_statement_4(t):
-	'jump_statement : RETURN expression SEMI_COLON’
-	pass
-
-def p_translation_unit_1(t):
-	'translation_unit: external_declaration’
-	pass
-
-def p_translation_unit_2(t):
-	'translation_unit: translation_unit external_declaration’
-	pass
-
-def p_external_declaration_1(t):
-	'exteral_declaration : function_definition’
-	pass
-
-def p_external_declaration_2(t):
-	'exteral_declaration : declaration’
-	pass
-
-def p_function_definition_1(t):
-	'function_definition : declaration_specifiers declarator declaration_list compound_statement’
-	pass
-
-def p_function_definition_2(t):
-	'function_definition : declaration_specifiers declarator compound_statement’
-	pass
-
-def p_function_definition_3(t):
-	'function_definition : declarator declaration_list compound_statement’
-	pass
-
-def p_function_definition_4(t):
-	'function_definition : declarator compound_statement’
-	pass
-
 
 def p_empty(t):
 	'empty : '

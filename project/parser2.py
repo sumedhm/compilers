@@ -7,12 +7,13 @@ from lexer import tokens
 tokens = lexer.tokens
 
 def p_declaration_1(t):
-        'declaration : declaration_specifiers SEMI_COLON'
-	declaration.append(declaration_specifiers, SEMI_COLON)
-        pass
+	'declaration : declaration_specifiers SEMI_COLON'
+	print "declaration"
+	pass
 
 def p_declaration_2(t):
 	'declaration : declaration_specifiers init_declarator_list SEMI_COLON'
+	print "in dec"
 	pass
 
 def p_declaration_specifiers_1(t):
@@ -20,7 +21,7 @@ def p_declaration_specifiers_1(t):
 	pass
 
 def p_declaration_specifiers_2(t):
-        'declaration_specifiers : type_specifier declaration_specifiers'
+	'declaration_specifiers : type_specifier declaration_specifiers'
 	pass
 
 def p_init_declarator_list_1(t):
@@ -100,32 +101,32 @@ def p_type_specifier_1(t):
 	pass
 
 def p_type_specifier_2(t):
-        'type_specifier : INT'
-        pass
-
+	'type_specifier : INT'
+	pass
+	
 def p_type_specifier_3(t):
-        'type_specifier : CHAR'
-        pass
+	'type_specifier : CHAR'
+	pass
 
 def p_type_specifier_4(t):
-        'type_specifier : SHORT'
-        pass
+	'type_specifier : SHORT'
+	pass
 
 def p_type_specifier_5(t):
-        'type_specifier : LONG'
-        pass
+	'type_specifier : LONG'
+	pass
 
 def p_type_specifier_6(t):
-        'type_specifier : FLOAT'
-        pass
+	'type_specifier : FLOAT'
+	pass
 
 def p_type_specifier_7(t):
-        'type_specifier : DOUBLE'
-        pass  
+	'type_specifier : DOUBLE'
+	pass  
 
 def p_type_specifier_8(t):
-        'type_specifier : enum_specifier'
-        pass
+	'type_specifier : enum_specifier'
+	pass
 
 def p_enum_specifier_1(t):
 	'enum_specifier : type_specifier enum_list'
@@ -136,8 +137,8 @@ def p_enum_list_1(t):
 	pass
 
 def p_enum_list_2(t):
-        'enum_list : enum_list COMMA enumerator'
-        pass
+	'enum_list : enum_list COMMA enumerator'
+	pass
 
 def p_enumerator_1(t):
 	'enumerator : VARIABLE'
@@ -156,9 +157,8 @@ def p_conditional_expression_1(t):
 	pass
 
 def p_conditional_expression_2(t):
-        'conditional_expression : logical_or_expression CONDOP expression COLON conditional_expression'
-        pass
-
+	'conditional_expression : logical_or_expression CONDOP expression COLON conditional_expression'
+	pass
 
 def p_logical_or_expression_1(t):
 	'logical_or_expression : logical_and_expression'
@@ -197,8 +197,9 @@ def p_and_expression_1(t):
 	pass
 
 def p_and_expression_2(t):
-	'and_expression : and_expression AND_OP equality_expression'
+	'and_expression : and_expression ANDI equality_expression'
 	pass
+
 
 def p_equality_expression_1(t):
 	'equality_expression : relational_expression'
@@ -305,7 +306,7 @@ def p_unary_expression_6(t):
 	pass
 
 def p_unary_operator_1(t):
-	'unary_operator : AND_OP'
+	'unary_operator : ANDI'
 	pass
 
 def p_unary_operator_2(t):
@@ -314,6 +315,7 @@ def p_unary_operator_2(t):
 
 def p_unary_operator_3(t):
 	'unary_operator : ADD'
+	print "adsfadsf"
 	pass
 def p_unary_operator_4(t):
 	'unary_operator : MINUS'
@@ -338,10 +340,6 @@ def p_specifier_qualifier_list_1(t):
 
 def p_specifier_qualifier_list_2(t):
 	'specifier_qualifier_list : type_specifier'
-	pass
-
-def p_postfix_expression_1(t):
-	'postfix_expression : primary_expression'
 	pass
 
 def p_primary_expression_1(t):
@@ -370,6 +368,10 @@ def p_constant_3(t):
 
 def p_constant_4(t):
 	'constant : DEC_INT'
+	pass
+
+def p_postfix_expression_1(t):
+	'postfix_expression : primary_expression'
 	pass
 
 def p_postfix_expression_2(t):
@@ -469,55 +471,72 @@ def p_statement_1(t):
 	pass
 
 def p_statement_2(t):
-	'statement : expression_statement’
+	'statement : expression_statement'
 	pass
 	
 def p_statement_3(t):
-	'statement : selection_statement’
+	'statement : selection_statement'
 	pass
 
 def p_statement_4(t):
-	'statement : iteration_statement’
+	'statement : iteration_statement'
 	pass
 
 def p_statement_5(t):
-	'statement : jump_statement’
+	'statement : jump_statement'
 	pass
 
 def p_compound_statement_1(t):
-	'compound_statement : LBRACE RBRACE’
+	'compound_statement : LBRACE RBRACE'
 	pass
 
 def p_compound_statement_2(t):
-	'compound_statement : LBRACE statement_list RBRACE’
+	'compound_statement : LBRACE statement_list RBRACE'
 	pass
 
 def p_compound_statement_3(t):
-	'compound_statement : LBRACE declaration_list RBRACE’
+	'compound_statement : LBRACE declaration_list RBRACE'
 	pass
 
 def p_compound_statement_4(t):
-	'compound_statement : LBRACE declaration_list statement_list RBRACE’
+	'compound_statement : LBRACE declaration_list statement_list RBRACE'
+	pass
+
+def p_declaration_list_1(t):
+	'declaration_list : declaration'
+	pass
+
+def p_declaration_list_2(t):
+	'declaration_list : declaration_list declaration'
+	pass
+
+def p_statement_list_1(t):
+	'statement_list : statement'
+	pass
+
+def p_statement_list_2(t):
+	'statement_list : statement_list statement'
 	pass
 
 def p_expression_statement_1(t):
-	'expression_statement : SEMI_COLON’
+	'expression_statement : SEMI_COLON'
 	pass
 
 def p_expression_statement_2(t):
-	'expression_statement : expression SEMI_COLON’
+	'expression_statement : expression SEMI_COLON'
 	pass
 
 def p_selection_statement_1(t):
-	'selection_statement : IF LPAREN expression RPAREN statement’
+	'selection_statement : IF LPAREN expression RPAREN statement'
 	pass
 
 def p_selection_statement_2(t):
-	'selection_statement : IF LPAREN expression RPAREN statement ELSE statement’
+	'selection_statement : IF LPAREN expression RPAREN statement ELSE statement'
 	pass
 
 def p_iteration_statement_1(t):
-	'iteration_statement : WHILE LPAREN expression RPAREN statement’
+	'iteration_statement : WHILE LPAREN expression RPAREN statement'
+	print "in while"
 	pass
 
 def p_iteration_statement_2(t):
@@ -525,62 +544,62 @@ def p_iteration_statement_2(t):
 	pass
 
 def p_iteration_statement_3(t):
-	'iteration_statement : FOR LPAREN expression_statement expression_statement RPAREN statement’
+	'iteration_statement : FOR LPAREN expression_statement expression_statement RPAREN statement'
+	print "for loop me hai"
 	pass
 
 def p_iteration_statement_4(t):
-	'iteration_statement : FOR LPAREN expression_statement expression_statement expression RPAREN statement’
+	'iteration_statement : FOR LPAREN expression_statement expression_statement expression RPAREN statement'
 	pass
 
-
-
 def p_jump_statement_1(t):
-	'jump_statement : CONTINUE SEMI_COLON’
+	'jump_statement : CONTINUE SEMI_COLON'
 	pass
 
 def p_jump_statement_2(t):
-	'jump_statement : BREAK SEMI_COLON’
+	'jump_statement : BREAK SEMI_COLON'
 	pass
 
 def p_jump_statement_3(t):
-	'jump_statement : RETURN SEMI_COLON’
+	'jump_statement : RETURN SEMI_COLON'
 	pass
 
 
 def p_jump_statement_4(t):
-	'jump_statement : RETURN expression SEMI_COLON’
+	'jump_statement : RETURN expression SEMI_COLON'
 	pass
 
 def p_translation_unit_1(t):
-	'translation_unit: external_declaration’
+	'translation_unit : external_declaration'
 	pass
 
 def p_translation_unit_2(t):
-	'translation_unit: translation_unit external_declaration’
+	'translation_unit : translation_unit external_declaration'
 	pass
 
+
 def p_external_declaration_1(t):
-	'exteral_declaration : function_definition’
+	'external_declaration : function_definition'
 	pass
 
 def p_external_declaration_2(t):
-	'exteral_declaration : declaration’
+	'external_declaration : declaration'
 	pass
 
 def p_function_definition_1(t):
-	'function_definition : declaration_specifiers declarator declaration_list compound_statement’
+	'function_definition : declaration_specifiers declarator declaration_list compound_statement'
 	pass
 
 def p_function_definition_2(t):
-	'function_definition : declaration_specifiers declarator compound_statement’
+	'function_definition : declaration_specifiers declarator compound_statement'
 	pass
 
 def p_function_definition_3(t):
-	'function_definition : declarator declaration_list compound_statement’
+	'function_definition : declarator declaration_list compound_statement'
 	pass
 
 def p_function_definition_4(t):
-	'function_definition : declarator compound_statement’
+	'function_definition : declarator compound_statement'
 	pass
 
 
@@ -589,8 +608,16 @@ def p_empty(t):
 	pass
 
 def p_error(t):
-    print "Whoa. We're hosed"
+    print "ERROR"
 
+
+def parse():
+	f = open(sys.argv[1])
+	p = yacc.parse(f.read(), debug=1)
+	print p
 
 import profile
-yacc.yacc(method='LALR', debug=0)
+'''yacc.yacc(method='LALR', debug=0)'''
+parser = yacc.yacc()
+parse()
+
