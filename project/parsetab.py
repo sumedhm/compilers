@@ -5,9 +5,9 @@ _tabversion = '3.2'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'Q\xfa\x80\xa8|V(\xd7\x0eoM\xfd\x89Z\x0b@'
+_lr_signature = '\xc4n\xc2\xe2,\xd9\x05\xcf\x0e\x8e\x10\x93\xe6\xa35\x82'
     
-_lr_action_items = {'INT':([0,1,15,17,],[2,2,-2,-1,]),'DOUBLE':([0,1,15,17,],[3,3,-2,-1,]),'VOID':([0,1,15,17,],[4,4,-2,-1,]),'FLOAT':([0,1,15,17,],[5,5,-2,-1,]),'CHARACTER':([14,26,27,28,29,30,31,32,],[19,19,19,-23,-26,-24,-25,-27,]),'EQUALS':([9,16,],[14,26,]),'LONG':([0,1,15,17,],[7,7,-2,-1,]),'DEC_INT':([14,26,27,28,29,30,31,32,],[22,22,22,-23,-26,-24,-25,-27,]),'CHAR':([0,1,15,17,],[8,8,-2,-1,]),'SEMI_COLON':([6,10,11,13,16,18,19,20,21,22,23,24,25,33,34,35,],[-4,15,-3,17,-5,-21,-18,-14,-16,-17,-15,-19,-22,-6,-7,-20,]),'ADD':([18,19,20,21,22,23,24,25,33,34,35,],[-21,-18,-14,-16,-17,-15,28,-22,-21,28,28,]),'DOT_REAL':([14,26,27,28,29,30,31,32,],[23,23,23,-23,-26,-24,-25,-27,]),'MOD':([18,19,20,21,22,23,24,25,33,34,35,],[-21,-18,-14,-16,-17,-15,32,-22,-21,32,32,]),'VARIABLE':([0,1,2,3,4,5,7,8,12,14,15,17,26,27,28,29,30,31,32,],[9,9,-8,-11,-12,-9,-13,-10,16,25,-2,-1,25,25,-23,-26,-24,-25,-27,]),'DIV':([18,19,20,21,22,23,24,25,33,34,35,],[-21,-18,-14,-16,-17,-15,29,-22,-21,29,29,]),'EXP_REAL':([14,26,27,28,29,30,31,32,],[21,21,21,-23,-26,-24,-25,-27,]),'MINUS':([18,19,20,21,22,23,24,25,33,34,35,],[-21,-18,-14,-16,-17,-15,30,-22,-21,30,30,]),'HEX_INT':([14,26,27,28,29,30,31,32,],[20,20,20,-23,-26,-24,-25,-27,]),'MULT':([18,19,20,21,22,23,24,25,33,34,35,],[-21,-18,-14,-16,-17,-15,31,-22,-21,31,31,]),'$end':([1,15,17,],[0,-2,-1,]),}
+_lr_action_items = {'DO':([0,1,3,26,29,43,44,55,62,66,75,78,79,],[1,1,1,1,-2,1,-1,1,1,1,1,1,1,]),'SHORT':([0,1,3,26,29,43,44,55,62,66,75,78,79,],[2,2,2,2,-2,2,-1,2,2,2,2,2,2,]),'VOID':([0,1,3,26,29,43,44,55,62,66,75,78,79,],[4,4,4,4,-2,4,-1,4,4,4,4,4,4,]),'CHARACTER':([0,1,3,26,28,29,32,36,37,38,39,40,41,43,44,48,53,55,58,62,65,66,67,75,78,79,],[5,5,5,5,5,-2,5,-44,5,-47,-45,-46,-48,5,-1,5,5,5,5,5,5,5,5,5,5,5,]),'CHAR':([0,1,3,26,29,43,44,55,62,66,75,78,79,],[7,7,7,7,-2,7,-1,7,7,7,7,7,7,]),'WHILE':([0,1,3,5,6,9,10,11,12,17,18,21,23,24,25,26,29,30,33,34,35,43,44,46,51,52,54,55,56,57,61,62,66,68,70,75,76,77,78,79,80,],[8,8,8,-21,-20,-24,-5,-19,-4,-3,-25,-17,-18,-6,42,8,-2,-7,-27,-28,-26,8,-1,-25,-22,-23,60,8,-8,-9,-31,8,8,-33,-32,8,-34,-29,8,8,-30,]),'SEMI_COLON':([5,6,9,10,11,12,14,17,18,21,23,24,27,30,33,34,35,45,46,49,51,52,56,57,61,63,64,68,70,74,76,77,80,],[-21,-20,-24,-5,-19,-4,29,-3,-25,-17,-18,-6,44,-7,-27,-28,-26,-43,-25,58,-22,-23,-8,-9,-31,67,68,-33,-32,76,-34,-29,-30,]),'DIV':([5,6,9,11,18,21,23,24,33,34,35,45,46,51,52,56,57,72,],[-21,-20,-24,-19,-25,-17,-18,38,-27,-28,-26,38,-25,38,38,-24,38,38,]),'MINUS':([5,6,9,11,18,21,23,24,33,34,35,45,46,51,52,56,57,72,],[-21,-20,-24,-19,-25,-17,-18,39,-27,-28,-26,39,-25,39,39,-24,39,39,]),'MULT':([5,6,9,11,18,21,23,24,33,34,35,45,46,51,52,56,57,72,],[-21,-20,-24,-19,-25,-17,-18,40,-27,-28,-26,40,-25,40,40,-24,40,40,]),'RPAREN':([5,6,9,11,18,21,23,33,34,35,45,46,47,51,52,59,69,71,72,73,],[-21,-20,-24,-19,-25,-17,-18,-27,-28,-26,-43,-25,55,-22,-23,64,74,-35,-36,75,]),'EXP_REAL':([0,1,3,26,28,29,32,36,37,38,39,40,41,43,44,48,53,55,58,62,65,66,67,75,78,79,],[11,11,11,11,11,-2,11,-44,11,-47,-45,-46,-48,11,-1,11,11,11,11,11,11,11,11,11,11,11,]),'DEC_INT':([0,1,3,26,28,29,32,36,37,38,39,40,41,43,44,48,53,55,58,62,65,66,67,75,78,79,],[6,6,6,6,6,-2,6,-44,6,-47,-45,-46,-48,6,-1,6,6,6,6,6,6,6,6,6,6,6,]),'LONG':([0,1,3,26,29,43,44,55,62,66,75,78,79,],[13,13,13,13,-2,13,-1,13,13,13,13,13,13,]),'INCREMENT':([18,46,],[33,33,]),'$end':([3,29,44,],[0,-2,-1,]),'RBRACE':([29,43,44,66,79,],[-2,54,-1,70,80,]),'FOR':([0,1,3,26,29,43,44,55,62,66,75,78,79,],[16,16,16,16,-2,16,-1,16,16,16,16,16,16,]),'EQUALS':([18,30,50,],[32,48,32,]),'ADD':([5,6,9,11,18,21,23,24,33,34,35,45,46,51,52,56,57,72,],[-21,-20,-24,-19,-25,-17,-18,36,-27,-28,-26,36,-25,36,36,-24,36,36,]),'LPAREN':([8,16,42,60,],[28,31,53,65,]),'VARIABLE':([0,1,2,3,4,7,13,15,19,20,22,26,28,29,31,32,36,37,38,39,40,41,43,44,48,53,55,58,62,65,66,67,75,78,79,],[18,18,-15,18,-14,-12,-16,30,-10,-13,-11,18,46,-2,50,46,-44,46,-47,-45,-46,-48,18,-1,46,46,18,46,18,46,18,18,18,18,18,]),'LBRACE':([1,55,75,],[26,62,78,]),'INT':([0,1,3,26,29,43,44,55,62,66,75,78,79,],[19,19,19,19,-2,19,-1,19,19,19,19,19,19,]),'DOUBLE':([0,1,3,26,29,43,44,55,62,66,75,78,79,],[20,20,20,20,-2,20,-1,20,20,20,20,20,20,]),'HEX_INT':([0,1,3,26,28,29,32,36,37,38,39,40,41,43,44,48,53,55,58,62,65,66,67,75,78,79,],[21,21,21,21,21,-2,21,-44,21,-47,-45,-46,-48,21,-1,21,21,21,21,21,21,21,21,21,21,21,]),'FLOAT':([0,1,3,26,29,43,44,55,62,66,75,78,79,],[22,22,22,22,-2,22,-1,22,22,22,22,22,22,]),'DOT_REAL':([0,1,3,26,28,29,32,36,37,38,39,40,41,43,44,48,53,55,58,62,65,66,67,75,78,79,],[23,23,23,23,23,-2,23,-44,23,-47,-45,-46,-48,23,-1,23,23,23,23,23,23,23,23,23,23,23,]),'DECREMENT':([18,46,],[34,34,]),'MOD':([5,6,9,11,18,21,23,24,33,34,35,45,46,51,52,56,57,72,],[-21,-20,-24,-19,-25,-17,-18,41,-27,-28,-26,41,-25,41,41,-24,41,41,]),}
 
 _lr_action = { }
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'statements':([0,],[1,]),'exp':([14,26,27,],[24,34,35,]),'assignment_statement':([0,1,],[6,6,]),'statement':([0,1,],[10,13,]),'declaration':([0,1,],[11,11,]),'operator':([24,34,35,],[27,27,27,]),'constant':([14,26,27,],[18,33,18,]),'type':([0,1,],[12,12,]),}
+_lr_goto_items = {'statements':([0,26,62,78,],[3,43,66,79,]),'statement':([0,1,3,26,43,55,62,66,75,78,79,],[14,25,27,14,27,61,14,27,77,14,27,]),'type':([0,1,3,26,43,55,62,66,75,78,79,],[15,15,15,15,15,15,15,15,15,15,15,]),'conditional_expression':([28,53,58,65,],[47,59,63,69,]),'assignment_statement':([0,1,3,26,31,43,55,62,66,67,75,78,79,],[12,12,12,12,49,12,12,12,12,71,12,12,12,]),'action':([67,],[73,]),'exp':([0,1,3,26,28,32,37,43,48,53,55,58,62,65,66,67,75,78,79,],[24,24,24,24,45,51,52,24,57,45,24,45,24,45,24,72,24,24,24,]),'declaration':([0,1,3,26,43,55,62,66,75,78,79,],[17,17,17,17,17,17,17,17,17,17,17,]),'operator':([24,45,51,52,57,72,],[37,37,37,37,37,37,]),'constant':([0,1,3,26,28,32,37,43,48,53,55,58,62,65,66,67,75,78,79,],[9,9,9,9,9,9,9,9,56,9,9,9,9,9,9,9,9,9,9,]),'iterative_statement':([0,1,3,26,43,55,62,66,75,78,79,],[10,10,10,10,10,10,10,10,10,10,10,]),'unary_operator':([18,46,],[35,35,]),}
 
 _lr_goto = { }
 for _k, _v in _lr_goto_items.items():
@@ -30,28 +30,49 @@ _lr_productions = [
   ('statements -> statement SEMI_COLON','statements',2,'p_statements_2','parser.py',14),
   ('statement -> declaration','statement',1,'p_statement_1','parser.py',18),
   ('statement -> assignment_statement','statement',1,'p_statement_2','parser.py',22),
-  ('declaration -> type VARIABLE','declaration',2,'p_declaration_1','parser.py',26),
-  ('declaration -> type VARIABLE EQUALS constant','declaration',4,'p_declaration_2','parser.py',30),
-  ('declaration -> type VARIABLE EQUALS exp','declaration',4,'p_declaration_3','parser.py',34),
-  ('type -> INT','type',1,'p_type_1','parser.py',37),
-  ('type -> FLOAT','type',1,'p_type_2','parser.py',41),
-  ('type -> CHAR','type',1,'p_type_3','parser.py',45),
-  ('type -> DOUBLE','type',1,'p_type_4','parser.py',49),
-  ('type -> VOID','type',1,'p_type_5','parser.py',53),
-  ('type -> LONG','type',1,'p_type_6','parser.py',61),
-  ('constant -> HEX_INT','constant',1,'p_constant_1','parser.py',65),
-  ('constant -> DOT_REAL','constant',1,'p_constant_2','parser.py',69),
-  ('constant -> EXP_REAL','constant',1,'p_constant_3','parser.py',73),
-  ('constant -> DEC_INT','constant',1,'p_constant_4','parser.py',77),
-  ('constant -> CHARACTER','constant',1,'p_constant_5','parser.py',81),
-  ('assignment_statement -> VARIABLE EQUALS exp','assignment_statement',3,'p_assignment_statement_1','parser.py',85),
-  ('exp -> exp operator exp','exp',3,'p_exp_1','parser.py',89),
-  ('exp -> constant','exp',1,'p_exp_2','parser.py',93),
-  ('exp -> VARIABLE','exp',1,'p_exp_3','parser.py',97),
-  ('operator -> ADD','operator',1,'p_operator_1','parser.py',101),
-  ('operator -> MINUS','operator',1,'p_operator_2','parser.py',105),
-  ('operator -> MULT','operator',1,'p_operator_3','parser.py',109),
-  ('operator -> DIV','operator',1,'p_operator_4','parser.py',113),
-  ('operator -> MOD','operator',1,'p_operator_5','parser.py',117),
-  ('empty -> <empty>','empty',0,'p_empty','parser.py',121),
+  ('statement -> iterative_statement','statement',1,'p_statement_3','parser.py',26),
+  ('statement -> exp','statement',1,'p_statement_4','parser.py',31),
+  ('declaration -> type VARIABLE','declaration',2,'p_declaration_1','parser.py',35),
+  ('declaration -> type VARIABLE EQUALS constant','declaration',4,'p_declaration_2','parser.py',39),
+  ('declaration -> type VARIABLE EQUALS exp','declaration',4,'p_declaration_3','parser.py',43),
+  ('type -> INT','type',1,'p_type_1','parser.py',46),
+  ('type -> FLOAT','type',1,'p_type_2','parser.py',50),
+  ('type -> CHAR','type',1,'p_type_3','parser.py',54),
+  ('type -> DOUBLE','type',1,'p_type_4','parser.py',58),
+  ('type -> VOID','type',1,'p_type_5','parser.py',62),
+  ('type -> SHORT','type',1,'p_type_6','parser.py',66),
+  ('type -> LONG','type',1,'p_type_7','parser.py',70),
+  ('constant -> HEX_INT','constant',1,'p_constant_1','parser.py',74),
+  ('constant -> DOT_REAL','constant',1,'p_constant_2','parser.py',78),
+  ('constant -> EXP_REAL','constant',1,'p_constant_3','parser.py',82),
+  ('constant -> DEC_INT','constant',1,'p_constant_4','parser.py',86),
+  ('constant -> CHARACTER','constant',1,'p_constant_5','parser.py',90),
+  ('assignment_statement -> VARIABLE EQUALS exp','assignment_statement',3,'p_assignment_statement_1','parser.py',94),
+  ('exp -> exp operator exp','exp',3,'p_exp_1','parser.py',98),
+  ('exp -> constant','exp',1,'p_exp_2','parser.py',102),
+  ('exp -> VARIABLE','exp',1,'p_exp_3','parser.py',106),
+  ('exp -> VARIABLE unary_operator','exp',2,'p_exp_4','parser.py',110),
+  ('unary_operator -> INCREMENT','unary_operator',1,'p_unary_operator_1','parser.py',114),
+  ('unary_operator -> DECREMENT','unary_operator',1,'p_unary_operator_2','parser.py',118),
+  ('iterative_statement -> FOR LPAREN assignment_statement SEMI_COLON conditional_expression SEMI_COLON action RPAREN statement','iterative_statement',9,'p_iterative_statement_1','parser.py',122),
+  ('iterative_statement -> FOR LPAREN assignment_statement SEMI_COLON conditional_expression SEMI_COLON action RPAREN LBRACE statements RBRACE','iterative_statement',11,'p_iterative_statement_2','parser.py',126),
+  ('iterative_statement -> WHILE LPAREN conditional_expression RPAREN statement','iterative_statement',5,'p_iterative_statement_3','parser.py',130),
+  ('iterative_statement -> WHILE LPAREN conditional_expression RPAREN LBRACE statements RBRACE','iterative_statement',7,'p_iterative_statement_4','parser.py',134),
+  ('iterative_statement -> DO statement WHILE LPAREN conditional_expression RPAREN SEMI_COLON','iterative_statement',7,'p_iterative_statement_5','parser.py',138),
+  ('iterative_statement -> DO LBRACE statements RBRACE WHILE LPAREN conditional_expression RPAREN SEMI_COLON','iterative_statement',9,'p_iterative_statement_6','parser.py',142),
+  ('action -> assignment_statement','action',1,'p_action_1','parser.py',146),
+  ('action -> exp','action',1,'p_action_2','parser.py',150),
+  ('conditional_statement -> IF LPAREN conditional_expression RPAREN statement','conditional_statement',5,'p_conditional_statement_1','parser.py',154),
+  ('conditional_statement -> IF LPAREN conditional_expression RPAREN LBRACE statements RBRACE','conditional_statement',7,'p_conditional_statement_2','parser.py',158),
+  ('conditional_statement -> IF LPAREN conditional_expression RPAREN statement ELSE statement','conditional_statement',7,'p_conditional_statement_3','parser.py',162),
+  ('conditional_statement -> IF LPAREN conditional_expression RPAREN statement ELSE LBRACE statements RBRACE','conditional_statement',9,'p_conditional_statement_4','parser.py',166),
+  ('conditional_statement -> IF LPAREN conditional_expression RPAREN LBRACE statements RBRACE ELSE statement','conditional_statement',9,'p_conditional_statement_5','parser.py',170),
+  ('conditional_statement -> IF LPAREN conditional_expression RPAREN LBRACE statements RBRACE ELSE LBRACE statements RBRACE','conditional_statement',11,'p_conditional_statement_6','parser.py',174),
+  ('conditional_expression -> exp','conditional_expression',1,'p_conditional_expression_1','parser.py',178),
+  ('operator -> ADD','operator',1,'p_operator_1','parser.py',182),
+  ('operator -> MINUS','operator',1,'p_operator_2','parser.py',186),
+  ('operator -> MULT','operator',1,'p_operator_3','parser.py',190),
+  ('operator -> DIV','operator',1,'p_operator_4','parser.py',194),
+  ('operator -> MOD','operator',1,'p_operator_5','parser.py',198),
+  ('empty -> <empty>','empty',0,'p_empty','parser.py',202),
 ]

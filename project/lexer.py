@@ -25,6 +25,7 @@ reserved = {
 }
 
 tokens = [
+   'TRUE',
    'NEWLINE',
    'SINGLE_QUOTES',
    'DOUBLE_QUOTES',
@@ -119,6 +120,7 @@ t_LBIG = r'\['
 t_RBIG = r'\]'
 t_TILDA = r'\~'
 t_NOT = r'\!'
+t_TRUE = r"true"
 t_MUL_ASSIGN = r'\*\='
 t_DIV_ASSIGN = r'\/\='
 t_MOD_ASSIGN = r'\%\='

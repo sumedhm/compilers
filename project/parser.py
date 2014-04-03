@@ -22,6 +22,15 @@ def p_statement_2(t):
 	'statement : assignment_statement'
 	pass	
 
+def p_statement_3(t):
+	'statement : iterative_statement'
+	pass
+
+
+def p_statement_4(t):
+	'statement : exp'
+	pass	
+
 def p_declaration_1(t):
 	'declaration : type VARIABLE'
 	pass
@@ -57,7 +66,7 @@ def p_type_6(t):
 	'type : SHORT'
 	pass
 
-def p_type_6(t):
+def p_type_7(t):
 	'type : LONG'
 	pass
 
@@ -95,6 +104,78 @@ def p_exp_2(t):
 
 def p_exp_3(t):
 	'exp : VARIABLE'
+	pass
+
+def p_exp_4(t):
+	'exp : VARIABLE unary_operator'
+	pass
+
+def p_unary_operator_1(t):
+	'unary_operator : INCREMENT'
+	pass
+
+def p_unary_operator_2(t):
+	'unary_operator : DECREMENT'
+	pass
+
+def p_iterative_statement_1(t):
+	'iterative_statement : FOR LPAREN assignment_statement SEMI_COLON conditional_expression SEMI_COLON action RPAREN statement'
+	pass
+
+def p_iterative_statement_2(t):
+	'iterative_statement : FOR LPAREN assignment_statement SEMI_COLON conditional_expression SEMI_COLON action RPAREN LBRACE statements RBRACE'
+	pass
+
+def p_iterative_statement_3(t):
+	'iterative_statement : WHILE LPAREN conditional_expression RPAREN statement'
+	pass
+
+def p_iterative_statement_4(t):
+	'iterative_statement : WHILE LPAREN conditional_expression RPAREN LBRACE statements RBRACE'
+	pass
+
+def p_iterative_statement_5(t):
+	'iterative_statement : DO statement WHILE LPAREN conditional_expression RPAREN SEMI_COLON'
+	pass
+
+def p_iterative_statement_6(t):
+	'iterative_statement : DO LBRACE statements RBRACE WHILE LPAREN conditional_expression RPAREN SEMI_COLON'
+	pass
+
+def p_action_1(t):
+	'action : assignment_statement'
+	pass
+
+def p_action_2(t):
+	'action : exp'
+	pass
+	
+def p_conditional_statement_1(t):
+	'conditional_statement : IF LPAREN conditional_expression RPAREN statement'
+	pass
+
+def p_conditional_statement_2(t):
+	'conditional_statement : IF LPAREN conditional_expression RPAREN LBRACE statements RBRACE'
+	pass
+
+def p_conditional_statement_3(t):
+	'conditional_statement : IF LPAREN conditional_expression RPAREN statement ELSE statement'
+	pass
+
+def p_conditional_statement_4(t):
+	'conditional_statement : IF LPAREN conditional_expression RPAREN statement ELSE LBRACE statements RBRACE'
+	pass
+
+def p_conditional_statement_5(t):
+	'conditional_statement : IF LPAREN conditional_expression RPAREN LBRACE statements RBRACE ELSE statement'
+	pass
+
+def p_conditional_statement_6(t):
+	'conditional_statement : IF LPAREN conditional_expression RPAREN LBRACE statements RBRACE ELSE LBRACE statements RBRACE'
+	pass
+
+def p_conditional_expression_1(t):
+	'conditional_expression : exp'
 	pass
 
 def p_operator_1(t):
