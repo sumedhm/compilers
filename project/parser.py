@@ -35,6 +35,30 @@ def p_statement_3(t):
 	'statement : iterative_statement'
 	pass
 
+def p_statement_4(t):
+	'statement : function'
+	pass
+
+def p_statement_5(t):
+	'statement : constant_statement'
+	pass
+
+def p_constant_statement_1(t):
+	'constant_statement : BREAK SEMI_COLON'
+	pass
+
+def p_constant_statement_2(t):
+	'constant_statement : CONTINUE SEMI_COLON'
+	pass
+
+def p_constant_statement_3(t):
+	'constant_statement : RETURN SEMI_COLON'
+	pass
+
+def p_constant_statement_4(t):
+	'constant_statement : RETURN exp SEMI_COLON'
+	pass
+
 def p_declaration_1(t):
 	'declaration : type enum_list SEMI_COLON'
 	pass
@@ -204,10 +228,14 @@ def p_exp_25(t):
 	pass
 
 def p_exp_26(t):
-	'exp : constant'
+	'exp : LPAREN exp RPAREN'
 	pass
 
 def p_exp_27(t):
+	'exp : constant'
+	pass
+
+def p_exp_28(t):
 	'exp : VARIABLE'
 	pass
 
@@ -281,6 +309,34 @@ def p_iterative_exp_1(t):
 
 def p_iterative_exp_2(t):
 	'iterative_exp : exp'
+	pass
+
+def p_function_1(t):
+	'function : normal_function'
+	pass
+
+def p_function_2(t):
+	'function : main_function'
+	pass
+
+def p_main_function_1(t):
+	'main_function : type MAIN LPAREN arguments RPAREN LBRACE statements RBRACE'
+	pass
+
+def p_main_function_2(t):
+	'main_function : type MAIN LPAREN arguments RPAREN LBRACE RBRACE'
+	pass
+
+def p_normal_function_1(t):
+	'normal_function : type VARIABLE LPAREN arguments RPAREN LBRACE statements RBRACE'
+	pass
+
+def p_normal_function_2(t):
+	'normal_function : type VARIABLE LPAREN arguments RPAREN LBRACE RBRACE'
+	pass
+
+def p_arguments_1(t):
+	'arguments : empty'
 	pass
 
 def p_empty(t):
