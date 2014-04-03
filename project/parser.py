@@ -14,6 +14,19 @@ def p_statements_2(t):
 	'statements : statement SEMI_COLON'
 	pass
 
+def p_statements_3(t):
+	'statements : COMMENT'
+	pass
+
+def p_statements_4(t):
+	'statements : statements COMMENT'
+	pass
+
+def p_statements_5(t):
+	'statements : COMMENT statements'
+	pass
+
+
 def p_statement_1(t):
 	'statement : declaration'
 	pass
@@ -23,14 +36,12 @@ def p_statement_2(t):
 	pass	
 
 def p_statement_3(t):
-	'statement : iterative_statement'
-	pass
-
-
-def p_statement_4(t):
 	'statement : exp'
 	pass	
 
+def p_statements_4(t):
+	'statement : iterative_statement'
+	pass
 def p_declaration_1(t):
 	'declaration : type VARIABLE'
 	pass
@@ -94,6 +105,50 @@ def p_assignment_statement_1(t):
 	'assignment_statement : VARIABLE EQUALS exp'
 	pass
 
+def p_assignment_statement_2(t):
+	'assignment_statement : VARIABLE assignment_operator exp'
+	pass
+
+def p_assignment_operator_1(t):
+	'assignment_operator : MUL_ASSIGN'
+	pass
+
+def p_assignment_operator_2(t):
+	'assignment_operator : DIV_ASSIGN'
+	pass
+
+def p_assignment_operator_3(t):
+	'assignment_operator : MOD_ASSIGN'
+	pass
+
+def p_assignment_operator_4(t):
+	'assignment_operator : ADD_ASSIGN'
+	pass
+
+def p_assignment_operator_5(t):
+	'assignment_operator : SUB_ASSIGN'
+	pass
+
+def p_assignment_operator_6(t):
+	'assignment_operator : LEFT_ASSIGN'
+	pass
+
+def p_assignment_operator_7(t):
+	'assignment_operator : RIGHT_ASSIGN'
+	pass
+
+def p_assignment_operator_8(t):
+	'assignment_operator : AND_ASSIGN'
+	pass
+
+def p_assignment_operator_9(t):
+	'assignment_operator : XOR_ASSIGN'
+	pass
+
+def p_assignment_operator_10(t):
+	'assignment_operator : OR_ASSIGN'
+	pass
+
 def p_exp_1(t):
 	'exp : exp operator exp'
 	pass
@@ -110,6 +165,18 @@ def p_exp_4(t):
 	'exp : VARIABLE unary_operator'
 	pass
 
+def p_exp_5(t):
+	'exp : unary_operator VARIABLE'
+	pass
+
+def p_exp_6(t):
+	'exp : comparison_expression'
+	pass
+
+def p_exp_7(t):
+	'exp : logical_expression'
+	pass
+
 def p_unary_operator_1(t):
 	'unary_operator : INCREMENT'
 	pass
@@ -119,7 +186,7 @@ def p_unary_operator_2(t):
 	pass
 
 def p_iterative_statement_1(t):
-	'iterative_statement : FOR LPAREN assignment_statement SEMI_COLON conditional_expression SEMI_COLON action RPAREN statement'
+	'iterative_statement : FOR LPAREN assignment_statement SEMI_COLON conditional_expression SEMI_COLON action RPAREN statement SEMI_COLON'
 	pass
 
 def p_iterative_statement_2(t):
@@ -127,7 +194,7 @@ def p_iterative_statement_2(t):
 	pass
 
 def p_iterative_statement_3(t):
-	'iterative_statement : WHILE LPAREN conditional_expression RPAREN statement'
+	'iterative_statement : WHILE LPAREN conditional_expression RPAREN statement SEMI_COLON'
 	pass
 
 def p_iterative_statement_4(t):
@@ -135,7 +202,7 @@ def p_iterative_statement_4(t):
 	pass
 
 def p_iterative_statement_5(t):
-	'iterative_statement : DO statement WHILE LPAREN conditional_expression RPAREN SEMI_COLON'
+	'iterative_statement : DO statement SEMI_COLON WHILE LPAREN conditional_expression RPAREN SEMI_COLON'
 	pass
 
 def p_iterative_statement_6(t):
@@ -149,7 +216,7 @@ def p_action_1(t):
 def p_action_2(t):
 	'action : exp'
 	pass
-	
+
 def p_conditional_statement_1(t):
 	'conditional_statement : IF LPAREN conditional_expression RPAREN statement'
 	pass
@@ -175,7 +242,64 @@ def p_conditional_statement_6(t):
 	pass
 
 def p_conditional_expression_1(t):
+	'conditional_expression : comparison_expression'
+	pass
+
+def p_conditional_expression_2(t):
+	'conditional_expression : logical_expression'
+	pass
+
+def p_conditional_expression_3(t):
+	'conditional_expression : constant'
+	pass
+
+def p_conditional_expression_4(t):
 	'conditional_expression : exp'
+	pass
+
+def p_conditional_expression_5(t):
+	'conditional_expression : assignment_statement'
+	pass
+
+def p_comparison_expression_1(t):
+	'comparison_expression : exp comparison_operator exp'
+	pass
+
+def p_logical_expression_1(t):
+	'logical_expression : exp logical_operator exp'
+	pass
+
+def p_comparison_operator_1(t):
+	'comparison_operator : L_OP'
+	pass
+
+def p_comparison_operator_2(t):
+	'comparison_operator : G_OP'
+	pass
+
+def p_comparison_operator_3(t):
+	'comparison_operator : LE_OP'
+	pass
+
+def p_comparison_operator_4(t):
+	'comparison_operator : GE_OP'
+	pass
+
+
+def p_comparison_operator_5(t):
+	'comparison_operator : NOTEQUALS'
+	pass
+
+def p_comparison_operator_6(t):
+	'comparison_operator : EQUALS_OP'
+	pass
+
+def p_logical_operator_1(t):
+	'logical_operator : OR_OP'
+	pass
+
+def p_logical_operator_2(t):
+	'logical_operator : AND_OP'
 	pass
 
 def p_operator_1(t):
