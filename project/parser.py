@@ -36,15 +36,27 @@ def p_statement_3(t):
 	pass
 
 def p_declaration_1(t):
-	'declaration : type VARIABLE SEMI_COLON'
+	'declaration : type enum_list SEMI_COLON'
 	pass
 
-def p_declaration_2(t):
-	'declaration : type VARIABLE EQUALS exp SEMI_COLON'
+def p_enum_list_1(t):
+	'enum_list : VARIABLE COMMA enum_list'
+	pass
+
+def p_enum_list_2(t):
+	'enum_list : VARIABLE EQUALS exp COMMA enum_list'
+	pass
+
+def p_enum_list_3(t):
+	'enum_list : VARIABLE'
+	pass
+
+def p_enum_list_4(t):
+	'enum_list : VARIABLE EQUALS exp'
+	pass
 
 def p_type_1(t):
 	'type : INT'
-	print 'type de'
 	pass
 
 def p_type_2(t):
@@ -216,19 +228,19 @@ def p_unary_operator_2(t):
 	pass
 
 def p_iterative_statement_1(t):
-	'iterative_statement : FOR LPAREN exp SEMI_COLON exp SEMI_COLON exp RPAREN statement'
+	'iterative_statement : FOR LPAREN iterative_exp SEMI_COLON iterative_exp SEMI_COLON iterative_exp RPAREN statement'
 	pass
 
 def p_iterative_statement_2(t):
-	'iterative_statement : FOR LPAREN exp SEMI_COLON exp SEMI_COLON exp RPAREN LBRACE statements RBRACE'
+	'iterative_statement : FOR LPAREN iterative_exp SEMI_COLON iterative_exp SEMI_COLON iterative_exp RPAREN LBRACE statements RBRACE'
 	pass
 
 def p_iterative_statement_3(t):
-	'iterative_statement : FOR LPAREN exp SEMI_COLON exp SEMI_COLON exp RPAREN SEMI_COLON'
+	'iterative_statement : FOR LPAREN iterative_exp SEMI_COLON iterative_exp SEMI_COLON iterative_exp RPAREN SEMI_COLON'
 	pass
 
 def p_iterative_statement_4(t):
-	'iterative_statement : FOR LPAREN exp SEMI_COLON exp SEMI_COLON exp RPAREN LBRACE RBRACE'
+	'iterative_statement : FOR LPAREN iterative_exp SEMI_COLON iterative_exp SEMI_COLON iterative_exp RPAREN LBRACE RBRACE'
 	pass
 
 def p_iterative_statement_5(t):
@@ -263,6 +275,13 @@ def p_iterative_statement_12(t):
 	'iterative_statement : DO LBRACE  RBRACE WHILE LPAREN exp RPAREN SEMI_COLON'
 	pass
 
+def p_iterative_exp_1(t):
+	'iterative_exp : exp COMMA iterative_exp'
+	pass
+
+def p_iterative_exp_2(t):
+	'iterative_exp : exp'
+	pass
 
 def p_empty(t):
 	'empty : '
