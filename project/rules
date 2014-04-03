@@ -1,0 +1,88 @@
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> statements
+Rule 2     program -> program statements
+Rule 3     statements -> statements statement
+Rule 4     statements -> statement
+
+Rule 5     statement -> declaration
+Rule 6     statement -> assignment_statement SEMI_COLON
+Rule 7     statement -> exp exp_ender
+                            exp_ender -> SEMI_COLON | empty
+Rule 8     statement -> iterative_statement
+Rule 9     declaration -> type VARIABLE SEMI_COLON
+Rule 10    declaration -> type VARIABLE EQUALS constant SEMI_COLON
+Rule 11    declaration -> type VARIABLE EQUALS exp SEMI_COLON
+Rule 12    type -> INT
+Rule 13    type -> FLOAT
+Rule 14    type -> CHAR
+Rule 15    type -> DOUBLE
+Rule 16    type -> VOID
+Rule 17    type -> SHORT
+Rule 18    type -> LONG
+Rule 19    constant -> HEX_INT
+Rule 20    constant -> DOT_REAL
+Rule 21    constant -> EXP_REAL
+Rule 22    constant -> DEC_INT
+Rule 23    constant -> CHARACTER
+Rule 24    assignment_statement -> VARIABLE EQUALS exp
+Rule 25    assignment_statement -> VARIABLE assignment_operator exp
+            assignment_statement ->empty
+Rule 26    assignment_operator -> MUL_ASSIGN
+Rule 27    assignment_operator -> DIV_ASSIGN
+Rule 28    assignment_operator -> MOD_ASSIGN
+Rule 29    assignment_operator -> ADD_ASSIGN
+Rule 30    assignment_operator -> SUB_ASSIGN
+Rule 31    assignment_operator -> LEFT_ASSIGN
+Rule 32    assignment_operator -> RIGHT_ASSIGN
+Rule 33    assignment_operator -> AND_ASSIGN
+Rule 34    assignment_operator -> XOR_ASSIGN
+Rule 35    assignment_operator -> OR_ASSIGN
+Rule 36    exp -> exp operator exp
+Rule 37    exp -> constant
+Rule 39    exp -> VARIABLE unary_operator
+Rule 40    exp -> unary_operator VARIABLE
+Rule 41    exp -> comparison_expression
+Rule 42    exp -> logical_expression
+Rule 43    unary_operator -> INCREMENT
+Rule 44    unary_operator -> DECREMENT
+            unary_operator -> empty
+Rule 45    iterative_statement -> FOR LPAREN assignment_statement SEMI_COLON conditional_expression SEMI_COLON action RPAREN statement
+Rule 46    iterative_statement -> FOR LPAREN assignment_statement SEMI_COLON conditional_expression SEMI_COLON action RPAREN LBRACE statements RBRACE
+Rule 47    iterative_statement -> WHILE LPAREN conditional_expression RPAREN statement
+Rule 48    iterative_statement -> WHILE LPAREN conditional_expression RPAREN LBRACE statements RBRACE
+Rule 49    iterative_statement -> DO statement WHILE LPAREN conditional_expression RPAREN SEMI_COLON
+Rule 50    iterative_statement -> DO LBRACE statements RBRACE WHILE LPAREN conditional_expression RPAREN SEMI_COLON
+Rule 51    action -> assignment_statement
+Rule 52    action -> exp
+
+
+Rule 53    conditional_statement -> IF LPAREN conditional_expression RPAREN statement else_statement
+Rule 54    conditional_statement -> IF LPAREN conditional_expression RPAREN LBRACE statements RBRACE else_statement
+
+
+else_statement -> ELSE statement | ELSE LBRACE statements RBRACE | empty
+
+Rule 59    conditional_expression -> comparison_expression
+Rule 60    conditional_expression -> logical_expression
+Rule 61    conditional_expression -> constant
+Rule 62    conditional_expression -> exp
+Rule 63    conditional_expression -> assignment_statement
+Rule 64    comparison_expression -> exp comparison_operator exp
+Rule 65    logical_expression -> exp logical_operator exp
+Rule 66    comparison_operator -> L_OP
+Rule 67    comparison_operator -> G_OP
+Rule 68    comparison_operator -> LE_OP
+Rule 69    comparison_operator -> GE_OP
+Rule 70    comparison_operator -> NOTEQUALS
+Rule 71    comparison_operator -> EQUALS_OP
+Rule 72    logical_operator -> OR_OP
+Rule 73    logical_operator -> AND_OP
+Rule 74    operator -> ADD
+Rule 75    operator -> MINUS
+Rule 76    operator -> MULT
+Rule 77    operator -> DIV
+Rule 78    operator -> MOD
+Rule 79    empty -> <empty>
+
