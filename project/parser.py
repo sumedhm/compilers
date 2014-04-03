@@ -31,6 +31,10 @@ def p_statement_2(t):
 	'statement : exp SEMI_COLON'
 	pass
 
+def p_statement_3(t):
+	'statement : iterative_statement'
+	pass
+
 def p_declaration_1(t):
 	'declaration : type VARIABLE SEMI_COLON'
 	pass
@@ -40,6 +44,7 @@ def p_declaration_2(t):
 
 def p_type_1(t):
 	'type : INT'
+	print 'type de'
 	pass
 
 def p_type_2(t):
@@ -84,10 +89,6 @@ def p_constant_4(t):
 
 def p_constant_5(t):
 	'constant : CHARACTER'
-	pass
-
-def p_constant_6(t):
-	'constant : VARIABLE'
 	pass
 
 def p_exp_1(t):
@@ -155,7 +156,7 @@ def p_exp_16(t):
 	pass
 
 def p_exp_17(t):
-	'exp : exp AND_ASSIGN exp'
+	'exp : exp ADD_ASSIGN exp'
 	pass
 
 def p_exp_18(t):
@@ -168,6 +169,10 @@ def p_exp_19(t):
 
 def p_exp_20(t):
 	'exp : exp RIGHT_ASSIGN exp'
+	pass
+
+def p_exp_21(t):
+	'exp : exp AND_ASSIGN exp'
 	pass
 
 def p_exp_22(t):
@@ -183,8 +188,81 @@ def p_exp_24(t):
 	pass
 
 def p_exp_25(t):
+	'exp : unary_expression'
+	pass
+
+def p_exp_26(t):
 	'exp : constant'
 	pass
+
+def p_exp_27(t):
+	'exp : VARIABLE'
+	pass
+
+def p_unary_expression_1(t):
+	'unary_expression : VARIABLE unary_operator'
+	pass
+
+def p_unary_expression_2(t):
+	'unary_expression : unary_operator VARIABLE'
+	pass
+
+def p_unary_operator_1(t):
+	'unary_operator : INCREMENT'
+	pass
+
+def p_unary_operator_2(t):
+	'unary_operator : DECREMENT'
+	pass
+
+def p_iterative_statement_1(t):
+	'iterative_statement : FOR LPAREN exp SEMI_COLON exp SEMI_COLON exp RPAREN statement'
+	pass
+
+def p_iterative_statement_2(t):
+	'iterative_statement : FOR LPAREN exp SEMI_COLON exp SEMI_COLON exp RPAREN LBRACE statements RBRACE'
+	pass
+
+def p_iterative_statement_3(t):
+	'iterative_statement : FOR LPAREN exp SEMI_COLON exp SEMI_COLON exp RPAREN SEMI_COLON'
+	pass
+
+def p_iterative_statement_4(t):
+	'iterative_statement : FOR LPAREN exp SEMI_COLON exp SEMI_COLON exp RPAREN LBRACE RBRACE'
+	pass
+
+def p_iterative_statement_5(t):
+	'iterative_statement : WHILE LPAREN exp RPAREN statement'
+	pass
+
+def p_iterative_statement_6(t):
+	'iterative_statement : WHILE LPAREN exp RPAREN SEMI_COLON'
+	pass
+
+def p_iterative_statement_7(t):
+	'iterative_statement : WHILE LPAREN exp RPAREN LBRACE statements RBRACE'
+	pass
+
+def p_iterative_statement_8(t):
+	'iterative_statement : WHILE LPAREN exp RPAREN LBRACE RBRACE'
+	pass
+
+def p_iterative_statement_9(t):
+	'iterative_statement : DO statement WHILE LPAREN exp RPAREN SEMI_COLON'
+	pass
+
+def p_iterative_statement_10(t):
+	'iterative_statement : DO LBRACE statements RBRACE WHILE LPAREN exp RPAREN SEMI_COLON'
+	pass
+
+def p_iterative_statement_11(t):
+	'iterative_statement : DO SEMI_COLON WHILE LPAREN exp RPAREN SEMI_COLON'
+	pass
+
+def p_iterative_statement_12(t):
+	'iterative_statement : DO LBRACE  RBRACE WHILE LPAREN exp RPAREN SEMI_COLON'
+	pass
+
 
 def p_empty(t):
 	'empty : '
