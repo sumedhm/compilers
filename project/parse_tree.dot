@@ -1,0 +1,26 @@
+strict digraph graphname {
+
+0 [label="program"]
+1 [label=" statements2 "]; 
+0 -> 1 ; 
+2 [label=" statement2 "]; 
+1 -> 2 ; 
+3 [label=" exp24 "]; 
+2 -> 3 ; 
+4 [label=" exp28 "]; 
+3 -> 4 ; 
+5 [label=" a "]; 
+4 -> 5 ; 
+6 [label=" = "]; 
+3 -> 6 ; 
+7 [label=" exp27 "]; 
+3 -> 7 ; 
+8 [label=" constant4 "]; 
+7 -> 8 ; 
+9 [label=" 1 "]; 
+8 -> 9 ; 
+10 [label=" ; "]; 
+2 -> 10 ; 
+
+
+}
