@@ -356,15 +356,15 @@ def p_arguments_3(t):
 	pass
 
 def p_header_statement_1(t):
-	'header_statement : HASH INCLUDE L_OP VARIABLE G_OP'
+	'header_statement : HASH INCLUDE L_OP RETURN G_OP'
 	pass
 
 def p_header_statement_2(t):
-	'header_statement : HASH INCLUDE DOUBLE_QUOTES VARIABLE DOUBLE_QUOTES'
+	'header_statement : HASH INCLUDE DOUBLE_QUOTES RETURN DOUBLE_QUOTES'
 	pass
 
 def p_macro_statement_1(t):
-	'macro_statement : HASH DEFINE VARIABLE exp'
+	'macro_statement : HASH DEFINE RETURN exp'
 	pass
 
 def p_empty(t):
