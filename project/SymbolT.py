@@ -35,6 +35,7 @@ class Table(object):
 			self.variables[obj] = {}
 			self.variables[obj]['type'] = setType
 			self.variables[obj]['size'] = setSize
+			self.variables[obj]['offset'] = 'NA'
 			return True
 
 class Node(object):
@@ -45,7 +46,9 @@ class Node(object):
     def add_child(self, obj):
         self.children.append(obj)
 
-
+errors = 0
+offset = 0
+type_size = {'int':4,'char':1,'float':4,'double':8,'function':0}
 lineno = 1
 global_scope = Table('Global_variables')
 current_scope = global_scope
@@ -183,19 +186,24 @@ def p_declaration_1(t):
 	n.add_child(t[1])
 	n.add_child(t[2])
 	n.add_child(Node(t[3]))
-	global current_scope
+	global current_scope, offset
 	for i in current_scope.variables:
 		if(current_scope.variables[i]['type']=='NA'):
 			current_scope.variables[i]['type'] = t[1].data
+		if(current_scope.variables[i]['offset']=='NA'):
+			current_scope.variables[i]['offset'] = offset
+			if not current_scope.variables[i]['size']==-1:
+				offset += type_size[t[1].data]
 	t[0] = n
 	pass
 
 def p_enum_list_1(t):
 	'enum_list : VARIABLE COMMA enum_list'
 	n = Node('enum_list1')
-	global current_scope
+	global current_scope, errors
 	new_var = current_scope.add_variable(t[1], 'NA')
 	if(not new_var):
+		errors += 1
 		print "Error: Variable", t[1], "declared multiple times in same scope."
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -206,9 +214,10 @@ def p_enum_list_1(t):
 def p_enum_list_2(t):
 	'enum_list : VARIABLE EQUALS exp COMMA enum_list'
 	n = Node('enum_list2')
-	global current_scope
+	global current_scope, errors
 	new_var = current_scope.add_variable(t[1], 'NA')
 	if(not new_var):
+		errors += 1
 		print "Error: Variable", t[1], "declared multiple times in same scope."
 	x = Node(t[2])
 	x.add_child(Node(t[1]))
@@ -221,18 +230,20 @@ def p_enum_list_2(t):
 
 def p_enum_list_3(t):
 	'enum_list : VARIABLE'
-	global current_scope
+	global current_scope, errors
 	new_var = current_scope.add_variable(t[1], 'NA')
 	if(not new_var):
+		errors += 1
 		print "Error: Variable", t[1], "declared multiple times in same scope."
 	t[0] = Node(t[1])
 	pass
 
 def p_enum_list_4(t):
 	'enum_list : VARIABLE EQUALS exp'
-	global current_scope
+	global current_scope, errors
 	new_var = current_scope.add_variable(t[1], 'NA')
 	if(not new_var):
+		errors += 1
 		print "Error: Variable", t[1], "declared multiple times in same scope."
 	n = Node(t[2])
 	n.add_child(Node(t[1]))
@@ -243,9 +254,11 @@ def p_enum_list_4(t):
 def p_enum_list_5(t):
 	'enum_list : VARIABLE LBIG exp RBIG COMMA enum_list'
 	n = Node('enum_list5')
-	global current_scope
+	print t[3].data, 5
+	global current_scope, errors
 	new_var = current_scope.add_variable(t[1], 'NA', t[3].data)
 	if(not new_var):
+		errors += 1
 		print "Error: Variable", t[1], "declared multiple times in same scope."
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -257,10 +270,12 @@ def p_enum_list_5(t):
 
 def p_enum_list_6(t):
 	'enum_list : VARIABLE LBIG exp RBIG EQUALS LBRACE num_list RBRACE COMMA enum_list'
+	print t[3].data, 6
 	n = Node('enum_list6')
-	global current_scope
+	global current_scope, errors
 	new_var = current_scope.add_variable(t[1], 'NA', t[3].data)
 	if(not new_var):
+		errors += 1
 		print "Error: Variable", t[1], "declared multiple times in same scope."
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -277,10 +292,12 @@ def p_enum_list_6(t):
 
 def p_enum_list_7(t):
 	'enum_list : VARIABLE LBIG exp RBIG'
+	print t[3].data, 7
 	n = Node('enum_list7')
-	global current_scope
+	global current_scope, errors
 	new_var = current_scope.add_variable(t[1], 'NA', t[3].data)
 	if(not new_var):
+		errors += 1
 		print "Error: Variable", t[1], "declared multiple times in same scope."
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -291,10 +308,12 @@ def p_enum_list_7(t):
 
 def p_enum_list_8(t):
 	'enum_list : VARIABLE LBIG exp RBIG EQUALS LBRACE num_list RBRACE'
+	print t[3].data, 8
 	n = Node('enum_list8')
-	global current_scope
+	global current_scope, errors
 	new_var = current_scope.add_variable(t[1], 'NA', t[3].data)
 	if(not new_var):
+		errors += 1
 		print "Error: Variable", t[1], "declared multiple times in same scope."
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -924,7 +943,6 @@ def p_conditional_statement_6(t):
 	t[0] = n
 	pass
 
-
 def p_function_1(t):
 	'function : normal_function'
 	t[0] = t[1]
@@ -938,6 +956,15 @@ def p_function_2(t):
 def p_main_function_1(t):
 	'main_function : type MAIN LPAREN parameters RPAREN lbrace statements rbrace'
 	n = Node('main_function1')
+	global global_scope, current_scope, errors
+	if not (global_scope == current_scope):
+		errors += 1
+		print "Error: Function", t[2], "cannot be declared here."
+	else:
+		new_var = current_scope.add_variable(t[2], t[1] ,-1)
+		if(not new_var):
+			errors += 1
+			print "Error: Function", t[2], "declared multiple times."
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
@@ -952,6 +979,15 @@ def p_main_function_1(t):
 def p_main_function_2(t):
 	'main_function : type MAIN LPAREN parameters RPAREN lbrace rbrace'
 	n = Node('main_function2')
+	global global_scope, current_scope, errors
+	if not (global_scope == current_scope):
+		errors += 1
+		print "Error: Function", t[2], "cannot be declared here."
+	else:
+		new_var = current_scope.add_variable(t[2], t[1].data,-1)
+		if(not new_var):
+			errors += 1
+			print "Error: Function", t[2], "declared multiple times."
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
@@ -965,6 +1001,15 @@ def p_main_function_2(t):
 def p_main_function_3(t):
 	'main_function : MAIN LPAREN parameters RPAREN lbrace statements rbrace'
 	n = Node('main_function3')
+	global global_scope, current_scope, errors
+	if not (global_scope == current_scope):
+		errors += 1
+		print "Error: Function", t[1], "cannot be declared here."
+	else:
+		new_var = current_scope.add_variable(t[1], 'void', -1)
+		if(not new_var):
+			errors += 1
+			print "Error: Function", t[1], "declared multiple times."
 	n.add_child(Node("VOID"))
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -979,6 +1024,15 @@ def p_main_function_3(t):
 def p_main_function_4(t):
 	'main_function : MAIN LPAREN parameters RPAREN lbrace rbrace'
 	n = Node('main_function4')
+	global global_scope, current_scope, errors
+	if not (global_scope == current_scope):
+		errors += 1
+		print "Error: Function", t[1], "cannot be declared here."
+	else:
+		new_var = current_scope.add_variable(t[1], 'void',-1)
+		if(not new_var):
+			errors += 1
+			print "Error: Function", t[1], "declared multiple times."
 	n.add_child(Node("VOID"))
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -991,6 +1045,15 @@ def p_main_function_4(t):
 def p_main_function_5(t):
 	'main_function : type MAIN LPAREN RPAREN lbrace statements rbrace'
 	n = Node('main_function5')
+	global global_scope, current_scope, errors
+	if not (global_scope == current_scope):
+		errors += 1
+		print "Error: Function", t[2], "cannot be declared here."
+	else:
+		new_var = current_scope.add_variable(t[2], t[1].data,-1)
+		if(not new_var):
+			errors += 1
+			print "Error: Function", t[2], "declared multiple times."
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
@@ -1004,6 +1067,15 @@ def p_main_function_5(t):
 def p_main_function_6(t):
 	'main_function : type MAIN LPAREN RPAREN lbrace rbrace'
 	n = Node('main_function6')
+	global global_scope, current_scope, errors
+	if not (global_scope == current_scope):
+		errors += 1
+		print "Error: Function", t[2], "cannot be declared here."
+	else:
+		new_var = current_scope.add_variable(t[2], t[1].data,-1)
+		if(not new_var):
+			errors += 1
+			print "Error: Function", t[2], "declared multiple times."
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
@@ -1016,6 +1088,15 @@ def p_main_function_6(t):
 def p_main_function_7(t):
 	'main_function : MAIN LPAREN RPAREN lbrace statements rbrace'
 	n = Node('main_function7')
+	global global_scope, current_scope, errors
+	if not (global_scope == current_scope):
+		errors += 1
+		print "Error: Function", t[1], "cannot be declared here."
+	else:
+		new_var = current_scope.add_variable(t[1], 'void',-1)
+		if(not new_var):
+			errors += 1
+			print "Error: Function", t[1], "declared multiple times."
 	n.add_child(Node("VOID"))
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -1029,6 +1110,15 @@ def p_main_function_7(t):
 def p_main_function_8(t):
 	'main_function : MAIN LPAREN RPAREN lbrace rbrace'
 	n = Node('main_function8')
+	global global_scope, current_scope, errors
+	if not (global_scope == current_scope):
+		errors += 1
+		print "Error: Function", t[1], "cannot be declared here."
+	else:
+		new_var = current_scope.add_variable(t[1], 'void',-1)
+		if(not new_var):
+			errors += 1
+			print "Error: Function", t[1], "declared multiple times."
 	n.add_child(Node("VOID"))
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -1042,6 +1132,15 @@ def p_main_function_8(t):
 def p_normal_function_1(t):
 	'normal_function : type VARIABLE LPAREN parameters RPAREN lbrace statements rbrace'
 	n = Node('normal_function1')
+	global global_scope, current_scope, errors
+	if not (global_scope == current_scope):
+		errors += 1
+		print "Error: Function", t[2], "cannot be declared here."
+	else:
+		new_var = current_scope.add_variable(t[2], t[1].data,-1)
+		if(not new_var):
+			errors += 1
+			print "Error: Function", t[2], "declared multiple times."
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
@@ -1056,6 +1155,15 @@ def p_normal_function_1(t):
 def p_normal_function_2(t):
 	'normal_function : type VARIABLE LPAREN parameters RPAREN lbrace rbrace'
 	n = Node('normal_function2')
+	global global_scope, current_scope, errors
+	if not (global_scope == current_scope):
+		errors += 1
+		print "Error: Function", t[2], "cannot be declared here."
+	else:
+		new_var = current_scope.add_variable(t[2], t[1].data,-1)
+		if(not new_var):
+			errors += 1
+			print "Error: Function", t[2], "declared multiple times."
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
@@ -1069,6 +1177,15 @@ def p_normal_function_2(t):
 def p_normal_function_3(t):
 	'normal_function : VARIABLE LPAREN parameters RPAREN lbrace statements rbrace'
 	n = Node('normal_function3')
+	global global_scope, current_scope, errors
+	if not (global_scope == current_scope):
+		errors += 1
+		print "Error: Function", t[1], "cannot be declared here."
+	else:
+		new_var = current_scope.add_variable(t[1], 'void',-1)
+		if(not new_var):
+			errors += 1
+			print "Error: Function", t[1], "declared multiple times."
 	n.add_child(Node("VOID"))
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -1083,6 +1200,15 @@ def p_normal_function_3(t):
 def p_normal_function_4(t):
 	'normal_function : VARIABLE LPAREN parameters RPAREN lbrace rbrace'
 	n = Node('normal_function4')
+	global global_scope, current_scope, errors
+	if not (global_scope == current_scope):
+		errors += 1
+		print "Error: Function", t[1], "cannot be declared here."
+	else:
+		new_var = current_scope.add_variable(t[1], 'void',-1)
+		if(not new_var):
+			errors += 1
+			print "Error: Function", t[1], "declared multiple times."
 	n.add_child(Node("VOID"))
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -1096,6 +1222,15 @@ def p_normal_function_4(t):
 def p_normal_function_5(t):
 	'normal_function : type VARIABLE LPAREN RPAREN lbrace statements rbrace'
 	n = Node('normal_function5')
+	global global_scope, current_scope, errors
+	if not (global_scope == current_scope):
+		errors += 1
+		print "Error: Function", t[2], "cannot be declared here."
+	else:
+		new_var = current_scope.add_variable(t[2], t[1].data,-1)
+		if(not new_var):
+			errors += 1
+			print "Error: Function", t[2], "declared multiple times."
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
@@ -1109,6 +1244,15 @@ def p_normal_function_5(t):
 def p_normal_function_6(t):
 	'normal_function : type VARIABLE LPAREN RPAREN lbrace rbrace'
 	n = Node('normal_function6')
+	global global_scope, current_scope, errors
+	if not (global_scope == current_scope):
+		errors += 1
+		print "Error: Function", t[2], "cannot be declared here."
+	else:
+		new_var = current_scope.add_variable(t[2], t[1].data,-1)
+		if(not new_var):
+			errors += 1
+			print "Error: Function", t[2], "declared multiple times."
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
@@ -1121,6 +1265,15 @@ def p_normal_function_6(t):
 def p_normal_function_7(t):
 	'normal_function : VARIABLE LPAREN RPAREN lbrace statements rbrace'
 	n = Node('normal_function7')
+	global global_scope, current_scope, errors
+	if not (global_scope == current_scope):
+		errors += 1
+		print "Error: Function", t[1], "cannot be declared here."
+	else:
+		new_var = current_scope.add_variable(t[1], 'void',-1)
+		if(not new_var):
+			errors += 1
+			print "Error: Function", t[1], "declared multiple times."
 	n.add_child(Node("VOID"))
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -1134,6 +1287,15 @@ def p_normal_function_7(t):
 def p_normal_function_8(t):
 	'normal_function : VARIABLE LPAREN RPAREN lbrace rbrace'
 	n = Node('normal_function8')
+	global global_scope, current_scope, errors
+	if not (global_scope == current_scope):
+		errors += 1
+		print "Error: Function", t[1], "cannot be declared here."
+	else:
+		new_var = current_scope.add_variable(t[1], 'void',-1)
+		if(not new_var):
+			errors += 1
+			print "Error: Function", t[1], "declared multiple times."
 	n.add_child(Node("VOID"))
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -1232,13 +1394,18 @@ def p_empty(t):
 
 def p_error(p):
     print "Error: Syntax error in line", p.lineno
+    global errors
+    errors += 1
     pass
 
 
 def parse():
+	print " "
 	f = open(sys.argv[1])
 	p = yacc.parse(f.read(), debug=0)
-	print p
+	global errors
+	if(errors>0):
+		print "Compilation failed.", errors, "errors found."
 
 import profile
 
