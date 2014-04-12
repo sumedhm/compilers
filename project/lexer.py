@@ -145,12 +145,7 @@ t_COLON       = r'\:'
 t_CONDOP      = r'\?'
 t_COMMA	      = r'\,'
 t_ignore_HASH = r'\#.*'
-t_ignore  	  = ' \n\r\t'
-
-def t_NEWLINE(t):
-    r'\n+'
-    t.lexer.lineno += len(t.value)
-    return t
+t_ignore  	  = ' \r\t'
 
 def t_VARIABLE(t):
 	r'[a-zA-Z][0-9a-zA-Z_]*'
@@ -159,8 +154,11 @@ def t_VARIABLE(t):
 	return t
 
 def t_error(t):
-    print "Illegal character '%s'" % t.value[0]
-    t.lexer.skip(1)
+   print "Illegal character '%s'" % t.value[0]
+   t.lexer.skip(1)
 
+def t_NEWLINE(t):
+   r'\n+'
+   t.lexer.lineno += len(t.value)
 
 lexer = lex.lex()

@@ -42,11 +42,15 @@ class Node(object):
     def __init__(self, data):
         self.data = data
         self.children = []
+        self.code = ""
+        self.next = ""
+        self.place = 0
 
     def add_child(self, obj):
         self.children.append(obj)
 
 errors = 0
+labels = 0
 offset = 0
 type_size = {'int':4,'char':1,'float':4,'double':8,'function':0}
 lineno = 1
@@ -55,7 +59,7 @@ current_scope = global_scope
 tableux = 1
 
 i = 0
-f = open('st.dot','wb')
+f = open('3ac.dot','wb')
 f.write('strict digraph graphname {\n\n0 [label="program"]\n')
 def print_all(n):
 	global i
@@ -204,7 +208,7 @@ def p_enum_list_1(t):
 	new_var = current_scope.add_variable(t[1], 'NA')
 	if(not new_var):
 		errors += 1
-		print "Error: Variable", t[1], "declared multiple times in same scope."
+		print "Error : line", t.lexer.lineno,": Variable", t[1], "declared multiple times in same scope."
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
 	n.add_child(t[3])
@@ -218,7 +222,7 @@ def p_enum_list_2(t):
 	new_var = current_scope.add_variable(t[1], 'NA')
 	if(not new_var):
 		errors += 1
-		print "Error: Variable", t[1], "declared multiple times in same scope."
+		print "Error : line", t.lexer.lineno,": Variable", t[1], "declared multiple times in same scope."
 	x = Node(t[2])
 	x.add_child(Node(t[1]))
 	x.add_child(t[3])
@@ -234,7 +238,7 @@ def p_enum_list_3(t):
 	new_var = current_scope.add_variable(t[1], 'NA')
 	if(not new_var):
 		errors += 1
-		print "Error: Variable", t[1], "declared multiple times in same scope."
+		print "Error : line", t.lexer.lineno,": Variable", t[1], "declared multiple times in same scope."
 	t[0] = Node(t[1])
 	pass
 
@@ -244,7 +248,7 @@ def p_enum_list_4(t):
 	new_var = current_scope.add_variable(t[1], 'NA')
 	if(not new_var):
 		errors += 1
-		print "Error: Variable", t[1], "declared multiple times in same scope."
+		print "Error : line", t.lexer.lineno,": Variable", t[1], "declared multiple times in same scope."
 	n = Node(t[2])
 	n.add_child(Node(t[1]))
 	n.add_child(t[3])
@@ -258,7 +262,7 @@ def p_enum_list_5(t):
 	new_var = current_scope.add_variable(t[1], 'NA', t[3].data)
 	if(not new_var):
 		errors += 1
-		print "Error: Variable", t[1], "declared multiple times in same scope."
+		print "Error : line", t.lexer.lineno,": Variable", t[1], "declared multiple times in same scope."
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
 	n.add_child(t[3])
@@ -274,7 +278,7 @@ def p_enum_list_6(t):
 	new_var = current_scope.add_variable(t[1], 'NA', t[3].data)
 	if(not new_var):
 		errors += 1
-		print "Error: Variable", t[1], "declared multiple times in same scope."
+		print "Error : line", t.lexer.lineno,": Variable", t[1], "declared multiple times in same scope."
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
 	n.add_child(t[3])
@@ -295,7 +299,7 @@ def p_enum_list_7(t):
 	new_var = current_scope.add_variable(t[1], 'NA', t[3].data)
 	if(not new_var):
 		errors += 1
-		print "Error: Variable", t[1], "declared multiple times in same scope."
+		print "Error : line", t.lexer.lineno,": Variable", t[1], "declared multiple times in same scope."
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
 	n.add_child(t[3])
@@ -310,7 +314,7 @@ def p_enum_list_8(t):
 	new_var = current_scope.add_variable(t[1], 'NA', t[3].data)
 	if(not new_var):
 		errors += 1
-		print "Error: Variable", t[1], "declared multiple times in same scope."
+		print "Error : line", t.lexer.lineno,": Variable", t[1], "declared multiple times in same scope."
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
 	n.add_child(t[3])
@@ -625,6 +629,7 @@ def p_exp_29(t):
 def p_exp_30(t):
 	'exp : function_call'
 	t[0] = t[1]
+	'''to be continued 0015hrs 13/4/2014'''
 	pass
 
 def p_unary_expression_1(t):
@@ -633,6 +638,8 @@ def p_unary_expression_1(t):
 	n.add_child(Node(t[1]))
 	n.add_child(t[2])
 	t[0] = n
+	t[0].code = t[1].code + t[2].code
+	'''next'''
 	pass
 
 def p_unary_expression_2(t):
@@ -641,6 +648,8 @@ def p_unary_expression_2(t):
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
 	t[0] = n
+	t[0].code = t[2].code + t[1].code
+	'''next'''
 	pass
 
 def p_unary_expression_3(t):
@@ -652,6 +661,9 @@ def p_unary_expression_3(t):
 	n.add_child(Node(t[4]))
 	n.add_child(t[5])
 	t[0] = n
+	var = t[1].code + "[" + t[3].place + "]"
+	t[0].code = t[3].code + "\n" + var + " = " + var + t[4].code
+	t[0].next = t[3].next
 	pass
 
 def p_unary_expression_4(t):
@@ -663,16 +675,21 @@ def p_unary_expression_4(t):
 	n.add_child(t[4])
 	n.add_child(Node(t[5]))
 	t[0] = n
+	var = t[2].code + "[" + t[4].place + "]"
+	t[0].code = t[4].code + "\n" + var + " = " + var + t[1].code
+	t[0].next = t[4].next
 	pass
 
 def p_unary_operator_1(t):
 	'unary_operator : INCREMENT'
 	t[0] = Node(t[1])
+	t[0].code = " + 1;"
 	pass
 
 def p_unary_operator_2(t):
 	'unary_operator : DECREMENT'
 	t[0] = Node(t[1])
+	t[0].code = " - 1;"
 	pass
 
 def p_iterative_statement_1(t):
@@ -688,6 +705,12 @@ def p_iterative_statement_1(t):
 	n.add_child(Node(t[8]))
 	n.add_child(t[9])
 	t[0] = n
+	global labels
+	labels += 1
+	t[0].code = "\nlabel_" + labels + ":\n"+ t[9].code + "\n" + t[7].code + "\ngoto label_" + str(labels+1) + ";\n"
+	labels += 1
+	t[0].code += t[3].code + "\ngoto label_"+ labels + ";\nlabel_" + labels + ":\n"  + "\nif" + t[5].code + "\n" + "\ngoto label_" + str(labels-1) + ";\ngoto " + t[3].next + ";\n" 
+	t[0].next = t[9].next
 	pass
 
 def p_iterative_statement_2(t):
@@ -705,6 +728,12 @@ def p_iterative_statement_2(t):
 	n.add_child(t[10])
 	n.add_child(Node(t[11]))
 	t[0] = n
+	global labels
+	labels += 1
+	t[0].code = "\nlabel_" + labels + ":\n"+ t[10].code + "\n" + t[7].code + "\ngoto label_" + str(labels+1) + ";\n"
+	labels += 1
+	t[0].code += t[3].code + "\ngoto label_"+ labels + ";\nlabel_" + labels + ":\n"  + "\nif" + t[5].code + "\n" + "\ngoto label_" + str(labels-1) + ";\ngoto " + t[3].next + ";\n" 
+	t[0].next = t[10].next
 	pass
 
 def p_iterative_statement_3(t):
@@ -720,6 +749,12 @@ def p_iterative_statement_3(t):
 	n.add_child(Node(t[8]))
 	n.add_child(Node(t[9]))
 	t[0] = n
+	global labels
+	labels += 1
+	t[0].code = "\nlabel_" + labels + ":\n" + t[7].code + "\ngoto label_" + str(labels+1) + ";\n"
+	labels += 1
+	t[0].code += t[3].code + "\ngoto label_"+ labels + ";\nlabel_" + labels + ":\n"  + "\nif" + t[5].code + "\n" + "\ngoto label_" + str(labels-1) + ";\ngoto " + t[3].next + ";\n" 
+	t[0].next = t[7].next
 	pass
 
 def p_iterative_statement_4(t):
@@ -736,6 +771,12 @@ def p_iterative_statement_4(t):
 	n.add_child(Node(t[9]))
 	n.add_child(Node(t[10]))
 	t[0] = n
+	global labels
+	labels += 1
+	t[0].code = "\nlabel_" + labels + ":\n" + t[7].code + "\ngoto label_" + str(labels+1) + ";\n"
+	labels += 1
+	t[0].code += t[3].code + "\ngoto label_"+ labels + ";\nlabel_" + labels + ":\n"  + "\nif" + t[5].code + "\n" + "\ngoto label_" + str(labels-1) + ";\ngoto " + t[3].next + ";\n" 
+	t[0].next = t[7].next
 	pass
 
 def p_iterative_statement_5(t):
@@ -747,6 +788,12 @@ def p_iterative_statement_5(t):
 	n.add_child(Node(t[4]))
 	n.add_child(t[5])
 	t[0] = n
+	global labels
+	labels += 1
+	t[0].code = "\nlabel_" + labels + ":\n" + t[5].code + "\ngoto label_" + str(labels+1) + ";\n"
+	labels += 1
+	t[0].code += "\nlabel_" + labels + ":\nif" + t[3].code + "\ngoto label_" + str(labels-1) + ";\ngoto " + t[5].next + ";\n" 
+	t[0].next = t[5].next
 	pass
 
 def p_iterative_statement_6(t):
@@ -758,6 +805,10 @@ def p_iterative_statement_6(t):
 	n.add_child(Node(t[4]))
 	n.add_child(Node(t[5]))
 	t[0] = n
+	global labels
+	labels += 1
+	t[0].code = "\nlabel_" + labels + ":\nif" + t[3].code + "\ngoto label_" + labels + ";\ngoto " + t[3].next + ";\n" 
+	t[0].next = t[3].next
 	pass
 
 def p_iterative_statement_7(t):
@@ -771,6 +822,12 @@ def p_iterative_statement_7(t):
 	n.add_child(t[6])
 	n.add_child(Node(t[7]))
 	t[0] = n
+	global labels
+	labels += 1
+	t[0].code = "label_" + labels + ":\n" + t[6].code + "\ngoto label_" + str(labels+1) + ";\n"
+	labels += 1
+	t[0].code += "\nlabel_" + labels + ":\nif" + t[3].code + "\ngoto label_" + str(labels-1) + ";\ngoto " + t[6].next + ";\n" 
+	t[0].next = t[6].next
 	pass
 
 def p_iterative_statement_8(t):
@@ -783,6 +840,10 @@ def p_iterative_statement_8(t):
 	n.add_child(Node(t[5]))
 	n.add_child(Node(t[6]))
 	t[0] = n
+	global labels
+	labels += 1
+	t[0].code = "\nlabel_" + labels + ":\nif" + t[3].code + "\ngoto label_" + labels + ";\ngoto " + t[3].next + ";\n" 
+	t[0].next = t[3].next
 	pass
 
 def p_iterative_statement_9(t):
@@ -796,6 +857,10 @@ def p_iterative_statement_9(t):
 	n.add_child(Node(t[6]))
 	n.add_child(Node(t[7]))
 	t[0] = n
+	global labels
+	labels += 1
+	t[0].code = "\nlabel_" + labels + ":\n" + t[2].code +"\nif " + t[5].code + "\ngoto label_" + labels + ";\ngoto label_" + t[5].next +";\n"
+	t[0].next = t[5].next
 	pass
 
 def p_iterative_statement_10(t):
@@ -811,6 +876,10 @@ def p_iterative_statement_10(t):
 	n.add_child(Node(t[8]))
 	n.add_child(Node(t[9]))
 	t[0] = n
+	global labels
+	labels += 1
+	t[0].code = "\nlabel_" + labels + ":\n" + t[3].code +"\nif " + t[5].code + "\ngoto label_" + labels + ";\ngoto label_" + t[5].next + ";\n"
+	t[0].next = t[5].next
 	pass
 
 def p_iterative_statement_11(t):
@@ -824,6 +893,10 @@ def p_iterative_statement_11(t):
 	n.add_child(Node(t[6]))
 	n.add_child(Node(t[7]))
 	t[0] = n
+	global labels
+	labels += 1
+	t[0].code = "\nlabel_" + labels + ":\n" + "if " + t[5].code + "\ngoto label_" + labels + ";\ngoto label_" + t[5].next ";\n"
+	t[0].next = t[5].next
 	pass
 
 def p_iterative_statement_12(t):
@@ -838,6 +911,10 @@ def p_iterative_statement_12(t):
 	n.add_child(Node(t[7]))
 	n.add_child(Node(t[8]))
 	t[0] = n
+	global labels
+	labels += 1
+	t[0].code = "\nlabel_" + labels + ":\n" + "if " + t[6].code + "\ngoto label_" + labels + ";\ngoto label_" + t[6].next+";\n"
+	t[0].next = t[6].next
 	pass
 
 def p_iterative_exp_1(t):
@@ -847,11 +924,15 @@ def p_iterative_exp_1(t):
 	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1].code + ";\n" + t[3].code + ";\n"
+	t[0].next = t[3].next
 	pass
 
 def p_iterative_exp_2(t):
 	'iterative_exp : exp'
 	t[0] = t[1]
+	t[0].code = t[1].code
+	t[0].next = t[1].next
 	pass
 
 
@@ -864,11 +945,16 @@ def p_conditional_statement_1(t):
 	n.add_child(Node(t[4]))
 	n.add_child(t[5])
 	t[0] = n
+	global labels
+	labels += 1
+	t[0].code = "label_" + labels + ":\n" + t[5].code + "\n\n"
+	t[0].code += "\nif "+ t[3].code + " goto label_" + labels + ";\ngoto " + t[5].next +";\n"
+	t[0].next = t[5].next
 	pass
 
 def p_conditional_statement_2(t):
 	'conditional_statement : IF LPAREN exp RPAREN lbrace statements rbrace %prec UELSE'
-	n = Node('conditional_statement2')
+	n = Node('conditional_statement2') 
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
 	n.add_child(t[3])
@@ -877,6 +963,11 @@ def p_conditional_statement_2(t):
 	n.add_child(t[6])
 	n.add_child(Node(t[7]))
 	t[0] = n
+	global labels
+	labels += 1
+	t[0].code = "label_" + labels + ":\n" + t[6].code + "\n\n"
+	t[0].code += "\nif "+ t[3].code + " goto label_" + labels + ";\ngoto " + t[6].next +";\n"
+	t[0].next = t[6].next
 	pass
 
 def p_conditional_statement_3(t):
@@ -890,6 +981,11 @@ def p_conditional_statement_3(t):
 	n.add_child(Node(t[6]))
 	n.add_child(t[7])
 	t[0] = n
+	global labels
+	labels += 1
+	t[0].code = "label_" + labels + ":\n" + t[5].code + "\n\n"
+	t[0].code += "\nif "+ t[3].code + " goto label_" + labels + ";\n" + t[7].code + "\ngoto " + t[7].next +";\n"
+	t[0].next = t[7].next
 	pass
 
 def p_conditional_statement_4(t):
@@ -905,6 +1001,11 @@ def p_conditional_statement_4(t):
 	n.add_child(Node(t[8]))
 	n.add_child(t[9])
 	t[0] = n
+	global labels
+	labels += 1
+	t[0].code = "label_" + labels + ":\n" + t[6].code + "\n\n"
+	t[0].code += "\nif "+ t[3].code + " goto label_" + labels + ";\n" + t[9].code + "goto " + t[9].next + ";\n"
+	t[0].next = t[9].next
 	pass
 
 def p_conditional_statement_5(t):
@@ -920,6 +1021,11 @@ def p_conditional_statement_5(t):
 	n.add_child(t[8])
 	n.add_child(Node(t[9]))
 	t[0] = n
+	global labels
+	labels += 1
+	t[0].code = "label_" + labels + ":\n" + t[5].code + "\n\n"
+	t[0].code += "\nif "+ t[3].code + " goto label_" + labels + ";\n" + t[8].code + "\ngoto " + t[8].next + ";\n"
+	t[0].next = t[8].next
 	pass
 
 def p_conditional_statement_6(t):
@@ -937,16 +1043,25 @@ def p_conditional_statement_6(t):
 	n.add_child(t[10])
 	n.add_child(Node(t[11]))
 	t[0] = n
+	global labels
+	labels += 1
+	t[0].code = "label_" + labels + ":\n" + t[6].code + "\n\n"
+	t[0].code += "\nif "+ t[3].code + " goto label_" + labels + ";\n" + t[10].code + "\ngoto " + t[10].next +";\n"
+	t[0].next = t[10].next
 	pass
 
 def p_function_1(t):
 	'function : normal_function'
 	t[0] = t[1]
+	t[0].code = t[1].code +"\n"
+	t[0].next = t[1].next
 	pass
 
 def p_function_2(t):
 	'function : main_function'
 	t[0] = t[1]
+	t[0].code = t[1].code + "\n"
+	t[0].next = t[1].next
 	pass
 
 def p_main_function_1(t):
@@ -955,12 +1070,12 @@ def p_main_function_1(t):
 	global global_scope, current_scope, errors
 	if not (global_scope == current_scope):
 		errors += 1
-		print "Error: Function", t[2], "cannot be declared here."
+		print "Error : line", t.lexer.lineno,": Function", t[2], "cannot be declared here."
 	else:
 		new_var = current_scope.add_variable(t[2], t[1] ,-1)
 		if(not new_var):
 			errors += 1
-			print "Error: Function", t[2], "declared multiple times."
+			print "Error : line", t.lexer.lineno,": Function", t[2], "declared multiple times."
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
@@ -970,6 +1085,8 @@ def p_main_function_1(t):
 	n.add_child(t[7])
 	n.add_child(Node(t[8]))
 	t[0] = n
+	t[0].code = "\n main:\n" + t[7].code + "\n goto " + t[2].next + ";\n\n"
+	t[0].next = t[2].next
 	pass
 
 def p_main_function_2(t):
@@ -978,12 +1095,12 @@ def p_main_function_2(t):
 	global global_scope, current_scope, errors
 	if not (global_scope == current_scope):
 		errors += 1
-		print "Error: Function", t[2], "cannot be declared here."
+		print "Error : line", t.lexer.lineno,": Function", t[2], "cannot be declared here."
 	else:
 		new_var = current_scope.add_variable(t[2], t[1].data,-1)
 		if(not new_var):
 			errors += 1
-			print "Error: Function", t[2], "declared multiple times."
+			print "Error : line", t.lexer.lineno,": Function", t[2], "declared multiple times."
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
@@ -992,6 +1109,8 @@ def p_main_function_2(t):
 	n.add_child(Node(t[6]))
 	n.add_child(Node(t[7]))
 	t[0] = n
+	t[0].code = "\n main:\n goto " + t[2].next + ";\n\n"
+	t[0].next = t[2].next
 	pass
 
 def p_main_function_3(t):
@@ -1000,12 +1119,12 @@ def p_main_function_3(t):
 	global global_scope, current_scope, errors
 	if not (global_scope == current_scope):
 		errors += 1
-		print "Error: Function", t[1], "cannot be declared here."
+		print "Error : line", t.lexer.lineno,": Function", t[1], "cannot be declared here."
 	else:
 		new_var = current_scope.add_variable(t[1], 'void', -1)
 		if(not new_var):
 			errors += 1
-			print "Error: Function", t[1], "declared multiple times."
+			print "Error : line", t.lexer.lineno,": Function", t[1], "declared multiple times."
 	n.add_child(Node("VOID"))
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -1015,6 +1134,8 @@ def p_main_function_3(t):
 	n.add_child(t[6])
 	n.add_child(Node(t[7]))
 	t[0] = n
+	t[0].code = "\n main:\n" + t[6].code + "\n goto " + t[1].next + ";\n\n"
+	t[0].next = t[1].next
 	pass
 
 def p_main_function_4(t):
@@ -1023,12 +1144,12 @@ def p_main_function_4(t):
 	global global_scope, current_scope, errors
 	if not (global_scope == current_scope):
 		errors += 1
-		print "Error: Function", t[1], "cannot be declared here."
+		print "Error : line", t.lexer.lineno,": Function", t[1], "cannot be declared here."
 	else:
 		new_var = current_scope.add_variable(t[1], 'void',-1)
 		if(not new_var):
 			errors += 1
-			print "Error: Function", t[1], "declared multiple times."
+			print "Error : line", t.lexer.lineno,": Function", t[1], "declared multiple times."
 	n.add_child(Node("VOID"))
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -1037,19 +1158,22 @@ def p_main_function_4(t):
 	n.add_child(Node(t[5]))
 	n.add_child(Node(t[6]))
 	t[0] = n
+	t[0].code = "\n main:\n goto" + t[1].next + ";\n\n"
+	t[0].next = t[1].next
 	pass
+
 def p_main_function_5(t):
 	'main_function : type MAIN LPAREN RPAREN lbrace statements rbrace'
 	n = Node('main_function5')
 	global global_scope, current_scope, errors
 	if not (global_scope == current_scope):
 		errors += 1
-		print "Error: Function", t[2], "cannot be declared here."
+		print "Error : line", t.lexer.lineno,": Function", t[2], "cannot be declared here."
 	else:
 		new_var = current_scope.add_variable(t[2], t[1].data,-1)
 		if(not new_var):
 			errors += 1
-			print "Error: Function", t[2], "declared multiple times."
+			print "Error : line", t.lexer.lineno,": Function", t[2], "declared multiple times."
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
@@ -1058,6 +1182,8 @@ def p_main_function_5(t):
 	n.add_child(t[6])
 	n.add_child(Node(t[7]))
 	t[0] = n
+	t[0].code = "\n main:\n" + t[6].code + "\n goto " + t[2].next + ";\n\n"
+	t[0].next = t[2].next
 	pass
 
 def p_main_function_6(t):
@@ -1066,12 +1192,12 @@ def p_main_function_6(t):
 	global global_scope, current_scope, errors
 	if not (global_scope == current_scope):
 		errors += 1
-		print "Error: Function", t[2], "cannot be declared here."
+		print "Error : line", t.lexer.lineno,": Function", t[2], "cannot be declared here."
 	else:
 		new_var = current_scope.add_variable(t[2], t[1].data,-1)
 		if(not new_var):
 			errors += 1
-			print "Error: Function", t[2], "declared multiple times."
+			print "Error : line", t.lexer.lineno,": Function", t[2], "declared multiple times."
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
@@ -1079,6 +1205,8 @@ def p_main_function_6(t):
 	n.add_child(Node(t[5]))
 	n.add_child(Node(t[6]))
 	t[0] = n
+	t[0].code = "\n main:\n goto " + t[2].next + ";\n\n"
+	t[0].next = t[2].next
 	pass
 
 def p_main_function_7(t):
@@ -1087,12 +1215,12 @@ def p_main_function_7(t):
 	global global_scope, current_scope, errors
 	if not (global_scope == current_scope):
 		errors += 1
-		print "Error: Function", t[1], "cannot be declared here."
+		print "Error : line", t.lexer.lineno,": Function", t[1], "cannot be declared here."
 	else:
 		new_var = current_scope.add_variable(t[1], 'void',-1)
 		if(not new_var):
 			errors += 1
-			print "Error: Function", t[1], "declared multiple times."
+			print "Error : line", t.lexer.lineno,": Function", t[1], "declared multiple times."
 	n.add_child(Node("VOID"))
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -1101,6 +1229,8 @@ def p_main_function_7(t):
 	n.add_child(t[5])
 	n.add_child(Node(t[6]))
 	t[0] = n
+	t[0].code = "\n main:\n" + t[5].code + "\n goto " + t[1].next + ";\n\n"
+	t[0].next = t[1].next
 	pass
 
 def p_main_function_8(t):
@@ -1109,12 +1239,12 @@ def p_main_function_8(t):
 	global global_scope, current_scope, errors
 	if not (global_scope == current_scope):
 		errors += 1
-		print "Error: Function", t[1], "cannot be declared here."
+		print "Error : line", t.lexer.lineno,": Function", t[1], "cannot be declared here."
 	else:
 		new_var = current_scope.add_variable(t[1], 'void',-1)
 		if(not new_var):
 			errors += 1
-			print "Error: Function", t[1], "declared multiple times."
+			print "Error : line", t.lexer.lineno,": Function", t[1], "declared multiple times."
 	n.add_child(Node("VOID"))
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -1122,6 +1252,8 @@ def p_main_function_8(t):
 	n.add_child(Node(t[4]))
 	n.add_child(Node(t[5]))
 	t[0] = n
+	t[0].code = "\n main:\n goto " + t[1].next + ";\n\n"
+	t[0].next = t[1].next
 	pass
 
 
@@ -1131,12 +1263,12 @@ def p_normal_function_1(t):
 	global global_scope, current_scope, errors
 	if not (global_scope == current_scope):
 		errors += 1
-		print "Error: Function", t[2], "cannot be declared here."
+		print "Error : line", t.lexer.lineno,": Function", t[2], "cannot be declared here."
 	else:
 		new_var = current_scope.add_variable(t[2], t[1].data,-1)
 		if(not new_var):
 			errors += 1
-			print "Error: Function", t[2], "declared multiple times."
+			print "Error : line", t.lexer.lineno,": Function", t[2], "declared multiple times."
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
@@ -1146,6 +1278,8 @@ def p_normal_function_1(t):
 	n.add_child(t[7])
 	n.add_child(Node(t[8]))
 	t[0] = n
+	t[0].code = "\n" + t[2].code + "_begin:\n" + t[7].code + "\n goto " + t[2].next+ ";\n\n"
+	t[0].next = t[2].next
 	pass
 
 def p_normal_function_2(t):
@@ -1154,12 +1288,12 @@ def p_normal_function_2(t):
 	global global_scope, current_scope, errors
 	if not (global_scope == current_scope):
 		errors += 1
-		print "Error: Function", t[2], "cannot be declared here."
+		print "Error : line", t.lexer.lineno,": Function", t[2], "cannot be declared here."
 	else:
 		new_var = current_scope.add_variable(t[2], t[1].data,-1)
 		if(not new_var):
 			errors += 1
-			print "Error: Function", t[2], "declared multiple times."
+			print "Error : line", t.lexer.lineno,": Function", t[2], "declared multiple times."
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
@@ -1168,6 +1302,8 @@ def p_normal_function_2(t):
 	n.add_child(Node(t[6]))
 	n.add_child(Node(t[7]))
 	t[0] = n
+	t[0].code = "\n" + t[2].code + "_begin:\n goto " + t[2].next + ";\n\n"
+	t[0].next = t[2].next
 	pass
 
 def p_normal_function_3(t):
@@ -1176,12 +1312,12 @@ def p_normal_function_3(t):
 	global global_scope, current_scope, errors
 	if not (global_scope == current_scope):
 		errors += 1
-		print "Error: Function", t[1], "cannot be declared here."
+		print "Error : line", t.lexer.lineno, ": Function", t[1], "cannot be declared here."
 	else:
 		new_var = current_scope.add_variable(t[1], 'void',-1)
 		if(not new_var):
 			errors += 1
-			print "Error: Function", t[1], "declared multiple times."
+			print "Error : line", t.lexer.lineno, ": Function", t[1], "declared multiple times."
 	n.add_child(Node("VOID"))
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -1191,6 +1327,8 @@ def p_normal_function_3(t):
 	n.add_child(t[6])
 	n.add_child(Node(t[7]))
 	t[0] = n
+	t[0].code = "\n" + t[1].code + "_begin:\n" + t[6].code + "\n goto " + t[1].next + ";\n\n"
+	t[0].next = t[1].next
 	pass
 
 def p_normal_function_4(t):
@@ -1199,12 +1337,12 @@ def p_normal_function_4(t):
 	global global_scope, current_scope, errors
 	if not (global_scope == current_scope):
 		errors += 1
-		print "Error: Function", t[1], "cannot be declared here."
+		print "Error : line", t.lexer.lineno, ": Function", t[1], "cannot be declared here."
 	else:
 		new_var = current_scope.add_variable(t[1], 'void',-1)
 		if(not new_var):
 			errors += 1
-			print "Error: Function", t[1], "declared multiple times."
+			print "Error : line", t.lexer.lineno, ": Function", t[1], "declared multiple times."
 	n.add_child(Node("VOID"))
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -1213,6 +1351,8 @@ def p_normal_function_4(t):
 	n.add_child(Node(t[5]))
 	n.add_child(Node(t[6]))
 	t[0] = n
+	t[0].code = "\n" + t[1].code + "_begin:\n goto " + t[1].next + ";\n\n"
+	t[0].next = t[1].next
 	pass
 
 def p_normal_function_5(t):
@@ -1221,12 +1361,12 @@ def p_normal_function_5(t):
 	global global_scope, current_scope, errors
 	if not (global_scope == current_scope):
 		errors += 1
-		print "Error: Function", t[2], "cannot be declared here."
+		print "Error : line", t.lexer.lineno, ": Function", t[2], "cannot be declared here."
 	else:
 		new_var = current_scope.add_variable(t[2], t[1].data,-1)
 		if(not new_var):
 			errors += 1
-			print "Error: Function", t[2], "declared multiple times."
+			print "Error : line", t.lexer.lineno, ": Function", t[2], "declared multiple times."
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
@@ -1235,6 +1375,8 @@ def p_normal_function_5(t):
 	n.add_child(t[6])
 	n.add_child(Node(t[7]))
 	t[0] = n
+	t[0].code = "\n" + t[2].code + "_begin:\n" + t[6].code + "\n goto " + t[2].next + ";\n\n"
+	t[0].next = t[2].next
 	pass
 
 def p_normal_function_6(t):
@@ -1243,12 +1385,12 @@ def p_normal_function_6(t):
 	global global_scope, current_scope, errors
 	if not (global_scope == current_scope):
 		errors += 1
-		print "Error: Function", t[2], "cannot be declared here."
+		print "Error : line", t.lexer.lineno,": Function", t[2], "cannot be declared here."
 	else:
 		new_var = current_scope.add_variable(t[2], t[1].data,-1)
 		if(not new_var):
 			errors += 1
-			print "Error: Function", t[2], "declared multiple times."
+			print "Error : line", t.lexer.lineno,": Function", t[2], "declared multiple times."
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
@@ -1256,6 +1398,8 @@ def p_normal_function_6(t):
 	n.add_child(Node(t[5]))
 	n.add_child(Node(t[6]))
 	t[0] = n
+	t[0].code = "\n" + t[2].code + "_begin:\n goto " + t[2].next+ ";\n\n"
+	t[0].next = t[2].next
 	pass
 
 def p_normal_function_7(t):
@@ -1264,12 +1408,12 @@ def p_normal_function_7(t):
 	global global_scope, current_scope, errors
 	if not (global_scope == current_scope):
 		errors += 1
-		print "Error: Function", t[1], "cannot be declared here."
+		print "Error : line", t.lexer.lineno,": Function", t[1], "cannot be declared here."
 	else:
 		new_var = current_scope.add_variable(t[1], 'void',-1)
 		if(not new_var):
 			errors += 1
-			print "Error: Function", t[1], "declared multiple times."
+			print "Error : line", t.lexer.lineno,": Function", t[1], "declared multiple times."
 	n.add_child(Node("VOID"))
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -1278,6 +1422,8 @@ def p_normal_function_7(t):
 	n.add_child(t[5])
 	n.add_child(Node(t[6]))
 	t[0] = n
+	t[0].code = "\n" + t[1].code + "_begin:\n" + t[5].code + "\n goto " + t[1].next+ ";\n\n"
+	t[0].next = t[1].next
 	pass
 
 def p_normal_function_8(t):
@@ -1286,12 +1432,12 @@ def p_normal_function_8(t):
 	global global_scope, current_scope, errors
 	if not (global_scope == current_scope):
 		errors += 1
-		print "Error: Function", t[1], "cannot be declared here."
+		print "Error : line", t.lexer.lineno,": Function", t[1], "cannot be declared here."
 	else:
 		new_var = current_scope.add_variable(t[1], 'void',-1)
 		if(not new_var):
 			errors += 1
-			print "Error: Function", t[1], "declared multiple times."
+			print "Error : line", t.lexer.lineno,": Function", t[1], "declared multiple times."
 	n.add_child(Node("VOID"))
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
@@ -1299,6 +1445,8 @@ def p_normal_function_8(t):
 	n.add_child(Node(t[4]))
 	n.add_child(Node(t[5]))
 	t[0] = n
+	t[0].code = "\n" + t[1].code + "_begin:\n goto " + t[1].next+ ";\n\n"
+	t[0].next = t[1].next
 	pass
 
 def p_parameters_1(t):
@@ -1309,6 +1457,8 @@ def p_parameters_1(t):
 	n.add_child(Node(t[3]))
 	n.add_child(t[4])
 	t[0] = n
+	t[0].code = ""
+	t[0].next = t[3].next
 	pass
 
 def p_parameters_2(t):
@@ -1317,6 +1467,8 @@ def p_parameters_2(t):
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
 	t[0] = n
+	t[0].code = ""
+	t[0].next = t[2].next
 	pass
 
 def p_function_call_1(t):
@@ -1327,6 +1479,8 @@ def p_function_call_1(t):
 	n.add_child(t[3])
 	n.add_child(Node(t[4]))
 	t[0] = n
+	t[0].code = "\ngoto " + t[1] + "_begin;\n"
+	t[1].next = t[0].next
 	pass
 
 def p_function_call_2(t):
@@ -1336,6 +1490,8 @@ def p_function_call_2(t):
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
 	t[0] = n
+	t[0].code = "\ngoto "+ t[1] + "_begin;\n"
+	t[1].next = t[0].next
 	pass
 
 def p_arguments_1(t):
@@ -1345,6 +1501,8 @@ def p_arguments_1(t):
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
 	t[0] = n
+	t[0].code = ""
+	t[0].next = t[3].next
 	pass
 
 def p_arguments_2(t):
@@ -1354,21 +1512,29 @@ def p_arguments_2(t):
 	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = ""
+	t[0].next = t[1].next
 	pass
 
 def p_arguments_3(t):
 	'arguments : VARIABLE'
 	t[0] = Node(t[1])
+	t[0].code = " "+t[1]
+	t[0].next = t[1].next
 	pass
 
 def p_arguments_4(t):
 	'arguments : constant'
 	t[0] = t[1]
+	t[0].code = " "+t[1]
+	t[0].next = t[1].next
 	pass
 
 def p_lbrace_1(t):
 	'lbrace : LBRACE'
 	t[0] = t[1]
+	t[0].code = t[1].code
+	t[0].next = t[1].next
 	global current_scope, tableux
 	new_scope = Table(tableux)
 	tableux += 1
@@ -1379,6 +1545,8 @@ def p_lbrace_1(t):
 def p_rbrace_1(t):
 	'rbrace : RBRACE'
 	t[0] = t[1]
+	t[0].code = ""
+	t[0].next = t[1].next
 	global current_scope
 	current_scope = current_scope.parent
 	pass
