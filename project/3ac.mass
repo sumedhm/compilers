@@ -1,0 +1,38 @@
+
+ main:
+label_5:
+label_1:
+i = 
+
+
+if > goto label_1;
+goto ;
+label_2:
+i = 
+
+
+if > goto label_2;
+goto ;
+label_3:
+i = 
+
+
+if > goto label_3;
+goto ;
+label_4:
+i = 
+
+
+if > goto label_4;
+goto ;
+
+goto label_6;
+
+label_6:
+if>
+goto label_5;
+goto ;
+
+ goto ;
+
+

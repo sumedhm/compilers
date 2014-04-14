@@ -45,6 +45,7 @@ class Node(object):
         self.code = ""
         self.next = ""
         self.place = 0
+        self.count = 0
 
     def add_child(self, obj):
         self.children.append(obj)
@@ -93,7 +94,12 @@ def p_program_1(t):
 	'program : statements'
 	t[0] = t[1]
 	print_all(t[0])
+	global f
 	f.write('\n\n}')
+	f.close()
+	t[0].code = t[1].code
+	f = open('3ac.mass','wb')
+	f.write(t[0].code)
 	f.close()
 	global global_scope
 	print_table(global_scope)
@@ -106,16 +112,19 @@ def p_statements_1(t):
 	n.add_child(t[1])
 	n.add_child(t[2])
 	t[0] = n
+	t[0].code = t[1].code + t[2].code
 	pass
 
 def p_statements_2(t):
 	'statements : statement'
 	t[0] = t[1]
+	t[0].code = t[1].code
 	pass
 
 def p_statement_1(t):
 	'statement : declaration'
 	t[0] = t[1]
+	t[0].code = t[1].code
 	pass
 
 def p_statement_2(t):
@@ -124,31 +133,37 @@ def p_statement_2(t):
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
 	t[0] = n
+	t[0].code = t[1].code
 	pass
 
 def p_statement_3(t):
 	'statement : iterative_statement'
 	t[0] = t[1]
+	t[0].code = t[1].code
 	pass
 
 def p_statement_4(t):
 	'statement : function'
 	t[0] = t[1]
+	t[0].code = t[1].code
 	pass
 
 def p_statement_5(t):
 	'statement : constant_statement'
 	t[0] = t[1]
+	t[0].code = t[1].code
 	pass
 
 def p_statement_6(t):
 	'statement : conditional_statement'
 	t[0] = t[1]
+	t[0].code = t[1].code
 	pass
 
 def p_statement_7(t):
 	'statement : COMMENT'
 	t[0] = Node(t[1])
+	t[0].code = ""
 	pass
 
 def p_constant_statement_1(t):
@@ -157,6 +172,7 @@ def p_constant_statement_1(t):
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
 	t[0] = n
+	t[0].code = 'break ' + ";\n"
 	pass
 
 def p_constant_statement_2(t):
@@ -165,6 +181,7 @@ def p_constant_statement_2(t):
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
 	t[0] = n
+	t[0].code = 'continue ' + ";\n"
 	pass
 
 def p_constant_statement_3(t):
@@ -173,6 +190,7 @@ def p_constant_statement_3(t):
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
 	t[0] = n
+	t[0].code = 'return ' + ";\n"
 	pass
 
 def p_constant_statement_4(t):
@@ -182,6 +200,7 @@ def p_constant_statement_4(t):
 	n.add_child(t[2])
 	n.add_child(Node(t[3]))
 	t[0] = n
+	t[0].code = 'return ' + t[2].code + ";\n"
 	pass
 
 def p_declaration_1(t):
@@ -213,6 +232,7 @@ def p_enum_list_1(t):
 	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[3].code
 	pass
 
 def p_enum_list_2(t):
@@ -230,6 +250,7 @@ def p_enum_list_2(t):
 	n.add_child(Node(t[4]))
 	n.add_child(t[5])
 	t[0] = n
+	t[0].code = t[1] + " = " + t[3].code + ";\n" + t[5].code
 	pass
 
 def p_enum_list_3(t):
@@ -240,6 +261,7 @@ def p_enum_list_3(t):
 		errors += 1
 		print "Error : line", t.lexer.lineno,": Variable", t[1], "declared multiple times in same scope."
 	t[0] = Node(t[1])
+	t[0].code = ""
 	pass
 
 def p_enum_list_4(t):
@@ -253,6 +275,7 @@ def p_enum_list_4(t):
 	n.add_child(Node(t[1]))
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1] + "=" + t[3].code
 	pass
 
 def p_enum_list_5(t):
@@ -269,6 +292,7 @@ def p_enum_list_5(t):
 	n.add_child(Node(t[4]))
 	n.add_child(Node(t[5]))
 	n.add_child(t[6])
+	t[0].code = t[6].code
 	pass
 
 def p_enum_list_6(t):
@@ -290,6 +314,13 @@ def p_enum_list_6(t):
 	n.add_child(Node(t[9]))
 	n.add_child(t[10])
 	t[0] = n
+	t[0].code = '';
+	num_list = t[7].code.split(',')
+	j = 0
+	for i in num_list:
+		t[0].code += t[1].code + "[" + j + "] = " +  i + ";\n"
+		j += 1
+	t[0].code += t[10].code
 	pass
 
 def p_enum_list_7(t):
@@ -305,6 +336,7 @@ def p_enum_list_7(t):
 	n.add_child(t[3])
 	n.add_child(Node(t[4]))
 	t[0] = n
+	t[0].code = "\n"
 	pass
 
 def p_enum_list_8(t):
@@ -324,6 +356,12 @@ def p_enum_list_8(t):
 	n.add_child(t[7])
 	n.add_child(Node(t[8]))
 	t[0] = n
+	t[0].code = '';
+	num_list = t[7].code.split(',')
+	j = 0
+	for i in num_list:
+		t[0].code += t[1].code + "[" + j + "] = " +  i + ";\n"
+		j += 1
 	pass
 
 def p_num_list_1(t):
@@ -333,71 +371,90 @@ def p_num_list_1(t):
 	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1].code + "," + t[3].code
+	t[0].place = t[3].place + 1
+	t[0].next = t[3].next
 	pass
 
 def p_num_list_2(t):
 	'num_list : exp'
 	t[0] = t[1]
+	t[0].code = t[1].code
+	t[0].count = 1
+	t[0].place = t[1].place
+	t[1].next = t[1].next
 	pass
 
 def p_type_1(t):
 	'type : INT'
 	t[0] = Node(t[1])
+	t[0].code = ""
 	pass
 
 def p_type_2(t):
 	'type : FLOAT'
 	t[0] = Node(t[1])
+	t[0].code = ""
 	pass
 
 def p_type_3(t):
 	'type : CHAR'
 	t[0] = Node(t[1])
+	t[0].code = ""
 	pass
 
 def p_type_4(t):
 	'type : DOUBLE'
 	t[0] = Node(t[1])
+	t[0].code = ""
 	pass
 
 def p_type_5(t):
 	'type : VOID'
 	t[0] = Node(t[1])
+	t[0].code = ""
 	pass
 
 def p_type_6(t):
 	'type : SHORT'
 	t[0] = Node(t[1])
+	t[0].code = ""
 	pass
 
 def p_type_7(t):
 	'type : LONG'
 	t[0] = Node(t[1])
+	t[0].code = ""
 	pass
 
 def p_constant_1(t):
 	'constant : HEX_INT'
 	t[0] = Node(t[1])
+	t[0].code = ""
 	pass
 
 def p_constant_2(t):
 	'constant : DOT_REAL'
 	t[0] = Node(t[1])
+	t[0].code = ""
 	pass
 
 def p_constant_3(t):
 	'constant : EXP_REAL'
 	t[0] = Node(t[1])
+	t[0].code = ""
 	pass
 
 def p_constant_4(t):
 	'constant : DEC_INT'
 	t[0] = Node(t[1])
+	t[0].code = ""
 	pass
 
 def p_constant_5(t):
 	'constant : CHARACTER'
 	t[0] = Node(t[1])
+	t[0].code = ""
 	pass
 
 def p_exp_1(t):
@@ -406,6 +463,8 @@ def p_exp_1(t):
 	n.add_child(t[1])
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1].code + "+" + t[3].code
+	t[0].next = t[3].next
 	pass
 
 def p_exp_2(t):
@@ -414,6 +473,8 @@ def p_exp_2(t):
 	n.add_child(t[1])
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1].code + "-" + t[3].code
+	t[0].next = t[3].next
 	pass
 
 def p_exp_3(t):
@@ -422,6 +483,8 @@ def p_exp_3(t):
 	n.add_child(t[1])
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1].code + "*" + t[3].code
+	t[0].next = t[3].next
 	pass
 
 def p_exp_4(t):
@@ -430,6 +493,8 @@ def p_exp_4(t):
 	n.add_child(t[1])
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1].code + "/" + t[3].code
+	t[0].next = t[3].next
 	pass
 
 def p_exp_5(t):
@@ -438,6 +503,8 @@ def p_exp_5(t):
 	n.add_child(t[1])
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1].code + "%" + t[3].code
+	t[0].next = t[3].next
 	pass
 
 def p_exp_6(t):
@@ -446,6 +513,8 @@ def p_exp_6(t):
 	n.add_child(t[1])
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1].code + "<" + t[3].code
+	t[0].next = t[3].next
 	pass
 
 def p_exp_7(t):
@@ -454,6 +523,8 @@ def p_exp_7(t):
 	n.add_child(t[1])
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1].code + ">" + t[3].code
+	t[0].next = t[3].next
 	pass
 
 def p_exp_8(t):
@@ -462,6 +533,8 @@ def p_exp_8(t):
 	n.add_child(t[1])
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1].code + "<=" + t[3].code
+	t[0].next = t[3].next
 	pass
 
 def p_exp_9(t):
@@ -470,6 +543,8 @@ def p_exp_9(t):
 	n.add_child(t[1])
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1].code + ">=" + t[3].code
+	t[0].next = t[3].next
 	pass
 
 def p_exp_10(t):
@@ -478,6 +553,8 @@ def p_exp_10(t):
 	n.add_child(t[1])
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1].code + "!=" + t[3].code
+	t[0].next = t[3].next
 	pass
 
 def p_exp_11(t):
@@ -486,6 +563,8 @@ def p_exp_11(t):
 	n.add_child(t[1])
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1].code + "==" + t[3].code
+	t[0].next = t[3].next
 	pass
 
 def p_exp_12(t):
@@ -494,6 +573,8 @@ def p_exp_12(t):
 	n.add_child(t[1])
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1].code + "||" + t[3].code
+	t[0].next = t[3].next
 	pass
 
 def p_exp_13(t):
@@ -502,6 +583,8 @@ def p_exp_13(t):
 	n.add_child(t[1])
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1].code + "&&" + t[3].code
+	t[0].next = t[3].next
 	pass
 
 def p_exp_14(t):
@@ -510,6 +593,8 @@ def p_exp_14(t):
 	n.add_child(t[1])
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1].code + " = " + t[1].code + "*" + t[3].code
+	t[0].next = t[3].next
 	pass
 
 def p_exp_15(t):
@@ -518,6 +603,8 @@ def p_exp_15(t):
 	n.add_child(t[1])
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1].code + " = " + t[1].code + "/" + t[3].code
+	t[0].next = t[3].next
 	pass
 
 def p_exp_16(t):
@@ -526,7 +613,9 @@ def p_exp_16(t):
 	n.add_child(t[1])
 	n.add_child(t[3])
 	t[0] = n
-	pass
+	t[0].code = t[1].code + " = " + t[1].code + "%" + t[3].code
+	t[0].next = t[3].next
+	passco
 
 def p_exp_17(t):
 	'exp : exp ADD_ASSIGN exp'
@@ -534,6 +623,8 @@ def p_exp_17(t):
 	n.add_child(t[1])
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1].code + " = " + t[1].code + "+" + t[3].code
+	t[0].next = t[3].next
 	pass
 
 def p_exp_18(t):
@@ -542,6 +633,8 @@ def p_exp_18(t):
 	n.add_child(t[1])
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1].code + " = " + t[1].code + "-" + t[3].code
+	t[0].next = t[3].next
 	pass
 
 def p_exp_19(t):
@@ -550,6 +643,8 @@ def p_exp_19(t):
 	n.add_child(t[1])
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1].code + " = " + t[1].code + "<<" + t[3].code
+	t[0].next = t[3].next
 	pass
 
 def p_exp_20(t):
@@ -558,6 +653,8 @@ def p_exp_20(t):
 	n.add_child(t[1])
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1].code + " = " + t[1].code + ">>" + t[3].code
+	t[0].next = t[3].next
 	pass
 
 def p_exp_21(t):
@@ -566,6 +663,8 @@ def p_exp_21(t):
 	n.add_child(t[1])
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1].code + " = " + t[1].code + "&" + t[3].code
+	t[0].next = t[3].next
 	pass
 
 def p_exp_22(t):
@@ -574,6 +673,8 @@ def p_exp_22(t):
 	n.add_child(t[1])
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1].code + " = " + t[1].code + "^" + t[3].code
+	t[0].next = t[3].next
 	pass
 
 def p_exp_23(t):
@@ -582,6 +683,8 @@ def p_exp_23(t):
 	n.add_child(t[1])
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1].code + " = " + t[1].code + "|" + t[3].code
+	t[0].next = t[3].next
 	pass
 
 def p_exp_24(t):
@@ -590,11 +693,14 @@ def p_exp_24(t):
 	n.add_child(t[1])
 	n.add_child(t[3])
 	t[0] = n
+	t[0].code = t[1].code + " = " + t[3].code
 	pass
 
 def p_exp_25(t):
 	'exp : unary_expression'
 	t[0] = t[1]
+	t[0].code = t[1].code
+	t[0].next = t[1].next
 	pass
 
 def p_exp_26(t):
@@ -604,16 +710,21 @@ def p_exp_26(t):
 	n.add_child(t[2])
 	n.add_child(Node(t[3]))
 	t[0] = n
+	t[0].code = t[2].code
+	t[0].next = t[2].next
 	pass
 
 def p_exp_27(t):
 	'exp : constant'
 	t[0] = t[1]
+	t[0].code = t[1].code
+	t[0].next = t[1].next
 	pass
 
 def p_exp_28(t):
 	'exp : VARIABLE'
 	t[0] = Node(t[1])
+	t[0].code = t[1]
 	pass
 
 def p_exp_29(t):
@@ -624,12 +735,15 @@ def p_exp_29(t):
 	n.add_child(t[3])
 	n.add_child(Node(t[4]))
 	t[0] = n
+	t[0].code = t[1] + "\n t = " + t[3].place + "\n" + t[1].code + "[ t ];\n"
+	t[0].next = t[3].next 
 	pass
 
 def p_exp_30(t):
 	'exp : function_call'
 	t[0] = t[1]
-	'''to be continued 0015hrs 13/4/2014'''
+	t[0].code = t[1].code
+	t[0].next = t[1].next
 	pass
 
 def p_unary_expression_1(t):
@@ -638,8 +752,8 @@ def p_unary_expression_1(t):
 	n.add_child(Node(t[1]))
 	n.add_child(t[2])
 	t[0] = n
-	t[0].code = t[1].code + t[2].code
-	'''next'''
+	t[0].code = t[1] + " = " + t[1] + t[2].code
+	t[0].next = t[2].next
 	pass
 
 def p_unary_expression_2(t):
@@ -648,8 +762,8 @@ def p_unary_expression_2(t):
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
 	t[0] = n
-	t[0].code = t[2].code + t[1].code
-	'''next'''
+	t[0].code = t[2] + " = " + t[2] + t[1].code
+	t[0].next = t[1].next
 	pass
 
 def p_unary_expression_3(t):
@@ -661,7 +775,7 @@ def p_unary_expression_3(t):
 	n.add_child(Node(t[4]))
 	n.add_child(t[5])
 	t[0] = n
-	var = t[1].code + "[" + t[3].place + "]"
+	var = t[1] + "[" + t[3].place + "]"
 	t[0].code = t[3].code + "\n" + var + " = " + var + t[4].code
 	t[0].next = t[3].next
 	pass
@@ -675,7 +789,7 @@ def p_unary_expression_4(t):
 	n.add_child(t[4])
 	n.add_child(Node(t[5]))
 	t[0] = n
-	var = t[2].code + "[" + t[4].place + "]"
+	var = t[2] + "[" + t[4].place + "]"
 	t[0].code = t[4].code + "\n" + var + " = " + var + t[1].code
 	t[0].next = t[4].next
 	pass
@@ -683,13 +797,13 @@ def p_unary_expression_4(t):
 def p_unary_operator_1(t):
 	'unary_operator : INCREMENT'
 	t[0] = Node(t[1])
-	t[0].code = " + 1;"
+	t[0].code = " + 1;\n"
 	pass
 
 def p_unary_operator_2(t):
 	'unary_operator : DECREMENT'
 	t[0] = Node(t[1])
-	t[0].code = " - 1;"
+	t[0].code = " - 1;\n"
 	pass
 
 def p_iterative_statement_1(t):
@@ -709,7 +823,7 @@ def p_iterative_statement_1(t):
 	labels += 1
 	t[0].code = "\nlabel_" + labels + ":\n"+ t[9].code + "\n" + t[7].code + "\ngoto label_" + str(labels+1) + ";\n"
 	labels += 1
-	t[0].code += t[3].code + "\ngoto label_"+ labels + ";\nlabel_" + labels + ":\n"  + "\nif" + t[5].code + "\n" + "\ngoto label_" + str(labels-1) + ";\ngoto " + t[3].next + ";\n" 
+	t[0].code += t[3].code + "\ngoto label_"+ str(labels) + ";\nlabel_" + str(labels) + ":\n"  + "\nif" + t[5].code + "\n" + "\ngoto label_" + str(labels-1) + ";\ngoto " + str(t[3].next) + ";\n" 
 	t[0].next = t[9].next
 	pass
 
@@ -724,15 +838,15 @@ def p_iterative_statement_2(t):
 	n.add_child(Node(t[6]))
 	n.add_child(t[7])
 	n.add_child(Node(t[8]))
-	n.add_child(Node(t[9]))
+	n.add_child(t[9])
 	n.add_child(t[10])
-	n.add_child(Node(t[11]))
+	n.add_child(t[11])
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = "\nlabel_" + labels + ":\n"+ t[10].code + "\n" + t[7].code + "\ngoto label_" + str(labels+1) + ";\n"
+	t[0].code = "\nlabel_" + str(labels) + ":\n"+ t[10].code + "\n" + t[7].code + "\ngoto label_" + str(labels+1) + ";\n"
 	labels += 1
-	t[0].code += t[3].code + "\ngoto label_"+ labels + ";\nlabel_" + labels + ":\n"  + "\nif" + t[5].code + "\n" + "\ngoto label_" + str(labels-1) + ";\ngoto " + t[3].next + ";\n" 
+	t[0].code += t[3].code + "\ngoto label_"+ str(labels) + ";\nlabel_" + str(labels) + ":\n"  + "\nif" + t[5].code + "\n" + "\ngoto label_" + str(labels-1) + ";\ngoto " + str(t[3].next) + ";\n" 
 	t[0].next = t[10].next
 	pass
 
@@ -751,9 +865,9 @@ def p_iterative_statement_3(t):
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = "\nlabel_" + labels + ":\n" + t[7].code + "\ngoto label_" + str(labels+1) + ";\n"
+	t[0].code = "\nlabel_" + str(labels) + ":\n" + t[7].code + "\ngoto label_" + str(labels+1) + ";\n"
 	labels += 1
-	t[0].code += t[3].code + "\ngoto label_"+ labels + ";\nlabel_" + labels + ":\n"  + "\nif" + t[5].code + "\n" + "\ngoto label_" + str(labels-1) + ";\ngoto " + t[3].next + ";\n" 
+	t[0].code += t[3].code + "\ngoto label_"+ str(labels) + ";\nlabel_" + str(labels) + ":\n"  + "\nif" + t[5].code + "\n" + "\ngoto label_" + str(labels-1) + ";\ngoto " + str(t[3].next) + ";\n" 
 	t[0].next = t[7].next
 	pass
 
@@ -768,14 +882,14 @@ def p_iterative_statement_4(t):
 	n.add_child(Node(t[6]))
 	n.add_child(t[7])
 	n.add_child(Node(t[8]))
-	n.add_child(Node(t[9]))
-	n.add_child(Node(t[10]))
+	n.add_child(t[9])
+	n.add_child(t[10])
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = "\nlabel_" + labels + ":\n" + t[7].code + "\ngoto label_" + str(labels+1) + ";\n"
+	t[0].code = "\nlabel_" + str(labels) + ":\n" + t[7].code + "\ngoto label_" + str(labels+1) + ";\n"
 	labels += 1
-	t[0].code += t[3].code + "\ngoto label_"+ labels + ";\nlabel_" + labels + ":\n"  + "\nif" + t[5].code + "\n" + "\ngoto label_" + str(labels-1) + ";\ngoto " + t[3].next + ";\n" 
+	t[0].code += t[3].code + "\ngoto label_"+ str(labels) + ";\nlabel_" + str(labels) + ":\n"  + "\nif" + t[5].code + "\n" + "\ngoto label_" + str(labels-1) + ";\ngoto " + str(t[3].next) + ";\n" 
 	t[0].next = t[7].next
 	pass
 
@@ -790,9 +904,9 @@ def p_iterative_statement_5(t):
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = "\nlabel_" + labels + ":\n" + t[5].code + "\ngoto label_" + str(labels+1) + ";\n"
+	t[0].code = "\nlabel_" + str(labels) + ":\n" + t[5].code + "\ngoto label_" + str(labels+1) + ";\n"
 	labels += 1
-	t[0].code += "\nlabel_" + labels + ":\nif" + t[3].code + "\ngoto label_" + str(labels-1) + ";\ngoto " + t[5].next + ";\n" 
+	t[0].code += "\nlabel_" + str(labels) + ":\nif" + t[3].code + "\ngoto label_" + str(labels-1) + ";\ngoto " + str(t[5].next) + ";\n" 
 	t[0].next = t[5].next
 	pass
 
@@ -807,7 +921,7 @@ def p_iterative_statement_6(t):
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = "\nlabel_" + labels + ":\nif" + t[3].code + "\ngoto label_" + labels + ";\ngoto " + t[3].next + ";\n" 
+	t[0].code = "\nlabel_" + str(labels) + ":\nif" + t[3].code + "\ngoto label_" + str(labels) + ";\ngoto " + str(t[3].next) + ";\n" 
 	t[0].next = t[3].next
 	pass
 
@@ -818,15 +932,15 @@ def p_iterative_statement_7(t):
 	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	n.add_child(Node(t[4]))
-	n.add_child(Node(t[5]))
+	n.add_child(t[5])
 	n.add_child(t[6])
-	n.add_child(Node(t[7]))
+	n.add_child(t[7])
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = "label_" + labels + ":\n" + t[6].code + "\ngoto label_" + str(labels+1) + ";\n"
+	t[0].code = "label_" + str(labels) + ":\n" + t[6].code + "\ngoto label_" + str(labels+1) + ";\n"
 	labels += 1
-	t[0].code += "\nlabel_" + labels + ":\nif" + t[3].code + "\ngoto label_" + str(labels-1) + ";\ngoto " + t[6].next + ";\n" 
+	t[0].code += "\nlabel_" + str(labels) + ":\nif" + t[3].code + "\ngoto label_" + str(labels-1) + ";\ngoto " + str(t[6].next) + ";\n" 
 	t[0].next = t[6].next
 	pass
 
@@ -837,12 +951,12 @@ def p_iterative_statement_8(t):
 	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	n.add_child(Node(t[4]))
-	n.add_child(Node(t[5]))
-	n.add_child(Node(t[6]))
+	n.add_child(t[5])
+	n.add_child(t[6])
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = "\nlabel_" + labels + ":\nif" + t[3].code + "\ngoto label_" + labels + ";\ngoto " + t[3].next + ";\n" 
+	t[0].code = "\nlabel_" + str(labels) + ":\nif" + t[3].code + "\ngoto label_" + str(labels) + ";\ngoto " + str(t[3].next) + ";\n" 
 	t[0].next = t[3].next
 	pass
 
@@ -859,7 +973,7 @@ def p_iterative_statement_9(t):
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = "\nlabel_" + labels + ":\n" + t[2].code +"\nif " + t[5].code + "\ngoto label_" + labels + ";\ngoto label_" + t[5].next +";\n"
+	t[0].code = "\nlabel_" + str(labels) + ":\n" + t[2].code +"\nif " + t[5].code + "\ngoto label_" + str(labels) + ";\ngoto label_" + str(t[5].next) +";\n"
 	t[0].next = t[5].next
 	pass
 
@@ -867,9 +981,9 @@ def p_iterative_statement_10(t):
 	'iterative_statement : DO lbrace statements rbrace WHILE LPAREN exp RPAREN SEMI_COLON'
 	n = Node('iterative_statement10')
 	n.add_child(Node(t[1]))
-	n.add_child(Node(t[2]))
+	n.add_child(t[2])
 	n.add_child(t[3])
-	n.add_child(Node(t[4]))
+	n.add_child(t[4])
 	n.add_child(Node(t[5]))
 	n.add_child(Node(t[6]))
 	n.add_child(t[7])
@@ -878,7 +992,7 @@ def p_iterative_statement_10(t):
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = "\nlabel_" + labels + ":\n" + t[3].code +"\nif " + t[5].code + "\ngoto label_" + labels + ";\ngoto label_" + t[5].next + ";\n"
+	t[0].code = "\nlabel_" + str(labels) + ":\n" + t[3].code +"\nif " + t[5].code + "\ngoto label_" + str(labels) + ";\ngoto label_" + str(t[5].next) + ";\n"
 	t[0].next = t[5].next
 	pass
 
@@ -895,7 +1009,7 @@ def p_iterative_statement_11(t):
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = "\nlabel_" + labels + ":\n" + "if " + t[5].code + "\ngoto label_" + labels + ";\ngoto label_" + t[5].next ";\n"
+	t[0].code = "\nlabel_" + str(labels) + ":\n" + "if " + t[5].code + "\ngoto label_" + str(labels) + ";\ngoto label_" + str(t[5].next) + ";\n"
 	t[0].next = t[5].next
 	pass
 
@@ -903,8 +1017,8 @@ def p_iterative_statement_12(t):
 	'iterative_statement : DO lbrace rbrace WHILE LPAREN exp RPAREN SEMI_COLON'
 	n = Node('iterative_statement12')
 	n.add_child(Node(t[1]))
-	n.add_child(Node(t[2]))
-	n.add_child(Node(t[3]))
+	n.add_child(t[2])
+	n.add_child(t[3])
 	n.add_child(Node(t[4]))
 	n.add_child(Node(t[5]))
 	n.add_child(t[6])
@@ -913,7 +1027,7 @@ def p_iterative_statement_12(t):
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = "\nlabel_" + labels + ":\n" + "if " + t[6].code + "\ngoto label_" + labels + ";\ngoto label_" + t[6].next+";\n"
+	t[0].code = "\nlabel_" + str(labels) + ":\n" + "if " + t[6].code + "\ngoto label_" + str(labels) + ";\ngoto label_" + str(t[6].next) +";\n"
 	t[0].next = t[6].next
 	pass
 
@@ -947,8 +1061,8 @@ def p_conditional_statement_1(t):
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = "label_" + labels + ":\n" + t[5].code + "\n\n"
-	t[0].code += "\nif "+ t[3].code + " goto label_" + labels + ";\ngoto " + t[5].next +";\n"
+	t[0].code = "label_" + str(labels) + ":\n" + t[5].code + "\n\n"
+	t[0].code += "\nif "+ t[3].code + " goto label_" + str(labels) + ";\ngoto " + str(t[5].next) +";\n"
 	t[0].next = t[5].next
 	pass
 
@@ -959,14 +1073,14 @@ def p_conditional_statement_2(t):
 	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	n.add_child(Node(t[4]))
-	n.add_child(Node(t[5]))
+	n.add_child(t[5])
 	n.add_child(t[6])
-	n.add_child(Node(t[7]))
+	n.add_child(t[7])
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = "label_" + labels + ":\n" + t[6].code + "\n\n"
-	t[0].code += "\nif "+ t[3].code + " goto label_" + labels + ";\ngoto " + t[6].next +";\n"
+	t[0].code = "label_" + str(labels) + ":\n" + t[6].code + "\n\n"
+	t[0].code += "\nif "+ t[3].code + " goto label_" + str(labels) + ";\ngoto " + str(t[6].next) +";\n"
 	t[0].next = t[6].next
 	pass
 
@@ -983,8 +1097,8 @@ def p_conditional_statement_3(t):
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = "label_" + labels + ":\n" + t[5].code + "\n\n"
-	t[0].code += "\nif "+ t[3].code + " goto label_" + labels + ";\n" + t[7].code + "\ngoto " + t[7].next +";\n"
+	t[0].code = "label_" + str(labels) + ":\n" + t[5].code + "\n\n"
+	t[0].code += "\nif "+ t[3].code + " goto label_" + str(labels) + ";\n" + t[7].code + "\ngoto " + str(t[7].next) +";\n"
 	t[0].next = t[7].next
 	pass
 
@@ -995,16 +1109,16 @@ def p_conditional_statement_4(t):
 	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	n.add_child(Node(t[4]))
-	n.add_child(Node(t[5]))
+	n.add_child(t[5])
 	n.add_child(t[6])
-	n.add_child(Node(t[7]))
+	n.add_child(t[7])
 	n.add_child(Node(t[8]))
 	n.add_child(t[9])
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = "label_" + labels + ":\n" + t[6].code + "\n\n"
-	t[0].code += "\nif "+ t[3].code + " goto label_" + labels + ";\n" + t[9].code + "goto " + t[9].next + ";\n"
+	t[0].code = "label_" + str(labels) + ":\n" + t[6].code + "\n\n"
+	t[0].code += "\nif "+ t[3].code + " goto label_" + str(labels) + ";\n" + t[9].code + "goto " + str(t[9].next) + ";\n"
 	t[0].next = t[9].next
 	pass
 
@@ -1017,14 +1131,14 @@ def p_conditional_statement_5(t):
 	n.add_child(Node(t[4]))
 	n.add_child(t[5])
 	n.add_child(Node(t[6]))
-	n.add_child(Node(t[7]))
+	n.add_child(t[7])
 	n.add_child(t[8])
-	n.add_child(Node(t[9]))
+	n.add_child(t[9])
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = "label_" + labels + ":\n" + t[5].code + "\n\n"
-	t[0].code += "\nif "+ t[3].code + " goto label_" + labels + ";\n" + t[8].code + "\ngoto " + t[8].next + ";\n"
+	t[0].code = "label_" + str(labels) + ":\n" + t[5].code + "\n\n"
+	t[0].code += "\nif "+ t[3].code + " goto label_" + str(labels) + ";\n" + t[8].code + "\ngoto " + str(t[8].next) + ";\n"
 	t[0].next = t[8].next
 	pass
 
@@ -1039,14 +1153,14 @@ def p_conditional_statement_6(t):
 	n.add_child(t[6])
 	n.add_child(Node(t[7]))
 	n.add_child(Node(t[8]))
-	n.add_child(Node(t[9]))
+	n.add_child(t[9])
 	n.add_child(t[10])
-	n.add_child(Node(t[11]))
+	n.add_child(t[11])
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = "label_" + labels + ":\n" + t[6].code + "\n\n"
-	t[0].code += "\nif "+ t[3].code + " goto label_" + labels + ";\n" + t[10].code + "\ngoto " + t[10].next +";\n"
+	t[0].code = "label_" + str(labels) + ":\n" + t[6].code + "\n\n"
+	t[0].code += "\nif "+ t[3].code + " goto label_" + str(labels) + ";\n" + t[10].code + "\ngoto " + str(t[10].next) +";\n"
 	t[0].next = t[10].next
 	pass
 
@@ -1081,12 +1195,12 @@ def p_main_function_1(t):
 	n.add_child(Node(t[3]))
 	n.add_child(t[4])
 	n.add_child(Node(t[5]))
-	n.add_child(Node(t[6]))
+	n.add_child(t[6])
 	n.add_child(t[7])
-	n.add_child(Node(t[8]))
+	n.add_child(t[8])
 	t[0] = n
-	t[0].code = "\n main:\n" + t[7].code + "\n goto " + t[2].next + ";\n\n"
-	t[0].next = t[2].next
+	t[0].code = "\n main:\n" + t[7].code + "\n goto " + str(t[7].next) + ";\n\n"
+	t[0].next = t[7].next
 	pass
 
 def p_main_function_2(t):
@@ -1106,11 +1220,11 @@ def p_main_function_2(t):
 	n.add_child(Node(t[3]))
 	n.add_child(t[4])
 	n.add_child(Node(t[5]))
-	n.add_child(Node(t[6]))
-	n.add_child(Node(t[7]))
+	n.add_child(t[6])
+	n.add_child(t[7])
 	t[0] = n
-	t[0].code = "\n main:\n goto " + t[2].next + ";\n\n"
-	t[0].next = t[2].next
+	t[0].code = "\n main:\n goto " + str(t[7].next) + ";\n\n"
+	t[0].next = t[7].next
 	pass
 
 def p_main_function_3(t):
@@ -1130,12 +1244,12 @@ def p_main_function_3(t):
 	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	n.add_child(Node(t[4]))
-	n.add_child(Node(t[5]))
+	n.add_child(t[5])
 	n.add_child(t[6])
-	n.add_child(Node(t[7]))
+	n.add_child(t[7])
 	t[0] = n
-	t[0].code = "\n main:\n" + t[6].code + "\n goto " + t[1].next + ";\n\n"
-	t[0].next = t[1].next
+	t[0].code = "\n main:\n" + t[6].code + "\n goto " + str(t[6].next) + ";\n\n"
+	t[0].next = t[6].next
 	pass
 
 def p_main_function_4(t):
@@ -1155,10 +1269,10 @@ def p_main_function_4(t):
 	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	n.add_child(Node(t[4]))
-	n.add_child(Node(t[5]))
-	n.add_child(Node(t[6]))
+	n.add_child(t[5])
+	n.add_child(t[6])
 	t[0] = n
-	t[0].code = "\n main:\n goto" + t[1].next + ";\n\n"
+	t[0].code = "\n main:\n goto" + str(t[1].next) + ";\n\n"
 	t[0].next = t[1].next
 	pass
 
@@ -1178,12 +1292,12 @@ def p_main_function_5(t):
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
 	n.add_child(Node(t[4]))
-	n.add_child(Node(t[5]))
+	n.add_child(t[5])
 	n.add_child(t[6])
-	n.add_child(Node(t[7]))
+	n.add_child(t[7])
 	t[0] = n
-	t[0].code = "\n main:\n" + t[6].code + "\n goto " + t[2].next + ";\n\n"
-	t[0].next = t[2].next
+	t[0].code = "\n main:\n" + t[6].code + "\n goto " + str(t[6].next) + ";\n\n"
+	t[0].next = t[6].next
 	pass
 
 def p_main_function_6(t):
@@ -1202,11 +1316,11 @@ def p_main_function_6(t):
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
 	n.add_child(Node(t[4]))
-	n.add_child(Node(t[5]))
-	n.add_child(Node(t[6]))
+	n.add_child(t[5])
+	n.add_child(t[6])
 	t[0] = n
-	t[0].code = "\n main:\n goto " + t[2].next + ";\n\n"
-	t[0].next = t[2].next
+	t[0].code = "\n main:\n goto " + str(t[6].next) + ";\n\n"
+	t[0].next = t[6].next
 	pass
 
 def p_main_function_7(t):
@@ -1225,12 +1339,12 @@ def p_main_function_7(t):
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
-	n.add_child(Node(t[4]))
+	n.add_child(t[4])
 	n.add_child(t[5])
-	n.add_child(Node(t[6]))
+	n.add_child(t[6])
 	t[0] = n
-	t[0].code = "\n main:\n" + t[5].code + "\n goto " + t[1].next + ";\n\n"
-	t[0].next = t[1].next
+	t[0].code = "\n main:\n" + t[5].code + "\n goto " + str(t[5].next) + ";\n\n"
+	t[0].next = t[5].next
 	pass
 
 def p_main_function_8(t):
@@ -1249,11 +1363,11 @@ def p_main_function_8(t):
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
-	n.add_child(Node(t[4]))
-	n.add_child(Node(t[5]))
+	n.add_child(t[4])
+	n.add_child(t[5])
 	t[0] = n
-	t[0].code = "\n main:\n goto " + t[1].next + ";\n\n"
-	t[0].next = t[1].next
+	t[0].code = "\n main:\n goto " + str(t[5].next) + ";\n\n"
+	t[0].next = t[5].next
 	pass
 
 
@@ -1274,12 +1388,12 @@ def p_normal_function_1(t):
 	n.add_child(Node(t[3]))
 	n.add_child(t[4])
 	n.add_child(Node(t[5]))
-	n.add_child(Node(t[6]))
+	n.add_child(t[6])
 	n.add_child(t[7])
-	n.add_child(Node(t[8]))
+	n.add_child(t[8])
 	t[0] = n
-	t[0].code = "\n" + t[2].code + "_begin:\n" + t[7].code + "\n goto " + t[2].next+ ";\n\n"
-	t[0].next = t[2].next
+	t[0].code = "\n" + t[2] + "_begin:\n" + t[7].code + "\n goto " + str(t[7].next) + ";\n\n"
+	t[0].next = t[7].next
 	pass
 
 def p_normal_function_2(t):
@@ -1299,11 +1413,11 @@ def p_normal_function_2(t):
 	n.add_child(Node(t[3]))
 	n.add_child(t[4])
 	n.add_child(Node(t[5]))
-	n.add_child(Node(t[6]))
-	n.add_child(Node(t[7]))
+	n.add_child(t[6])
+	n.add_child(t[7])
 	t[0] = n
-	t[0].code = "\n" + t[2].code + "_begin:\n goto " + t[2].next + ";\n\n"
-	t[0].next = t[2].next
+	t[0].code = "\n" + t[2] + "_begin:\n goto " + str(t[7].next) + ";\n\n"
+	t[0].next = t[7].next
 	pass
 
 def p_normal_function_3(t):
@@ -1323,12 +1437,12 @@ def p_normal_function_3(t):
 	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	n.add_child(Node(t[4]))
-	n.add_child(Node(t[5]))
+	n.add_child(t[5])
 	n.add_child(t[6])
-	n.add_child(Node(t[7]))
+	n.add_child(t[7])
 	t[0] = n
-	t[0].code = "\n" + t[1].code + "_begin:\n" + t[6].code + "\n goto " + t[1].next + ";\n\n"
-	t[0].next = t[1].next
+	t[0].code = "\n" + t[1] + "_begin:\n" + t[6].code + "\n goto " + str(t[6].next) + ";\n\n"
+	t[0].next = t[6].next
 	pass
 
 def p_normal_function_4(t):
@@ -1348,11 +1462,11 @@ def p_normal_function_4(t):
 	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	n.add_child(Node(t[4]))
-	n.add_child(Node(t[5]))
-	n.add_child(Node(t[6]))
+	n.add_child(t[5])
+	n.add_child(t[6])
 	t[0] = n
-	t[0].code = "\n" + t[1].code + "_begin:\n goto " + t[1].next + ";\n\n"
-	t[0].next = t[1].next
+	t[0].code = "\n" + t[1] + "_begin:\n goto " + str(t[6].next) + ";\n\n"
+	t[0].next = t[6].next
 	pass
 
 def p_normal_function_5(t):
@@ -1371,12 +1485,12 @@ def p_normal_function_5(t):
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
 	n.add_child(Node(t[4]))
-	n.add_child(Node(t[5]))
+	n.add_child(t[5])
 	n.add_child(t[6])
-	n.add_child(Node(t[7]))
+	n.add_child(t[7])
 	t[0] = n
-	t[0].code = "\n" + t[2].code + "_begin:\n" + t[6].code + "\n goto " + t[2].next + ";\n\n"
-	t[0].next = t[2].next
+	t[0].code = "\n" + t[2] + "_begin:\n" + t[6].code + "\n goto " + str(t[6].next) + ";\n\n"
+	t[0].next = t[6].next
 	pass
 
 def p_normal_function_6(t):
@@ -1395,11 +1509,11 @@ def p_normal_function_6(t):
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
 	n.add_child(Node(t[4]))
-	n.add_child(Node(t[5]))
-	n.add_child(Node(t[6]))
+	n.add_child(t[5])
+	n.add_child(t[6])
 	t[0] = n
-	t[0].code = "\n" + t[2].code + "_begin:\n goto " + t[2].next+ ";\n\n"
-	t[0].next = t[2].next
+	t[0].code = "\n" + t[2] + "_begin:\n goto " + str(t[6].next) + ";\n\n"
+	t[0].next = t[6].next
 	pass
 
 def p_normal_function_7(t):
@@ -1418,12 +1532,12 @@ def p_normal_function_7(t):
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
-	n.add_child(Node(t[4]))
+	n.add_child(t[4])
 	n.add_child(t[5])
-	n.add_child(Node(t[6]))
+	n.add_child(t[6])
 	t[0] = n
-	t[0].code = "\n" + t[1].code + "_begin:\n" + t[5].code + "\n goto " + t[1].next+ ";\n\n"
-	t[0].next = t[1].next
+	t[0].code = "\n" + t[1] + "_begin:\n" + t[5].code + "\n goto " + str(t[5].next) + ";\n\n"
+	t[0].next = t[5].next
 	pass
 
 def p_normal_function_8(t):
@@ -1442,11 +1556,11 @@ def p_normal_function_8(t):
 	n.add_child(Node(t[1]))
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
-	n.add_child(Node(t[4]))
-	n.add_child(Node(t[5]))
+	n.add_child(t[4])
+	n.add_child(t[5])
 	t[0] = n
-	t[0].code = "\n" + t[1].code + "_begin:\n goto " + t[1].next+ ";\n\n"
-	t[0].next = t[1].next
+	t[0].code = "\n" + t[1] + "_begin:\n goto " + str(t[5].next) + ";\n\n"
+	t[0].next = t[5].next
 	pass
 
 def p_parameters_1(t):
@@ -1458,7 +1572,6 @@ def p_parameters_1(t):
 	n.add_child(t[4])
 	t[0] = n
 	t[0].code = ""
-	t[0].next = t[3].next
 	pass
 
 def p_parameters_2(t):
@@ -1468,7 +1581,6 @@ def p_parameters_2(t):
 	n.add_child(Node(t[2]))
 	t[0] = n
 	t[0].code = ""
-	t[0].next = t[2].next
 	pass
 
 def p_function_call_1(t):
@@ -1480,7 +1592,6 @@ def p_function_call_1(t):
 	n.add_child(Node(t[4]))
 	t[0] = n
 	t[0].code = "\ngoto " + t[1] + "_begin;\n"
-	t[1].next = t[0].next
 	pass
 
 def p_function_call_2(t):
@@ -1491,7 +1602,6 @@ def p_function_call_2(t):
 	n.add_child(Node(t[3]))
 	t[0] = n
 	t[0].code = "\ngoto "+ t[1] + "_begin;\n"
-	t[1].next = t[0].next
 	pass
 
 def p_arguments_1(t):
@@ -1501,8 +1611,7 @@ def p_arguments_1(t):
 	n.add_child(Node(t[2]))
 	n.add_child(Node(t[3]))
 	t[0] = n
-	t[0].code = ""
-	t[0].next = t[3].next
+	t[0].code = t[1].code + ", " + t[3]
 	pass
 
 def p_arguments_2(t):
@@ -1512,29 +1621,27 @@ def p_arguments_2(t):
 	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
-	t[0].code = ""
+	t[0].code = t[1].code + ", " + t[3].code
 	t[0].next = t[1].next
 	pass
 
 def p_arguments_3(t):
 	'arguments : VARIABLE'
 	t[0] = Node(t[1])
-	t[0].code = " "+t[1]
-	t[0].next = t[1].next
+	t[0].code = t[1]
 	pass
 
 def p_arguments_4(t):
 	'arguments : constant'
 	t[0] = t[1]
-	t[0].code = " "+t[1]
+	t[0].code = t[1].code
 	t[0].next = t[1].next
 	pass
 
 def p_lbrace_1(t):
 	'lbrace : LBRACE'
-	t[0] = t[1]
-	t[0].code = t[1].code
-	t[0].next = t[1].next
+	t[0] = Node(t[1])
+	t[0].code = ""
 	global current_scope, tableux
 	new_scope = Table(tableux)
 	tableux += 1
@@ -1544,9 +1651,8 @@ def p_lbrace_1(t):
 
 def p_rbrace_1(t):
 	'rbrace : RBRACE'
-	t[0] = t[1]
+	t[0] = Node(t[1])
 	t[0].code = ""
-	t[0].next = t[1].next
 	global current_scope
 	current_scope = current_scope.parent
 	pass
