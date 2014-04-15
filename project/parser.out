@@ -5202,6 +5202,8 @@ state 117
     GE_OP           reduce using rule 47 (exp -> exp NOTEQUALS exp .)
     NOTEQUALS       reduce using rule 47 (exp -> exp NOTEQUALS exp .)
     EQUALS_OP       reduce using rule 47 (exp -> exp NOTEQUALS exp .)
+    OR_OP           reduce using rule 47 (exp -> exp NOTEQUALS exp .)
+    AND_OP          reduce using rule 47 (exp -> exp NOTEQUALS exp .)
     MUL_ASSIGN      reduce using rule 47 (exp -> exp NOTEQUALS exp .)
     DIV_ASSIGN      reduce using rule 47 (exp -> exp NOTEQUALS exp .)
     MOD_ASSIGN      reduce using rule 47 (exp -> exp NOTEQUALS exp .)
@@ -5217,11 +5219,7 @@ state 117
     COMMA           reduce using rule 47 (exp -> exp NOTEQUALS exp .)
     RBIG            reduce using rule 47 (exp -> exp NOTEQUALS exp .)
     RBRACE          reduce using rule 47 (exp -> exp NOTEQUALS exp .)
-    OR_OP           shift and go to state 74
-    AND_OP          shift and go to state 78
 
-  ! OR_OP           [ reduce using rule 47 (exp -> exp NOTEQUALS exp .) ]
-  ! AND_OP          [ reduce using rule 47 (exp -> exp NOTEQUALS exp .) ]
   ! ADD             [ shift and go to state 79 ]
   ! MINUS           [ shift and go to state 69 ]
   ! MULT            [ shift and go to state 70 ]
@@ -5233,6 +5231,8 @@ state 117
   ! GE_OP           [ shift and go to state 80 ]
   ! NOTEQUALS       [ shift and go to state 64 ]
   ! EQUALS_OP       [ shift and go to state 65 ]
+  ! OR_OP           [ shift and go to state 74 ]
+  ! AND_OP          [ shift and go to state 78 ]
   ! MUL_ASSIGN      [ shift and go to state 86 ]
   ! DIV_ASSIGN      [ shift and go to state 66 ]
   ! MOD_ASSIGN      [ shift and go to state 82 ]
@@ -5286,6 +5286,8 @@ state 118
     GE_OP           reduce using rule 48 (exp -> exp EQUALS_OP exp .)
     NOTEQUALS       reduce using rule 48 (exp -> exp EQUALS_OP exp .)
     EQUALS_OP       reduce using rule 48 (exp -> exp EQUALS_OP exp .)
+    OR_OP           reduce using rule 48 (exp -> exp EQUALS_OP exp .)
+    AND_OP          reduce using rule 48 (exp -> exp EQUALS_OP exp .)
     MUL_ASSIGN      reduce using rule 48 (exp -> exp EQUALS_OP exp .)
     DIV_ASSIGN      reduce using rule 48 (exp -> exp EQUALS_OP exp .)
     MOD_ASSIGN      reduce using rule 48 (exp -> exp EQUALS_OP exp .)
@@ -5301,11 +5303,7 @@ state 118
     COMMA           reduce using rule 48 (exp -> exp EQUALS_OP exp .)
     RBIG            reduce using rule 48 (exp -> exp EQUALS_OP exp .)
     RBRACE          reduce using rule 48 (exp -> exp EQUALS_OP exp .)
-    OR_OP           shift and go to state 74
-    AND_OP          shift and go to state 78
 
-  ! OR_OP           [ reduce using rule 48 (exp -> exp EQUALS_OP exp .) ]
-  ! AND_OP          [ reduce using rule 48 (exp -> exp EQUALS_OP exp .) ]
   ! ADD             [ shift and go to state 79 ]
   ! MINUS           [ shift and go to state 69 ]
   ! MULT            [ shift and go to state 70 ]
@@ -5317,6 +5315,8 @@ state 118
   ! GE_OP           [ shift and go to state 80 ]
   ! NOTEQUALS       [ shift and go to state 64 ]
   ! EQUALS_OP       [ shift and go to state 65 ]
+  ! OR_OP           [ shift and go to state 74 ]
+  ! AND_OP          [ shift and go to state 78 ]
   ! MUL_ASSIGN      [ shift and go to state 86 ]
   ! DIV_ASSIGN      [ shift and go to state 66 ]
   ! MOD_ASSIGN      [ shift and go to state 82 ]
@@ -5448,6 +5448,8 @@ state 120
     MULT            reduce using rule 41 (exp -> exp DIV exp .)
     DIV             reduce using rule 41 (exp -> exp DIV exp .)
     MOD             reduce using rule 41 (exp -> exp DIV exp .)
+    OR_OP           reduce using rule 41 (exp -> exp DIV exp .)
+    AND_OP          reduce using rule 41 (exp -> exp DIV exp .)
     MUL_ASSIGN      reduce using rule 41 (exp -> exp DIV exp .)
     DIV_ASSIGN      reduce using rule 41 (exp -> exp DIV exp .)
     MOD_ASSIGN      reduce using rule 41 (exp -> exp DIV exp .)
@@ -5469,8 +5471,6 @@ state 120
     GE_OP           shift and go to state 80
     NOTEQUALS       shift and go to state 64
     EQUALS_OP       shift and go to state 65
-    OR_OP           shift and go to state 74
-    AND_OP          shift and go to state 78
 
   ! L_OP            [ reduce using rule 41 (exp -> exp DIV exp .) ]
   ! G_OP            [ reduce using rule 41 (exp -> exp DIV exp .) ]
@@ -5478,13 +5478,13 @@ state 120
   ! GE_OP           [ reduce using rule 41 (exp -> exp DIV exp .) ]
   ! NOTEQUALS       [ reduce using rule 41 (exp -> exp DIV exp .) ]
   ! EQUALS_OP       [ reduce using rule 41 (exp -> exp DIV exp .) ]
-  ! OR_OP           [ reduce using rule 41 (exp -> exp DIV exp .) ]
-  ! AND_OP          [ reduce using rule 41 (exp -> exp DIV exp .) ]
   ! ADD             [ shift and go to state 79 ]
   ! MINUS           [ shift and go to state 69 ]
   ! MULT            [ shift and go to state 70 ]
   ! DIV             [ shift and go to state 68 ]
   ! MOD             [ shift and go to state 88 ]
+  ! OR_OP           [ shift and go to state 74 ]
+  ! AND_OP          [ shift and go to state 78 ]
   ! MUL_ASSIGN      [ shift and go to state 86 ]
   ! DIV_ASSIGN      [ shift and go to state 66 ]
   ! MOD_ASSIGN      [ shift and go to state 82 ]
@@ -5529,6 +5529,8 @@ state 121
     SEMI_COLON      reduce using rule 39 (exp -> exp MINUS exp .)
     ADD             reduce using rule 39 (exp -> exp MINUS exp .)
     MINUS           reduce using rule 39 (exp -> exp MINUS exp .)
+    OR_OP           reduce using rule 39 (exp -> exp MINUS exp .)
+    AND_OP          reduce using rule 39 (exp -> exp MINUS exp .)
     MUL_ASSIGN      reduce using rule 39 (exp -> exp MINUS exp .)
     DIV_ASSIGN      reduce using rule 39 (exp -> exp MINUS exp .)
     MOD_ASSIGN      reduce using rule 39 (exp -> exp MINUS exp .)
@@ -5553,8 +5555,6 @@ state 121
     GE_OP           shift and go to state 80
     NOTEQUALS       shift and go to state 64
     EQUALS_OP       shift and go to state 65
-    OR_OP           shift and go to state 74
-    AND_OP          shift and go to state 78
 
   ! MULT            [ reduce using rule 39 (exp -> exp MINUS exp .) ]
   ! DIV             [ reduce using rule 39 (exp -> exp MINUS exp .) ]
@@ -5565,10 +5565,10 @@ state 121
   ! GE_OP           [ reduce using rule 39 (exp -> exp MINUS exp .) ]
   ! NOTEQUALS       [ reduce using rule 39 (exp -> exp MINUS exp .) ]
   ! EQUALS_OP       [ reduce using rule 39 (exp -> exp MINUS exp .) ]
-  ! OR_OP           [ reduce using rule 39 (exp -> exp MINUS exp .) ]
-  ! AND_OP          [ reduce using rule 39 (exp -> exp MINUS exp .) ]
   ! ADD             [ shift and go to state 79 ]
   ! MINUS           [ shift and go to state 69 ]
+  ! OR_OP           [ shift and go to state 74 ]
+  ! AND_OP          [ shift and go to state 78 ]
   ! MUL_ASSIGN      [ shift and go to state 86 ]
   ! DIV_ASSIGN      [ shift and go to state 66 ]
   ! MOD_ASSIGN      [ shift and go to state 82 ]
@@ -5616,6 +5616,8 @@ state 122
     MULT            reduce using rule 40 (exp -> exp MULT exp .)
     DIV             reduce using rule 40 (exp -> exp MULT exp .)
     MOD             reduce using rule 40 (exp -> exp MULT exp .)
+    OR_OP           reduce using rule 40 (exp -> exp MULT exp .)
+    AND_OP          reduce using rule 40 (exp -> exp MULT exp .)
     MUL_ASSIGN      reduce using rule 40 (exp -> exp MULT exp .)
     DIV_ASSIGN      reduce using rule 40 (exp -> exp MULT exp .)
     MOD_ASSIGN      reduce using rule 40 (exp -> exp MULT exp .)
@@ -5637,8 +5639,6 @@ state 122
     GE_OP           shift and go to state 80
     NOTEQUALS       shift and go to state 64
     EQUALS_OP       shift and go to state 65
-    OR_OP           shift and go to state 74
-    AND_OP          shift and go to state 78
 
   ! L_OP            [ reduce using rule 40 (exp -> exp MULT exp .) ]
   ! G_OP            [ reduce using rule 40 (exp -> exp MULT exp .) ]
@@ -5646,13 +5646,13 @@ state 122
   ! GE_OP           [ reduce using rule 40 (exp -> exp MULT exp .) ]
   ! NOTEQUALS       [ reduce using rule 40 (exp -> exp MULT exp .) ]
   ! EQUALS_OP       [ reduce using rule 40 (exp -> exp MULT exp .) ]
-  ! OR_OP           [ reduce using rule 40 (exp -> exp MULT exp .) ]
-  ! AND_OP          [ reduce using rule 40 (exp -> exp MULT exp .) ]
   ! ADD             [ shift and go to state 79 ]
   ! MINUS           [ shift and go to state 69 ]
   ! MULT            [ shift and go to state 70 ]
   ! DIV             [ shift and go to state 68 ]
   ! MOD             [ shift and go to state 88 ]
+  ! OR_OP           [ shift and go to state 74 ]
+  ! AND_OP          [ shift and go to state 78 ]
   ! MUL_ASSIGN      [ shift and go to state 86 ]
   ! DIV_ASSIGN      [ shift and go to state 66 ]
   ! MOD_ASSIGN      [ shift and go to state 82 ]
@@ -5704,6 +5704,8 @@ state 123
     G_OP            reduce using rule 45 (exp -> exp LE_OP exp .)
     LE_OP           reduce using rule 45 (exp -> exp LE_OP exp .)
     GE_OP           reduce using rule 45 (exp -> exp LE_OP exp .)
+    OR_OP           reduce using rule 45 (exp -> exp LE_OP exp .)
+    AND_OP          reduce using rule 45 (exp -> exp LE_OP exp .)
     MUL_ASSIGN      reduce using rule 45 (exp -> exp LE_OP exp .)
     DIV_ASSIGN      reduce using rule 45 (exp -> exp LE_OP exp .)
     MOD_ASSIGN      reduce using rule 45 (exp -> exp LE_OP exp .)
@@ -5721,13 +5723,9 @@ state 123
     RBRACE          reduce using rule 45 (exp -> exp LE_OP exp .)
     NOTEQUALS       shift and go to state 64
     EQUALS_OP       shift and go to state 65
-    OR_OP           shift and go to state 74
-    AND_OP          shift and go to state 78
 
   ! NOTEQUALS       [ reduce using rule 45 (exp -> exp LE_OP exp .) ]
   ! EQUALS_OP       [ reduce using rule 45 (exp -> exp LE_OP exp .) ]
-  ! OR_OP           [ reduce using rule 45 (exp -> exp LE_OP exp .) ]
-  ! AND_OP          [ reduce using rule 45 (exp -> exp LE_OP exp .) ]
   ! ADD             [ shift and go to state 79 ]
   ! MINUS           [ shift and go to state 69 ]
   ! MULT            [ shift and go to state 70 ]
@@ -5737,6 +5735,8 @@ state 123
   ! G_OP            [ shift and go to state 73 ]
   ! LE_OP           [ shift and go to state 71 ]
   ! GE_OP           [ shift and go to state 80 ]
+  ! OR_OP           [ shift and go to state 74 ]
+  ! AND_OP          [ shift and go to state 78 ]
   ! MUL_ASSIGN      [ shift and go to state 86 ]
   ! DIV_ASSIGN      [ shift and go to state 66 ]
   ! MOD_ASSIGN      [ shift and go to state 82 ]
@@ -5872,6 +5872,8 @@ state 125
     G_OP            reduce using rule 44 (exp -> exp G_OP exp .)
     LE_OP           reduce using rule 44 (exp -> exp G_OP exp .)
     GE_OP           reduce using rule 44 (exp -> exp G_OP exp .)
+    OR_OP           reduce using rule 44 (exp -> exp G_OP exp .)
+    AND_OP          reduce using rule 44 (exp -> exp G_OP exp .)
     MUL_ASSIGN      reduce using rule 44 (exp -> exp G_OP exp .)
     DIV_ASSIGN      reduce using rule 44 (exp -> exp G_OP exp .)
     MOD_ASSIGN      reduce using rule 44 (exp -> exp G_OP exp .)
@@ -5889,13 +5891,9 @@ state 125
     RBRACE          reduce using rule 44 (exp -> exp G_OP exp .)
     NOTEQUALS       shift and go to state 64
     EQUALS_OP       shift and go to state 65
-    OR_OP           shift and go to state 74
-    AND_OP          shift and go to state 78
 
   ! NOTEQUALS       [ reduce using rule 44 (exp -> exp G_OP exp .) ]
   ! EQUALS_OP       [ reduce using rule 44 (exp -> exp G_OP exp .) ]
-  ! OR_OP           [ reduce using rule 44 (exp -> exp G_OP exp .) ]
-  ! AND_OP          [ reduce using rule 44 (exp -> exp G_OP exp .) ]
   ! ADD             [ shift and go to state 79 ]
   ! MINUS           [ shift and go to state 69 ]
   ! MULT            [ shift and go to state 70 ]
@@ -5905,6 +5903,8 @@ state 125
   ! G_OP            [ shift and go to state 73 ]
   ! LE_OP           [ shift and go to state 71 ]
   ! GE_OP           [ shift and go to state 80 ]
+  ! OR_OP           [ shift and go to state 74 ]
+  ! AND_OP          [ shift and go to state 78 ]
   ! MUL_ASSIGN      [ shift and go to state 86 ]
   ! DIV_ASSIGN      [ shift and go to state 66 ]
   ! MOD_ASSIGN      [ shift and go to state 82 ]
@@ -5947,17 +5947,6 @@ state 126
     (61) exp -> exp . EQUALS exp
 
     SEMI_COLON      reduce using rule 49 (exp -> exp OR_OP exp .)
-    ADD             reduce using rule 49 (exp -> exp OR_OP exp .)
-    MINUS           reduce using rule 49 (exp -> exp OR_OP exp .)
-    MULT            reduce using rule 49 (exp -> exp OR_OP exp .)
-    DIV             reduce using rule 49 (exp -> exp OR_OP exp .)
-    MOD             reduce using rule 49 (exp -> exp OR_OP exp .)
-    L_OP            reduce using rule 49 (exp -> exp OR_OP exp .)
-    G_OP            reduce using rule 49 (exp -> exp OR_OP exp .)
-    LE_OP           reduce using rule 49 (exp -> exp OR_OP exp .)
-    GE_OP           reduce using rule 49 (exp -> exp OR_OP exp .)
-    NOTEQUALS       reduce using rule 49 (exp -> exp OR_OP exp .)
-    EQUALS_OP       reduce using rule 49 (exp -> exp OR_OP exp .)
     OR_OP           reduce using rule 49 (exp -> exp OR_OP exp .)
     AND_OP          reduce using rule 49 (exp -> exp OR_OP exp .)
     MUL_ASSIGN      reduce using rule 49 (exp -> exp OR_OP exp .)
@@ -5975,18 +5964,29 @@ state 126
     COMMA           reduce using rule 49 (exp -> exp OR_OP exp .)
     RBIG            reduce using rule 49 (exp -> exp OR_OP exp .)
     RBRACE          reduce using rule 49 (exp -> exp OR_OP exp .)
+    ADD             shift and go to state 79
+    MINUS           shift and go to state 69
+    MULT            shift and go to state 70
+    DIV             shift and go to state 68
+    MOD             shift and go to state 88
+    L_OP            shift and go to state 85
+    G_OP            shift and go to state 73
+    LE_OP           shift and go to state 71
+    GE_OP           shift and go to state 80
+    NOTEQUALS       shift and go to state 64
+    EQUALS_OP       shift and go to state 65
 
-  ! ADD             [ shift and go to state 79 ]
-  ! MINUS           [ shift and go to state 69 ]
-  ! MULT            [ shift and go to state 70 ]
-  ! DIV             [ shift and go to state 68 ]
-  ! MOD             [ shift and go to state 88 ]
-  ! L_OP            [ shift and go to state 85 ]
-  ! G_OP            [ shift and go to state 73 ]
-  ! LE_OP           [ shift and go to state 71 ]
-  ! GE_OP           [ shift and go to state 80 ]
-  ! NOTEQUALS       [ shift and go to state 64 ]
-  ! EQUALS_OP       [ shift and go to state 65 ]
+  ! ADD             [ reduce using rule 49 (exp -> exp OR_OP exp .) ]
+  ! MINUS           [ reduce using rule 49 (exp -> exp OR_OP exp .) ]
+  ! MULT            [ reduce using rule 49 (exp -> exp OR_OP exp .) ]
+  ! DIV             [ reduce using rule 49 (exp -> exp OR_OP exp .) ]
+  ! MOD             [ reduce using rule 49 (exp -> exp OR_OP exp .) ]
+  ! L_OP            [ reduce using rule 49 (exp -> exp OR_OP exp .) ]
+  ! G_OP            [ reduce using rule 49 (exp -> exp OR_OP exp .) ]
+  ! LE_OP           [ reduce using rule 49 (exp -> exp OR_OP exp .) ]
+  ! GE_OP           [ reduce using rule 49 (exp -> exp OR_OP exp .) ]
+  ! NOTEQUALS       [ reduce using rule 49 (exp -> exp OR_OP exp .) ]
+  ! EQUALS_OP       [ reduce using rule 49 (exp -> exp OR_OP exp .) ]
   ! OR_OP           [ shift and go to state 74 ]
   ! AND_OP          [ shift and go to state 78 ]
   ! MUL_ASSIGN      [ shift and go to state 86 ]
@@ -6283,17 +6283,6 @@ state 130
     (61) exp -> exp . EQUALS exp
 
     SEMI_COLON      reduce using rule 50 (exp -> exp AND_OP exp .)
-    ADD             reduce using rule 50 (exp -> exp AND_OP exp .)
-    MINUS           reduce using rule 50 (exp -> exp AND_OP exp .)
-    MULT            reduce using rule 50 (exp -> exp AND_OP exp .)
-    DIV             reduce using rule 50 (exp -> exp AND_OP exp .)
-    MOD             reduce using rule 50 (exp -> exp AND_OP exp .)
-    L_OP            reduce using rule 50 (exp -> exp AND_OP exp .)
-    G_OP            reduce using rule 50 (exp -> exp AND_OP exp .)
-    LE_OP           reduce using rule 50 (exp -> exp AND_OP exp .)
-    GE_OP           reduce using rule 50 (exp -> exp AND_OP exp .)
-    NOTEQUALS       reduce using rule 50 (exp -> exp AND_OP exp .)
-    EQUALS_OP       reduce using rule 50 (exp -> exp AND_OP exp .)
     OR_OP           reduce using rule 50 (exp -> exp AND_OP exp .)
     AND_OP          reduce using rule 50 (exp -> exp AND_OP exp .)
     MUL_ASSIGN      reduce using rule 50 (exp -> exp AND_OP exp .)
@@ -6311,18 +6300,29 @@ state 130
     COMMA           reduce using rule 50 (exp -> exp AND_OP exp .)
     RBIG            reduce using rule 50 (exp -> exp AND_OP exp .)
     RBRACE          reduce using rule 50 (exp -> exp AND_OP exp .)
+    ADD             shift and go to state 79
+    MINUS           shift and go to state 69
+    MULT            shift and go to state 70
+    DIV             shift and go to state 68
+    MOD             shift and go to state 88
+    L_OP            shift and go to state 85
+    G_OP            shift and go to state 73
+    LE_OP           shift and go to state 71
+    GE_OP           shift and go to state 80
+    NOTEQUALS       shift and go to state 64
+    EQUALS_OP       shift and go to state 65
 
-  ! ADD             [ shift and go to state 79 ]
-  ! MINUS           [ shift and go to state 69 ]
-  ! MULT            [ shift and go to state 70 ]
-  ! DIV             [ shift and go to state 68 ]
-  ! MOD             [ shift and go to state 88 ]
-  ! L_OP            [ shift and go to state 85 ]
-  ! G_OP            [ shift and go to state 73 ]
-  ! LE_OP           [ shift and go to state 71 ]
-  ! GE_OP           [ shift and go to state 80 ]
-  ! NOTEQUALS       [ shift and go to state 64 ]
-  ! EQUALS_OP       [ shift and go to state 65 ]
+  ! ADD             [ reduce using rule 50 (exp -> exp AND_OP exp .) ]
+  ! MINUS           [ reduce using rule 50 (exp -> exp AND_OP exp .) ]
+  ! MULT            [ reduce using rule 50 (exp -> exp AND_OP exp .) ]
+  ! DIV             [ reduce using rule 50 (exp -> exp AND_OP exp .) ]
+  ! MOD             [ reduce using rule 50 (exp -> exp AND_OP exp .) ]
+  ! L_OP            [ reduce using rule 50 (exp -> exp AND_OP exp .) ]
+  ! G_OP            [ reduce using rule 50 (exp -> exp AND_OP exp .) ]
+  ! LE_OP           [ reduce using rule 50 (exp -> exp AND_OP exp .) ]
+  ! GE_OP           [ reduce using rule 50 (exp -> exp AND_OP exp .) ]
+  ! NOTEQUALS       [ reduce using rule 50 (exp -> exp AND_OP exp .) ]
+  ! EQUALS_OP       [ reduce using rule 50 (exp -> exp AND_OP exp .) ]
   ! OR_OP           [ shift and go to state 74 ]
   ! AND_OP          [ shift and go to state 78 ]
   ! MUL_ASSIGN      [ shift and go to state 86 ]
@@ -6369,6 +6369,8 @@ state 131
     SEMI_COLON      reduce using rule 38 (exp -> exp ADD exp .)
     ADD             reduce using rule 38 (exp -> exp ADD exp .)
     MINUS           reduce using rule 38 (exp -> exp ADD exp .)
+    OR_OP           reduce using rule 38 (exp -> exp ADD exp .)
+    AND_OP          reduce using rule 38 (exp -> exp ADD exp .)
     MUL_ASSIGN      reduce using rule 38 (exp -> exp ADD exp .)
     DIV_ASSIGN      reduce using rule 38 (exp -> exp ADD exp .)
     MOD_ASSIGN      reduce using rule 38 (exp -> exp ADD exp .)
@@ -6393,8 +6395,6 @@ state 131
     GE_OP           shift and go to state 80
     NOTEQUALS       shift and go to state 64
     EQUALS_OP       shift and go to state 65
-    OR_OP           shift and go to state 74
-    AND_OP          shift and go to state 78
 
   ! MULT            [ reduce using rule 38 (exp -> exp ADD exp .) ]
   ! DIV             [ reduce using rule 38 (exp -> exp ADD exp .) ]
@@ -6405,10 +6405,10 @@ state 131
   ! GE_OP           [ reduce using rule 38 (exp -> exp ADD exp .) ]
   ! NOTEQUALS       [ reduce using rule 38 (exp -> exp ADD exp .) ]
   ! EQUALS_OP       [ reduce using rule 38 (exp -> exp ADD exp .) ]
-  ! OR_OP           [ reduce using rule 38 (exp -> exp ADD exp .) ]
-  ! AND_OP          [ reduce using rule 38 (exp -> exp ADD exp .) ]
   ! ADD             [ shift and go to state 79 ]
   ! MINUS           [ shift and go to state 69 ]
+  ! OR_OP           [ shift and go to state 74 ]
+  ! AND_OP          [ shift and go to state 78 ]
   ! MUL_ASSIGN      [ shift and go to state 86 ]
   ! DIV_ASSIGN      [ shift and go to state 66 ]
   ! MOD_ASSIGN      [ shift and go to state 82 ]
@@ -6460,6 +6460,8 @@ state 132
     G_OP            reduce using rule 46 (exp -> exp GE_OP exp .)
     LE_OP           reduce using rule 46 (exp -> exp GE_OP exp .)
     GE_OP           reduce using rule 46 (exp -> exp GE_OP exp .)
+    OR_OP           reduce using rule 46 (exp -> exp GE_OP exp .)
+    AND_OP          reduce using rule 46 (exp -> exp GE_OP exp .)
     MUL_ASSIGN      reduce using rule 46 (exp -> exp GE_OP exp .)
     DIV_ASSIGN      reduce using rule 46 (exp -> exp GE_OP exp .)
     MOD_ASSIGN      reduce using rule 46 (exp -> exp GE_OP exp .)
@@ -6477,13 +6479,9 @@ state 132
     RBRACE          reduce using rule 46 (exp -> exp GE_OP exp .)
     NOTEQUALS       shift and go to state 64
     EQUALS_OP       shift and go to state 65
-    OR_OP           shift and go to state 74
-    AND_OP          shift and go to state 78
 
   ! NOTEQUALS       [ reduce using rule 46 (exp -> exp GE_OP exp .) ]
   ! EQUALS_OP       [ reduce using rule 46 (exp -> exp GE_OP exp .) ]
-  ! OR_OP           [ reduce using rule 46 (exp -> exp GE_OP exp .) ]
-  ! AND_OP          [ reduce using rule 46 (exp -> exp GE_OP exp .) ]
   ! ADD             [ shift and go to state 79 ]
   ! MINUS           [ shift and go to state 69 ]
   ! MULT            [ shift and go to state 70 ]
@@ -6493,6 +6491,8 @@ state 132
   ! G_OP            [ shift and go to state 73 ]
   ! LE_OP           [ shift and go to state 71 ]
   ! GE_OP           [ shift and go to state 80 ]
+  ! OR_OP           [ shift and go to state 74 ]
+  ! AND_OP          [ shift and go to state 78 ]
   ! MUL_ASSIGN      [ shift and go to state 86 ]
   ! DIV_ASSIGN      [ shift and go to state 66 ]
   ! MOD_ASSIGN      [ shift and go to state 82 ]
@@ -6880,6 +6880,8 @@ state 137
     G_OP            reduce using rule 43 (exp -> exp L_OP exp .)
     LE_OP           reduce using rule 43 (exp -> exp L_OP exp .)
     GE_OP           reduce using rule 43 (exp -> exp L_OP exp .)
+    OR_OP           reduce using rule 43 (exp -> exp L_OP exp .)
+    AND_OP          reduce using rule 43 (exp -> exp L_OP exp .)
     MUL_ASSIGN      reduce using rule 43 (exp -> exp L_OP exp .)
     DIV_ASSIGN      reduce using rule 43 (exp -> exp L_OP exp .)
     MOD_ASSIGN      reduce using rule 43 (exp -> exp L_OP exp .)
@@ -6897,13 +6899,9 @@ state 137
     RBRACE          reduce using rule 43 (exp -> exp L_OP exp .)
     NOTEQUALS       shift and go to state 64
     EQUALS_OP       shift and go to state 65
-    OR_OP           shift and go to state 74
-    AND_OP          shift and go to state 78
 
   ! NOTEQUALS       [ reduce using rule 43 (exp -> exp L_OP exp .) ]
   ! EQUALS_OP       [ reduce using rule 43 (exp -> exp L_OP exp .) ]
-  ! OR_OP           [ reduce using rule 43 (exp -> exp L_OP exp .) ]
-  ! AND_OP          [ reduce using rule 43 (exp -> exp L_OP exp .) ]
   ! ADD             [ shift and go to state 79 ]
   ! MINUS           [ shift and go to state 69 ]
   ! MULT            [ shift and go to state 70 ]
@@ -6913,6 +6911,8 @@ state 137
   ! G_OP            [ shift and go to state 73 ]
   ! LE_OP           [ shift and go to state 71 ]
   ! GE_OP           [ shift and go to state 80 ]
+  ! OR_OP           [ shift and go to state 74 ]
+  ! AND_OP          [ shift and go to state 78 ]
   ! MUL_ASSIGN      [ shift and go to state 86 ]
   ! DIV_ASSIGN      [ shift and go to state 66 ]
   ! MOD_ASSIGN      [ shift and go to state 82 ]
@@ -7128,6 +7128,8 @@ state 140
     MULT            reduce using rule 42 (exp -> exp MOD exp .)
     DIV             reduce using rule 42 (exp -> exp MOD exp .)
     MOD             reduce using rule 42 (exp -> exp MOD exp .)
+    OR_OP           reduce using rule 42 (exp -> exp MOD exp .)
+    AND_OP          reduce using rule 42 (exp -> exp MOD exp .)
     MUL_ASSIGN      reduce using rule 42 (exp -> exp MOD exp .)
     DIV_ASSIGN      reduce using rule 42 (exp -> exp MOD exp .)
     MOD_ASSIGN      reduce using rule 42 (exp -> exp MOD exp .)
@@ -7149,8 +7151,6 @@ state 140
     GE_OP           shift and go to state 80
     NOTEQUALS       shift and go to state 64
     EQUALS_OP       shift and go to state 65
-    OR_OP           shift and go to state 74
-    AND_OP          shift and go to state 78
 
   ! L_OP            [ reduce using rule 42 (exp -> exp MOD exp .) ]
   ! G_OP            [ reduce using rule 42 (exp -> exp MOD exp .) ]
@@ -7158,13 +7158,13 @@ state 140
   ! GE_OP           [ reduce using rule 42 (exp -> exp MOD exp .) ]
   ! NOTEQUALS       [ reduce using rule 42 (exp -> exp MOD exp .) ]
   ! EQUALS_OP       [ reduce using rule 42 (exp -> exp MOD exp .) ]
-  ! OR_OP           [ reduce using rule 42 (exp -> exp MOD exp .) ]
-  ! AND_OP          [ reduce using rule 42 (exp -> exp MOD exp .) ]
   ! ADD             [ shift and go to state 79 ]
   ! MINUS           [ shift and go to state 69 ]
   ! MULT            [ shift and go to state 70 ]
   ! DIV             [ shift and go to state 68 ]
   ! MOD             [ shift and go to state 88 ]
+  ! OR_OP           [ shift and go to state 74 ]
+  ! AND_OP          [ shift and go to state 78 ]
   ! MUL_ASSIGN      [ shift and go to state 86 ]
   ! DIV_ASSIGN      [ shift and go to state 66 ]
   ! MOD_ASSIGN      [ shift and go to state 82 ]

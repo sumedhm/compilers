@@ -8,11 +8,11 @@ tokens = lexer.tokens
 
 precedence = (
  ('right','EQUALS','ADD_ASSIGN','MOD_ASSIGN','SUB_ASSIGN','MUL_ASSIGN','DIV_ASSIGN','LEFT_ASSIGN','RIGHT_ASSIGN','XOR_ASSIGN','OR_ASSIGN','AND_ASSIGN'),
+ ('left','OR_OP','AND_OP'),
  ('left','ADD','MINUS'),
  ('left','MULT','DIV','MOD'),
  ('left','L_OP','G_OP','LE_OP','GE_OP'),
  ('left','NOTEQUALS','EQUALS_OP'),
- ('left','OR_OP','AND_OP'),
  ('right', 'UELSE'),
  ('right', 'ELSE')
 )
@@ -264,7 +264,7 @@ def p_enum_list_2(t):
 	n.add_child(Node(t[4]))
 	n.add_child(t[5])
 	t[0] = n
-	t[0].code = "\n_x1 = " + t[3].place + ";\n" + t[1]+ " = _x1;\n" + t[5].code + "\n"
+	t[0].code = t[3].code + "\n_x1 = " + t[3].place + ";\n" + t[1]+ " = _x1;\n" + t[5].code + "\n"
 	t[0].next = t[3].next
 	pass
 
@@ -290,7 +290,7 @@ def p_enum_list_4(t):
 	n.add_child(Node(t[1]))
 	n.add_child(t[3])
 	t[0] = n
-	t[0].code = "\n_x1 = " + t[3].place + ";\n" + t[1]+ " = _x1;\n"
+	t[0].code = t[3].code + "\n_x1 = " + t[3].place + ";\n" + t[1]+ " = _x1;\n"
 	t[0].next = t[3].next
  	pass
 
@@ -331,11 +331,11 @@ def p_enum_list_6(t):
 	n.add_child(Node(t[9]))
 	n.add_child(t[10])
 	t[0] = n
-	t[0].code = '';
+	t[0].code = t[7].code
 	num_list = t[7].place.split(',')
 	j = 0
 	for i in num_list:
-		t[0].code += t[1] + "[" + j + "] = " +  i + ";\n"
+		t[0].code += t[1] + "[" + str(j) + "] = " +  i + ";\n"
 		j += 1
 	t[0].code += t[10].code
 	t[0].next = t[10].next
@@ -379,11 +379,11 @@ def p_enum_list_8(t):
 	n.add_child(t[7])
 	n.add_child(Node(t[8]))
 	t[0] = n
-	t[0].code = "";
+	t[0].code = t[7].code;
 	num_list = t[7].place.split(',')
 	j = 0
 	for i in num_list:
-		t[0].code += "\n" + t[1] + "[" + j + "] = " +  i + ";\n"
+		t[0].code += "\n" + t[1] + "[" + str(j) + "] = " +  i + ";\n"
 		j += 1
 	t[0].next = t[7].next
 	pass
@@ -398,7 +398,7 @@ def p_num_list_1(t):
 	global mass
 	mass += 1
 	new_var = "_t" + str(mass)
-	t[0].code = t[1].code + "\n" + new_var + " = " + t[1].place+ ";\n" + t[3].code
+	t[0].code = t[1].code + "\n" + new_var + " = " + t[1].place + ";\n" + t[3].code
 	t[0].place = new_var + "," + t[3].place
 	t[0].next = t[3].next
 	pass
@@ -488,7 +488,7 @@ def p_constant_5(t):
 	'constant : CHARACTER'
 	t[0] = Node(t[1])
 	t[0].code = ""
-	t[0].place = "'"+ t[1] +"'"
+	t[0].place = t[1]
 	pass
 
 def p_exp_1(t):
@@ -668,7 +668,7 @@ def p_exp_12(t):
 	new_var = "_t" + str(mass)
 	true_1 = "\nlabel_" + str(labels) + ":\n" + new_var + " = 1;\n"
 	t[0].code = t[1].code + "\n" + t[3].code + "\n_x1 = " + t[1].place + ";\n_x2 = " + t[3].place + ";\n"
-	t[0].code += "if _x1 == 1 goto label_" + str(labels) + ";\nif _x2 == 1 goto label_" + str(labels) + ";\n"
+	t[0].code += "if _x1 > 0 goto label_" + str(labels) + ";\nif _x2 > 0 goto label_" + str(labels) + ";\n"
 	t[0].code += new_var + " = 0;\ngoto " + t[3].next + ";\n" + true_1
 	t[0].place = new_var
 	t[0].next = t[3].next
@@ -838,7 +838,7 @@ def p_exp_24(t):
 	n.add_child(t[1])
 	n.add_child(t[3])
 	t[0] = n
-	t[0].code = t[3].code + "\n" + t[1].place + " = " + t[3].place + ";\n"
+	t[0].code = t[1].code + t[3].code + "\n" + t[1].place + " = " + t[3].place + ";\n"
 	t[0].place = t[1].place
 	t[0].next = t[3].next
 	pass
@@ -909,7 +909,7 @@ def p_unary_expression_1(t):
 	n.add_child(t[2])
 	t[0] = n
 	t[0].code = t[1] + " = " + t[1] + t[2].code
-	t[0].place = t[1]
+	t[0].place = t[1] + t[2].place
 	t[0].next = t[2].next
 	pass
 
@@ -956,12 +956,14 @@ def p_unary_operator_1(t):
 	'unary_operator : INCREMENT'
 	t[0] = Node(t[1])
 	t[0].code = " + 1;\n"
+	t[0].place = ' - 1'
 	pass
 
 def p_unary_operator_2(t):
 	'unary_operator : DECREMENT'
 	t[0] = Node(t[1])
 	t[0].code = " - 1;\n"
+	t[0].place = ' + 1'
 	pass
 
 def p_iterative_statement_1(t):
@@ -979,7 +981,7 @@ def p_iterative_statement_1(t):
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = t[3].code + "\nlabel_" + str(labels) + ":\n"+ t[5].code + "_x = " + t[5].place + ";\n"  + "if _x == 1 goto label_" + str(labels+1) + ";\ngoto " + str(t[3].next) + ";\n" 
+	t[0].code = t[3].code + "\nlabel_" + str(labels) + ":\n"+ t[5].code + "_x = " + t[5].place + ";\n"  + "if _x > 0 goto label_" + str(labels+1) + ";\ngoto " + str(t[3].next) + ";\n" 
 	labels += 1 
 	t[0].code += "\nlabel_" + str(labels) + ":\n"+ t[9].code + "\n" + t[7].code + "\ngoto label_" + str(labels-1) + ";\n"
 	t[0].next = t[9].next
@@ -1002,7 +1004,7 @@ def p_iterative_statement_2(t):
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = t[3].code + "\nlabel_" + str(labels) + ":\n" + t[5].code + "_x = " + t[5].place + ";\nif _x == 1 goto label_" + str(labels+1) + ";\ngoto " + str(t[3].next) + ";\n" 
+	t[0].code = t[3].code + "\nlabel_" + str(labels) + ":\n" + t[5].code + "_x = " + t[5].place + ";\nif _x > 0 goto label_" + str(labels+1) + ";\ngoto " + str(t[3].next) + ";\n" 
 	labels += 1
 	t[0].code += "\nlabel_" + str(labels) + ":\n"+ t[10].code + "\n" + t[7].code + "\ngoto label_" + str(labels-1) + ";\n"
 	t[0].next = t[10].next
@@ -1023,7 +1025,7 @@ def p_iterative_statement_3(t):
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = t[3].code + "\nlabel_" + str(labels) + ":\n"  + t[5].code + "_x = " + t[5].place + ";" + "\nif _x == 1 goto label_" + str(labels+1) + ";\ngoto " + str(t[3].next) + ";\n" 
+	t[0].code = t[3].code + "\nlabel_" + str(labels) + ":\n"  + t[5].code + "_x = " + t[5].place + ";" + "\nif _x > 0 goto label_" + str(labels+1) + ";\ngoto " + str(t[3].next) + ";\n" 
 	labels += 1
 	t[0].code += "\nlabel_" + str(labels) + ":\n" + t[7].code + "\ngoto label_" + str(labels-1) + ";\n"
 	t[0].next = t[7].next
@@ -1045,7 +1047,7 @@ def p_iterative_statement_4(t):
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = t[3].code + "\nlabel_" + str(labels) + ":\n" + t[5].code + "_x = " + t[5].place + ";\nif _x == 1 goto label_" + str(labels+1) + ";\ngoto " + str(t[3].next) + ";\n" 
+	t[0].code = t[3].code + "\nlabel_" + str(labels) + ":\n" + t[5].code + "_x = " + t[5].place + ";\nif _x > 0 goto label_" + str(labels+1) + ";\ngoto " + str(t[3].next) + ";\n" 
 	labels += 1
 	t[0].code += "\nlabel_" + str(labels) + ":\n" + t[7].code + "\ngoto label_" + str(labels-1) + ";\n"
 	t[0].next = t[7].next
@@ -1062,7 +1064,7 @@ def p_iterative_statement_5(t):
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = "\nlabel_" + str(labels) + ":\n" + t[3].code + "_x = " + t[3].place + ";\n if _x == 1 goto label_" + str(labels+1) + ";\ngoto " + str(t[5].next) + ";\n"
+	t[0].code = "\nlabel_" + str(labels) + ":\n" + t[3].code + "_x = " + t[3].place + ";\n if _x > 0 goto label_" + str(labels+1) + ";\ngoto " + str(t[5].next) + ";\n"
 	labels += 1
 	t[0].code += "\nlabel_" + str(labels) + ":\n" + t[5].code + "\ngoto label_" + str(labels-1) + ";\n"
 	t[0].next = t[5].next
@@ -1079,7 +1081,7 @@ def p_iterative_statement_6(t):
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = "\nlabel_" + str(labels) +":" + t[3].code + "_x = " + t[3].place + ";\n" + "\nif _x == 1 goto label_" + str(labels) + ";\ngoto " + str(t[3].next) + ";\n" 
+	t[0].code = "\nlabel_" + str(labels) +":" + t[3].code + "_x = " + t[3].place + ";\n" + "\nif _x > 0 goto label_" + str(labels) + ";\ngoto " + str(t[3].next) + ";\n" 
 	t[0].next = t[3].next
 	pass
 
@@ -1096,7 +1098,7 @@ def p_iterative_statement_7(t):
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = "\nlabel_" + str(labels) +":" + t[3].code + "_x = " + t[3].place + ";\nif _x == 1 goto label_" + str(labels+1) + ";\ngoto " + str(t[6].next) + ";\n" 
+	t[0].code = "\nlabel_" + str(labels) +":" + t[3].code + "_x = " + t[3].place + ";\nif _x > 0 goto label_" + str(labels+1) + ";\ngoto " + str(t[6].next) + ";\n" 
 	labels += 1
 	t[0].code += "\nlabel_" + str(labels) + ":\n" + t[6].code + "\ngoto label_" + str(labels-1) + ";\n"
 	t[0].next = t[6].next
@@ -1114,7 +1116,7 @@ def p_iterative_statement_8(t):
 	t[0] = n
 	global labels
 	labels += 1 
-	t[0].code = "\nlabel_" + str(labels) + ":" + t[3].code + "_x = " + t[3].place + ";\n" + "\nif _x == 1 goto label_" + str(labels) + ";\ngoto " + str(t[3].next) + ";\n" 
+	t[0].code = "\nlabel_" + str(labels) + ":" + t[3].code + "_x = " + t[3].place + ";\n" + "\nif _x > 0 goto label_" + str(labels) + ";\ngoto " + str(t[3].next) + ";\n" 
 	t[0].next = t[3].next
 	pass
 
@@ -1131,7 +1133,7 @@ def p_iterative_statement_9(t):
 	t[0] = n
 	global labels
 	labels += 1 
-	t[0].code = "\nlabel_" + str(labels) + ":\n" + t[2].code + t[5].code + "_x = " + t[5].place + ";\nif _x == 1 goto label_" + str(labels) + ";\ngoto " + str(t[5].next) +";\n"
+	t[0].code = "\nlabel_" + str(labels) + ":\n" + t[2].code + t[5].code + "_x = " + t[5].place + ";\nif _x > 0 goto label_" + str(labels) + ";\ngoto " + str(t[5].next) +";\n"
 	t[0].next = t[5].next
 	pass
 
@@ -1150,7 +1152,7 @@ def p_iterative_statement_10(t):
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = "\nlabel_" + str(labels) + ":\n" + t[3].code + t[7].code + "_x = " + t[7].place +";\nif _x == 1 goto label_" + str(labels) + ";\ngoto " + str(t[7].next) + ";\n"
+	t[0].code = "\nlabel_" + str(labels) + ":\n" + t[3].code + t[7].code + "_x = " + t[7].place +";\nif _x > 0 goto label_" + str(labels) + ";\ngoto " + str(t[7].next) + ";\n"
 	t[0].next = t[7].next
 	pass
 
@@ -1167,7 +1169,7 @@ def p_iterative_statement_11(t):
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = "\nlabel_" + str(labels) + ":"+ t[5].code + "_x = " + t[5].place + ";\n" + "if _x == 1 goto label_" + str(labels) + ";\ngoto label_" + str(t[5].next) + ";\n"
+	t[0].code = "\nlabel_" + str(labels) + ":"+ t[5].code + "_x = " + t[5].place + ";\n" + "if _x > 0 goto label_" + str(labels) + ";\ngoto label_" + str(t[5].next) + ";\n"
 	t[0].next = t[5].next
 	pass
 
@@ -1185,7 +1187,7 @@ def p_iterative_statement_12(t):
 	t[0] = n
 	global labels
 	labels += 1
-	t[0].code = "\nlabel_" + str(labels) + ":"+ t[6].code + "_x = " + t[6].place + ";\n" + "if _x == 1 goto label_" + str(labels) + ";\ngoto " + str(t[6].next) +";\n"
+	t[0].code = "\nlabel_" + str(labels) + ":"+ t[6].code + "_x = " + t[6].place + ";\n" + "if _x > 0 goto label_" + str(labels) + ";\ngoto " + str(t[6].next) +";\n"
 	t[0].next = t[6].next
 	pass
 
@@ -1221,7 +1223,7 @@ def p_conditional_statement_1(t):
 	global labels
 	labels += 1
 	t[0].code = t[3].code + "_x = " + str(t[3].place) + ";\n"
-	t[0].code += "\nif _x == 1 goto label_" + str(labels) + ";\ngoto " + str(t[5].next) +";\n"
+	t[0].code += "\nif _x > 0 goto label_" + str(labels) + ";\ngoto " + str(t[5].next) +";\n"
 	t[0].code += "\nlabel_" + str(labels) + ":\n" + t[5].code + "\n\n"
 	t[0].next = t[5].next
 	pass
@@ -1240,7 +1242,7 @@ def p_conditional_statement_2(t):
 	global labels
 	labels += 1
 	t[0].code = t[3].code + "_x = " + str(t[3].place) + ";\n"
-	t[0].code += "\nif _x == 1 goto label_" + str(labels) + ";\ngoto " + str(t[6].next) +";\n"
+	t[0].code += "\nif _x > 0 goto label_" + str(labels) + ";\ngoto " + str(t[6].next) +";\n"
 	t[0].code += "\nlabel_" + str(labels) + ":\n" + t[6].code + "\n\n"
 	t[0].next = t[6].next
 	pass
@@ -1259,7 +1261,7 @@ def p_conditional_statement_3(t):
 	global labels
 	labels += 1
 	t[0].code = t[3].code + "_x = " + str(t[3].place) + ";\n"
-	t[0].code += "if _x == 1 goto label_" + str(labels) + ";\n" + t[7].code + "\ngoto " + str(t[7].next) +";\n"
+	t[0].code += "if _x > 0 goto label_" + str(labels) + ";\n" + t[7].code + "\ngoto " + str(t[7].next) +";\n"
 	t[0].code += "\nlabel_" + str(labels) + ":\n" + t[5].code + "\n\n"
 	t[0].next = t[7].next
 	pass
@@ -1280,7 +1282,7 @@ def p_conditional_statement_4(t):
 	global labels
 	labels += 1
 	t[0].code = t[3].code + "_x = " + str(t[3].place) + ";\n"
-	t[0].code += "if _x == 1 goto label_" + str(labels) + ";\n" + t[9].code + "goto " + str(t[9].next) + ";\n"
+	t[0].code += "if _x > 0 goto label_" + str(labels) + ";\n" + t[9].code + "goto " + str(t[9].next) + ";\n"
 	t[0].code += "\nlabel_" + str(labels) + ":\n" + t[6].code + "\n\n"
 	t[0].next = t[9].next
 	pass
@@ -1301,7 +1303,7 @@ def p_conditional_statement_5(t):
 	global labels
 	labels += 1
 	t[0].code = t[3].code + "_x = " + str(t[3].place) + ";\n"
-	t[0].code += "if _x == 1 goto label_" + str(labels) + ";\n" + t[8].code + "\ngoto " + str(t[8].next) + ";\n"
+	t[0].code += "if _x > 0 goto label_" + str(labels) + ";\n" + t[8].code + "\ngoto " + str(t[8].next) + ";\n"
 	t[0].code += "\nlabel_" + str(labels) + ":\n" + t[5].code + "\n"
 	t[0].next = t[8].next
 	pass
@@ -1323,9 +1325,8 @@ def p_conditional_statement_6(t):
 	t[0] = n
 	global labels
 	labels += 1
-	
 	t[0].code = t[3].code + "_x = " + t[3].place + ";\n"
-	t[0].code += "if _x == 1 goto label_" + str(labels) + ";\n" + t[10].code + "\ngoto " + str(t[10].next) +";\n"
+	t[0].code += "if _x > 0 goto label_" + str(labels) + ";\n" + t[10].code + "\ngoto " + str(t[10].next) +";\n"
 	t[0].code += "\nlabel_" + str(labels) + ":\n" + t[6].code + "\n"
 	t[0].next = t[10].next
 	pass
