@@ -1,23 +1,16 @@
 main()
 {
-int i=0,j=0,k=91;char y;
-while(2>1){
-	int i;
-	if(5>4){
-		i = 0;
-		int i;
-	}if(5>4){
-		i = 0;
-		int i;
-	}if(5>4){
-		i = 0;
-		int i;
-	}
-	if(5>4){
-		i = 0;
-		int i;
-	}
-}
-char y;
+	z = y + 2 *3 / 2;
+	y |= 1;
+	y ^= 1;
+	y &= 1;
+	y >>= 1;
+	y <<= 1;
+	y %= 1;
+	y -= 1;
+	y += 2;
+	y *= 2;
+	y /= 2;
+
 }
 char y;
