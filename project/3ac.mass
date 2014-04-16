@@ -1,57 +1,67 @@
 
-y_begin:(a,b)
-
-
-_x1 = a;
-_x2 = b;
-_t1 = _x1 + _x2;
-
-z = _t1;
-
-_x1 = z;
-return _x1;
-
-return;
-
-
-
  main:
 
-_x1 = 0;
-i = _x1;
+
+_t1 = 0;
 
 
-_x1 = x;
-_x2 = 1;
-_t2 = _x1 + _x2;
+_x1 = c;
+_x2 = r;
+if _x1 == _x2 _t1 = 1;
 
-x = _t2;
-
-_t3 = 0;
-
-
-_x1 = i;
-_x2 = 1;
-if _x1 == _x2 _t3 = 1;
-_x = _t3;
-
-if _x > 0 goto label_1;
+_x1 = b;
+_x2 = _t1;
+if _x1 == 0 goto label_1;
+if _x2 == 0 goto label_1;
+_t2 = 1;
 goto label_2;
 
 label_1:
-
-i = 1;
+_t2 = 0;
 
 label_2:
 
 
-_x1 = 2;
-_x2 = 3;
-_t4 = _x1 * _x2;
+_t5 = 1;
 
-_t5 = 2;
-y(_t4,a[_t5]);
-goto y_begin;
+
+
+
+_x1 = 3;
+_x2 = 2;
+_t3 = _x1 * _x2;
+
+_x1 = 5;
+_x2 = _t3;
+_t4 = _x1 + _x2;
+
+_x1 = t;
+_x2 = _t4;
+if _x1 > _x2 _t5 = 0;
+
+_x1 = _t2;
+_x2 = _t5;
+if _x1 > 0 goto label_3;
+if _x2 > 0 goto label_3;
+_t6 = 0;
+goto label_4;
+
+label_3:
+_t6 = 1;
+
+label_4:
+
+a = _t6;
+_x = a;
+
+if _x > 0 goto label_5;
+goto label_6;
+
+label_5:
+
+x = 1;
+
+label_6:
 
 return;
 
