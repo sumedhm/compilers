@@ -7,16 +7,15 @@ from lexer import tokens
 tokens = lexer.tokens
 
 precedence = (
+ ('right','EQUALS','ADD_ASSIGN','MOD_ASSIGN','SUB_ASSIGN','MUL_ASSIGN','DIV_ASSIGN','LEFT_ASSIGN','RIGHT_ASSIGN','XOR_ASSIGN','OR_ASSIGN','AND_ASSIGN'),
+ ('left','OR_OP','AND_OP'),
  ('left','ADD','MINUS'),
  ('left','MULT','DIV','MOD'),
  ('left','L_OP','G_OP','LE_OP','GE_OP'),
  ('left','NOTEQUALS','EQUALS_OP'),
- ('left','OR_OP','AND_OP'),
- ('right','EQUALS','ADD_ASSIGN','MOD_ASSIGN','SUB_ASSIGN','MUL_ASSIGN','DIV_ASSIGN','LEFT_ASSIGN','RIGHT_ASSIGN','XOR_ASSIGN','OR_ASSIGN','AND_ASSIGN'),
  ('right', 'UELSE'),
  ('right', 'ELSE')
 )
-
 class Node(object):
     def __init__(self, data):
         self.data = data
@@ -1178,33 +1177,17 @@ def p_function_call_2(t):
 	pass
 
 def p_arguments_1(t):
-	'arguments : arguments COMMA VARIABLE'
+	'arguments : arguments COMMA exp'
 	n = Node('arguments1')
-	n.add_child(t[1])
-	n.add_child(Node(t[2]))
-	n.add_child(Node(t[3]))
-	t[0] = n
-	pass
-
-def p_arguments_2(t):
-	'arguments : arguments COMMA constant'
-	n = Node('arguments2')
 	n.add_child(t[1])
 	n.add_child(Node(t[2]))
 	n.add_child(t[3])
 	t[0] = n
 	pass
 
-def p_arguments_3(t):
-	'arguments : VARIABLE'
-	n = Node('arguments3')
-	n.add_child(Node(t[1]))
-	t[0] = n
-	pass
-
-def p_arguments_4(t):
-	'arguments : constant'
-	n = Node('arguments4')
+def p_arguments_2(t):
+	'arguments : exp'
+	n = Node('arguments2')
 	n.add_child(t[1])
 	t[0] = n
 	pass 

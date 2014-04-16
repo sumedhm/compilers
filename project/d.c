@@ -1,7 +1,17 @@
+#include <stdio.h>
+
+y(int a, int b){
+	 z = a+b;
+	 return z;
+}
+
 main()
 {
-	if(x==2){
-		s=1;
-	} else if(x==3) s=2;
-	else s = 3;
+	int i=0;
+	x=x+1;
+	if(i==1){
+		i=1;
+	}
+	y(2*3, a[2]);
+	
 }
