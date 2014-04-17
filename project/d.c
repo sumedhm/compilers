@@ -1,5 +1,7 @@
 #include <stdio.h>
 int main()
-{
-	if(a=b && c == r || t<= 5+3*2 ) x=1;
+{	
+	int p[3];
+	int a;
+	a = p[2];
 }
